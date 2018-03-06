@@ -21,3 +21,4 @@ accounts-ui
 accounts-password
 react-meteor-data
 twbs:bootstrap@3.3.6
+jagi:astronomy
