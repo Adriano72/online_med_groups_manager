@@ -1,10 +1,12 @@
 import { Meteor } from 'meteor/meteor';
 
+import { Groups } from '../imports/collections/groups';
+import Group from '../imports/classes/Group';
+
 Meteor.startup(() => {
-  // code to run on server at startup
-  /*
-  Accounts.config({
-    forbidClientAccountCreation: true
+  //Sessions.rawCollection().drop();
+  Meteor.publish('groups', function() {
+    return Groups.find();
   });
-  */
+
 });

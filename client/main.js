@@ -1,8 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+
 import App from './components/app';
+import ManagerMain from './components/manager_main';
+import GroupsList from './components/groups/groups_list';
+
+Accounts.ui.config({
+  passwordSignupFields: "USERNAME_AND_EMAIL"
+});
+
+const routes = (
+  <Router history={browserHistory}>
+    <Route path="/" component={App}>
+      <IndexRoute component={GroupsList} />
+    </Route>
+  </Router>
+)
 
 Meteor.startup(() => {
-  ReactDOM.render(<App />, document.querySelector('.render-target'));
-})
+  ReactDOM.render(routes, document.querySelector('.render-target'));
+});
