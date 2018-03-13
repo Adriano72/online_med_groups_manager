@@ -95,22 +95,7 @@ const Group = Class.create({
   fields: {
     group_name: String,
     group_language: String,
-    group_country: String,
-    submitted_by: {
-      submitter: {
-        type: Submitter
-      }
-    },
-    leader_detail: {
-      leader_detail: {
-        type: GroupLeader
-      }
-    },
-    meet_time: {
-      meet_time: {
-        type: [MeetTime]
-      }
-    }
+    group_country: String
 
   }
 });

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
-import { Groups } from '../../../imports/collections/groups';
 import { Link, browserHistory } from 'react-router';
+//import { Groups } from '../../../imports/collections/groups';
+
 
 class GroupsList extends Component {
   render() {
-
     return (
       <div className="container-fluid top-buffer">
         <pre>
@@ -18,9 +18,6 @@ class GroupsList extends Component {
                 <th>Detail</th>
               </tr>
             </thead>
-            <tbody>
-              {this.renderRows()}
-            </tbody>
           </table>
         </pre>
       </div>
@@ -28,8 +25,4 @@ class GroupsList extends Component {
   }
 }
 
-export default createContainer(() => {
-  Meteor.subscribe('groups');
-
-  return { groups: Groups.find({}).fetch() };
-}, GroupsList);
+export default GroupsList;
