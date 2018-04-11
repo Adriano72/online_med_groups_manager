@@ -4,6 +4,7 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 import App from './components/app';
 import GroupsList from './components/groups/groups_list';
+import GroupCreate from './components/groups/group_create';
 
 Accounts.ui.config({
   passwordSignupFields: "USERNAME_AND_EMAIL"
@@ -13,6 +14,7 @@ const routes = (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={GroupsList} />
+      <Route path="newgroup" component={GroupCreate}/>
     </Route>
   </Router>
 )

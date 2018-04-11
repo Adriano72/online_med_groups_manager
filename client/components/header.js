@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
-import Accounts from './accounts';
 import { createContainer } from 'meteor/react-meteor-data';
+import Accounts from './accounts';
 import { Link, browserHistory } from 'react-router';
 
 class Header extends Component {
+
+  onBindCreateNewGroup(event) {
+    event.preventDefault();
+    if(Meteor.user()){
+      browserHistory.push(`/newgroup`);
+    }
+  }
+
   render() {
     return (
       <nav className="nav navbar-default">
@@ -15,8 +23,8 @@ class Header extends Component {
             <Accounts />
           </li>
           <li>
-            <a>Create new group</a>
-          </li>
+              <a href="#" onClick={this.onBindCreateNewGroup.bind(this)}>Create new group</a>
+            </li>
         </ul>
       </nav>
     );
