@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
-import { Link, browserHistory } from 'react-router';
-//import { Groups } from '../../../imports/collections/groups';
+import { Groups } from '../../../imports/collections/groups';
 
 
 class GroupsList extends Component {
@@ -25,4 +24,8 @@ class GroupsList extends Component {
   }
 }
 
-export default GroupsList;
+export default createContainer(() => {
+  Meteor.subscribe('groups');
+
+  return { groups: Groups.find({}).fetch() };
+}, GroupsList);

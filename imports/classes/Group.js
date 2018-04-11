@@ -28,49 +28,13 @@ const GroupLeader = Class.create({
     last_name: {
       type: String
     },
-    address1: {
-      type: String
-    },
-    address2: {
-      type: String
-    },
     country: {
-      type: String
-    },
-    city: {
-      type: String
-    },
-    state_province: {
-      type: String
-    },
-    zipcode: {
       type: String
     },
     phone: {
       type: String
     },
     email: {
-      type: String
-    },
-    how_long_know_leader: {
-      type: String
-    },
-    what_capacity_leader: {
-      type: String
-    },
-    leader_familiar_resources: {
-      type: String
-    },
-    leader_knowledge_role: {
-      type: String
-    },
-    leader_knowledge_wccm: {
-      type: String
-    },
-    attended_etw_school: {
-      type: String
-    },
-    other_notes: {
       type: String
     }
   }
@@ -93,10 +57,17 @@ const Group = Class.create({
   name: 'Group',
   collection: Groups,
   fields: {
-    group_name: String,
     group_language: String,
-    group_country: String
-
+    group_country: String,
+    submitted_by: {
+        type: Submitter
+    },
+    group_leader: {
+      type: GroupLeader
+    },
+    meet_time: {
+      type: MeetTime
+    }
   }
 });
 

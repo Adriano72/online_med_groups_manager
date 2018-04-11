@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Accounts from './accounts';
+import { createContainer } from 'meteor/react-meteor-data';
+import { Link, browserHistory } from 'react-router';
 
 class Header extends Component {
   render() {
@@ -21,4 +23,8 @@ class Header extends Component {
   }
 }
 
-export default Header;
+export default createContainer(() => {
+  return {
+    currentUser: Meteor.user() || {}, // default to plain object
+  };
+}, Header);
