@@ -16,16 +16,19 @@ class GroupCreate extends Component {
     super(props);
 
     this.state = {
-      error: ''
+      error: '',
+      grpupLanguage: 'English'
     };
+
+    this.updateLanguage = this.updateLanguage.bind(this);
   }
 
-  selectCountry (val) {
-    this.setState({ country: val });
+  updateLanguage(e) {
+    //console.log('NEW VALUE ', newValue);
+    this.setState({ grpupLanguage: e.target.value });
   }
 
   render() {
-    const { country, region } = this.state;
     return (
         <div className="container-fluid top-buffer">
             <h2>New online group</h2><br />
@@ -34,23 +37,20 @@ class GroupCreate extends Component {
                 <div className="panel-heading">Group Info</div>
                   <div className="panel-body">
                     <div className="form-group">
-                      <label>Country</label>
-                      <div className="dropdown">
-                        <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                          Language
-                          <span className="caret"></span>
-                        </button>
-                        <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-                          <li><a href="#">English</a></li>
-                          <li><a href="#">French</a></li>
-                          <li><a href="#">Spanish</a></li>
-                        </ul>
-                      </div>
+                      <label htmlFor="select1" >Grooup languge</label>
+                      <select value={this.state.grpupLanguage} onChange={this.updateLanguage} className="form-control">
+                        <option value="English">English</option>
+                        <option value="French">French</option>
+                        <option value="Italian">Italian</option>
+                        <option value="Spanish">Spanish</option>
+                        <option value="German">German</option>
+                        <option value="Dutch">Dutch</option>
+                        <option value="Portuguese">Portuguese</option>
+                        <option value="Russian">Russian</option>
+                        <option value="Chinese">Chinese</option>
+                        <option value="Indonesian">Indonesian</option>
+                      </select>
                     </div>
-                      <div className="form-group">
-                        <label>Language</label>
-                        <input type="text" className="form-control" placeholder="Language" ref="group_language" />
-                      </div>
                   </div>
               </div>
               <div className="panel panel-primary">
