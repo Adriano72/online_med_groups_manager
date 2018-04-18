@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link, browserHistory } from 'react-router';
+import { CountryDropdown } from 'react-country-region-selector';
 import { Groups } from '../../../imports/collections/groups';
+import moment from 'moment';
+import TimePicker from 'rc-time-picker';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
@@ -9,6 +12,9 @@ import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 import Group from '../../../imports/classes/Group';
 import { ValidationError } from 'meteor/jagi:astronomy';
 
+const format = 'h:mm a';
+
+const now = moment().hour(0).minute(0);
 
 class GroupCreate extends Component {
 
@@ -17,15 +23,65 @@ class GroupCreate extends Component {
 
     this.state = {
       error: '',
-      grpupLanguage: 'English'
+      country: '',
+      grpupLanguage: 'English',
+      meetDay: '',
+      meetTime: ''
     };
 
     this.updateLanguage = this.updateLanguage.bind(this);
+    this.updateCountry = this.updateCountry.bind(this);
+    this.updateMeetDay = this.updateMeetDay.bind(this);
+    this.updateMeetTime = this.updateMeetTime.bind(this);
   }
 
   updateLanguage(e) {
     //console.log('NEW VALUE ', newValue);
     this.setState({ grpupLanguage: e.target.value });
+  }
+
+  updateMeetDay(e) {
+    //console.log('NEW VALUE ', newValue);
+    this.setState({ meetDay: e.target.value });
+  }
+
+  updateMeetTime(val) {
+    //console.log('NEW VALUE ', newValue);
+    this.setState({ meetTime: val && val.format(format) });
+  }
+
+  updateCountry(val) {
+    //console.log('NEW VALUE ', newValue);
+    this.setState({ country: val });
+  }
+
+  onSaveClick() {
+
+      var newGroup = new Group();
+      newGroup.insert(
+        moment(this.state.date).startOf('day').format(),
+        this.state.grpupLanguage,
+        this.refs.useOwnMeetingRes.checked,
+        this.refs.group_leader_first_name.value,
+        this.refs.group_leader_second_name.value,
+        this.refs.group_leader_email.value,
+        this.refs.group_leader_phone.value,
+        this.state.country,
+        this.state.meetDay,
+        this.state.meetTime
+      );
+      Alert.success('Group created', {
+        position: 'top-left',
+        effect: 'jelly',
+        onShow: function () {
+          setTimeout(function(){
+            //browserHistory.push('/session_list');
+          }, 2000);
+        },
+        timeout: 1500,
+        offset: 20
+      });
+
   }
 
   render() {
@@ -58,7 +114,7 @@ class GroupCreate extends Component {
                   <div className="panel-body">
                       <div className="form-group col-xs-3">
                         <label>First name</label>
-                        <input type="text" className="form-control" placeholder="First name" ref="group_leader_second_name" />
+                        <input type="text" className="form-control" placeholder="First name" ref="group_leader_first_name" />
                       </div>
                       <div className="form-group col-xs-3">
                         <label>Last name</label>
@@ -72,18 +128,44 @@ class GroupCreate extends Component {
                         <label>Phone</label>
                         <input type="text" className="form-control" placeholder="Phone" ref="group_leader_phone" />
                       </div>
+                      <div className="form-group col-xs-3">
+                        <label>Country</label>
+                        <CountryDropdown
+                          value={this.state.country}
+                          classes='countryDropDown'
+                          defaultOptionLabel = 'select country'
+                          onChange={(val) => this.updateCountry(val)}
+                        />
+                      </div>
                   </div>
               </div>
               <div className="panel panel-primary">
                 <div className="panel-heading">Group Meeting Time</div>
                   <div className="panel-body">
                       <div className="form-group col-xs-2">
-                        <label>Day of the week</label>
-                        <input type="text" className="form-control" placeholder="Day" ref="group_meeting_day" />
+                        <label htmlFor="select1" >Day of week</label>
+                        <select value={this.state.meetDay} onChange={this.updateMeetDay} className="form-control">
+                          <option value="Monday">Monday</option>
+                          <option value="Tuesday">Tuesday</option>
+                          <option value="Wednesday">Wednesday</option>
+                          <option value="Thursday">Thursday</option>
+                          <option value="Friday">Friday</option>
+                          <option value="Saturday">Saturday</option>
+                          <option value="Sunday">Sunday</option>
+                        </select>
                       </div>
                       <div className="form-group col-xs-2">
                         <label>Time</label>
-                        <input type="text" className="form-control" placeholder="Time" ref="group_meeting_time" />
+                        <TimePicker
+                          showSecond={false}
+                          defaultValue={now}
+                          className="timePicker"
+                          onChange={this.updateMeetTime}
+                          format={format}
+                          minuteStep={15}
+                          use12Hours
+                          inputReadOnly
+                        />
                       </div>
                   </div>
               </div>
@@ -91,10 +173,9 @@ class GroupCreate extends Component {
                 <div className="panel-heading">Group Meeting Time</div>
                   <div className="panel-body">
                       <div className="form-group">
-
                         <div className="checkbox">
                           <label>
-                            <input type="checkbox" ref="morning" value="" />
+                            <input type="checkbox" ref="useOwnMeetingRes" value="" />
                             We are going to use our own live meeting service (Hangouts, Zoom, Webex...)
                           </label>
                         </div>
@@ -107,7 +188,7 @@ class GroupCreate extends Component {
               <div className="text-danger">{this.state.error}</div>
               <button
                 className="btn btn-primary"
-                //onClick={this.onSaveClick.bind(this)}
+                onClick={this.onSaveClick.bind(this)}
                 >
                 Submit Group
               </button>
