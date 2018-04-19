@@ -8,6 +8,7 @@
     "@babel/runtime": "^7.0.0-beta.44",
     "babel-runtime": "^6.20.0",
     "bcrypt": "^2.0.0",
+    "indexof": "0.0.1",
     "meteor-node-stubs": "~0.2.4",
     "rc-time-picker": "^3.3.1",
     "react": "^16.3.1",

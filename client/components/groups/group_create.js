@@ -57,18 +57,25 @@ class GroupCreate extends Component {
 
   onSaveClick() {
 
+      const gp_leader = {
+        first_name: this.refs.group_leader_first_name.value,
+        last_name: this.refs.group_leader_second_name.value,
+        country: this.state.country,
+        phone: this.refs.group_leader_phone.value,
+        email: this.refs.group_leader_email.value
+      }
+
+      const meet_time = {
+        day_of_week: this.state.meetDay,
+        meet_time: this.state.meetTime
+      }
+
       var newGroup = new Group();
       newGroup.insert(
-        moment(this.state.date).startOf('day').format(),
         this.state.grpupLanguage,
         this.refs.useOwnMeetingRes.checked,
-        this.refs.group_leader_first_name.value,
-        this.refs.group_leader_second_name.value,
-        this.refs.group_leader_email.value,
-        this.refs.group_leader_phone.value,
-        this.state.country,
-        this.state.meetDay,
-        this.state.meetTime
+        gp_leader,
+        meet_time
       );
       Alert.success('Group created', {
         position: 'top-left',

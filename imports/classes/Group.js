@@ -61,20 +61,12 @@ const Group = Class.create({
     }
   },
   meteorMethods: {
-    insert(language, useOwnMeetRes, ld_name, ld_surname, ld_email, ld_phone, ld_country, meet_day, meet_time) {
+    insert(language, useOwnMeetRes, group_leader, meet_time) {
       this.date_created = new Date();
       this.group_language = language;
       this.use_own_meeting_resources = useOwnMeetRes;
-
-      this.group_leader.first_name = ld_name;
-      this.group_leader.last_name = ld_surname;
-      this.group_leader.country = ld_country;
-      this.group_leader.phone = ld_phone;
-      this.group_leader.email = ld_email;
-
-      this.meet_time.day_of_week = meet_day;
-      this.meet_time.meet_time = meet_time;
-
+      this.group_leader = group_leader;
+      this.meet_time = meet_time;
 
       this.ownerId = Meteor.userId();
       return this.save((err, result) => {
