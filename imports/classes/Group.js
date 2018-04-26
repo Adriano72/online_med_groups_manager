@@ -40,6 +40,7 @@ const Group = Class.create({
   name: 'Group',
   collection: Groups,
   fields: {
+    ownerId: String,
     date_created: Date,
     group_language: String,
     use_own_meeting_resources: Boolean,
@@ -62,6 +63,7 @@ const Group = Class.create({
   },
   meteorMethods: {
     insert(language, useOwnMeetRes, group_leader, meet_time) {
+      this.ownerId = this.userId,
       this.date_created = new Date();
       this.group_language = language;
       this.use_own_meeting_resources = useOwnMeetRes;
@@ -76,7 +78,10 @@ const Group = Class.create({
           console.log("RESULT: ", result);
         }
       });
-    }
+    },
+    update(group, content) {
+      return this.update(group._id, { $set: { content } });
+    },
   }
 });
 

@@ -82,7 +82,7 @@ class GroupCreate extends Component {
         effect: 'jelly',
         onShow: function () {
           setTimeout(function(){
-            //browserHistory.push('/session_list');
+            browserHistory.push('/');
           }, 2000);
         },
         timeout: 1500,

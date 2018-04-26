@@ -15,8 +15,9 @@ Meteor.methods({
                     // Need _id of existing user record so this call must come
                     // after `Accounts.createUser` or `Accounts.onCreate`
                     //[].concat(user);
-                    Roles.addUsersToRoles(id, user.roles, user.group);
-                    Roles.setUserRoles(id, 'active', Roles.GLOBAL_GROUP);
+                    //Roles.addUsersToRoles(id, user.roles, user.country);
+                    Roles.addUsersToRoles(id, user.roles, Roles.GLOBAL_GROUP);
+                    Roles.setUserRoles(id, 'active', user.country);
                 }
 
                 _.extend(user, {id: id});

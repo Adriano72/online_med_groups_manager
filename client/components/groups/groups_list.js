@@ -6,18 +6,30 @@ import { Groups } from '../../../imports/collections/groups';
 class GroupsList extends Component {
   renderRows() {
       return this.props.groups.map(group => {
+        const groupEditUrl = `/editgroup/${group._id}`;
         const { _id, group_language, group_leader, meet_time  } = group;
         const leader = group_leader.first_name + " " + group_leader.last_name;
         const meetingtime = meet_time.day_of_week + " at " + meet_time.meet_time;
 
-        return (
-          <tr key={_id}>
-            <td>{group_language}</td>
-            <td>{leader}</td>
-            <td>{meetingtime}</td>
-            <td>Detail</td>
-          </tr>
-        )
+        if(Roles.userIsInRole(Meteor.user(), ['admin', 'nationalresp'])){
+          return (
+            <tr key={_id}>
+              <td><Link to={groupEditUrl}>{group_language}</Link></td>
+              <td>{leader}</td>
+              <td>{meetingtime}</td>
+              <td>Join</td>
+            </tr>
+          )
+        }else {
+          return (
+            <tr key={_id}>
+              <td>{group_language}</td>
+              <td>{leader}</td>
+              <td>{meetingtime}</td>
+              <td>Join</td>
+            </tr>
+          )
+        }
       });
   }
 
@@ -31,7 +43,7 @@ class GroupsList extends Component {
                 <th>Language</th>
                 <th>Group Leader</th>
                 <th>Meeting Time</th>
-                <th>Detail</th>
+                <th>Join this group</th>
               </tr>
             </thead>
             <tbody>

@@ -12,19 +12,43 @@ class Header extends Component {
     }
   }
 
+  onBindCreateNewAuthUser(event) {
+    event.preventDefault();
+    if(Meteor.user()){
+      browserHistory.push(`/createuser`);
+    }
+  }
+
+  renderCreateGroupLink(){
+    var loggedInUser = Meteor.user();
+    console.log("USER - header.js: ", Meteor.user());
+    if ( Roles.userIsInRole(loggedInUser, ['admin', 'nationalresp'])) { // il gruppo va messo dinamico o globale
+     return (<a href="#" onClick={this.onBindCreateNewGroup.bind(this)}>Create new group</a>);
+    }
+    return;
+  }
+
+  renderCreateUserLink(){
+    var loggedInUser = Meteor.user();
+    console.log("USER - header.js: ", Meteor.user());
+    if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
+     return (<a href="#" onClick={this.onBindCreateNewAuthUser.bind(this)}>Create Authorized User</a>);
+    }
+    return;
+  }
+
   render() {
     return (
       <nav className="nav navbar-default">
         <div className="navbar-header">
-          <a className="navbar-brand">Online group manager</a>
+          <Link to="/" className="navbar-brand">Online group manager</Link>
         </div>
         <ul className="nav navbar-nav">
           <li>
             <Accounts />
           </li>
-          <li>
-              <a href="#" onClick={this.onBindCreateNewGroup.bind(this)}>Create new group</a>
-            </li>
+          <li>{this.renderCreateGroupLink()}</li>
+          <li>{this.renderCreateUserLink()}</li>
         </ul>
       </nav>
     );
