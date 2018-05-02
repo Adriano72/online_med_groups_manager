@@ -26,7 +26,7 @@ class GroupEdit extends Component {
       country: '',
       grpupLanguage: 'English',
       meetDay: '',
-      meetTime: ''
+      meetTime: moment(),
     };
 
     this.updateLanguage = this.updateLanguage.bind(this);
@@ -45,9 +45,10 @@ class GroupEdit extends Component {
     this.setState({ meetDay: e.target.value });
   }
 
-  updateMeetTime(val) {
+  updateMeetTime(meetTime) {
     //console.log('NEW VALUE ', newValue);
-    this.setState({ meetTime: val && val.format(format) });
+    console.log(meetTime && meetTime.format('HH:mm:ss'));
+    this.setState({ meetTime });
   }
 
   updateCountry(val) {
@@ -57,10 +58,25 @@ class GroupEdit extends Component {
 
   updateGroup() {
     var newGroup = new Group(this.props.groups);
+
+    const gp_leader = {
+      first_name: this.refs.group_leader_first_name.value,
+      last_name: this.refs.group_leader_second_name.value,
+      country: this.state.country,
+      phone: this.refs.group_leader_phone.value,
+      email: this.refs.group_leader_email.value
+    }
+
+    const meet_time = {
+      day_of_week: this.state.meetDay,
+      meet_time: this.state.meetTime
+    }
+
     newGroup.insert(
-      this.refs.morning.checked,
-      this.refs.evening.checked,
-      this.refs.journal.value
+      this.state.grpupLanguage,
+      this.refs.useOwnMeetingRes.checked,
+      gp_leader,
+      meet_time
     );
     Alert.success('Group Updated', {
       position: 'top-left',
@@ -71,10 +87,9 @@ class GroupEdit extends Component {
         }, 2000);
       },
       timeout: 1500,
-      offset: 450
+      offset: 20
     });
-
-  };
+  }
 
   confirmDelete(){
     const presentGroup = this.props.groups;
@@ -108,7 +123,7 @@ class GroupEdit extends Component {
     };
     const meetTime = this.props.groups.meet_time.meet_time;
 
-    let dateStr = '2017-03-13',
+    let dateStr = moment(),
     timeStr = meetTime,
     date    = moment(dateStr),
     time    = moment(timeStr, 'h:mm a');
@@ -120,6 +135,7 @@ class GroupEdit extends Component {
 
     this.setState({ meetTime: date });
     this.setState({ meetDay: this.props.groups.meet_time.day_of_week });
+    
   };
 
   render() {
@@ -135,7 +151,6 @@ class GroupEdit extends Component {
     const groupLanguage = this.props.groups.group_language;
     const ownResources = this.props.groups.use_own_meeting_resources?"checked":"";
     const groupLeader = this.props.groups.group_leader;
-    const meetTime = this.props.groups.meet_time;
 
     return (
 
