@@ -24,7 +24,7 @@ class GroupEdit extends Component {
     this.state = {
       error: '',
       country: '',
-      grpupLanguage: 'English',
+      groupLanguage: 'English',
       meetDay: '',
       meetTime: moment(),
     };
@@ -37,7 +37,7 @@ class GroupEdit extends Component {
 
   updateLanguage(e) {
     //console.log('NEW VALUE ', newValue);
-    this.setState({ grpupLanguage: e.target.value });
+    this.setState({ groupLanguage: e.target.value });
   }
 
   updateMeetDay(e) {
@@ -45,10 +45,10 @@ class GroupEdit extends Component {
     this.setState({ meetDay: e.target.value });
   }
 
-  updateMeetTime(meetTime) {
+  updateMeetTime(val) {
     //console.log('NEW VALUE ', newValue);
-    console.log(meetTime && meetTime.format('HH:mm:ss'));
-    this.setState({ meetTime });
+    //console.log(val && val.format('HH:mm:ss'));
+    this.setState({ meetTime: val && val.format(format) });
   }
 
   updateCountry(val) {
@@ -73,7 +73,7 @@ class GroupEdit extends Component {
     }
 
     newGroup.insert(
-      this.state.grpupLanguage,
+      this.state.groupLanguage,
       this.refs.useOwnMeetingRes.checked,
       gp_leader,
       meet_time
@@ -135,7 +135,8 @@ class GroupEdit extends Component {
 
     this.setState({ meetTime: date });
     this.setState({ meetDay: this.props.groups.meet_time.day_of_week });
-    
+    this.setState({ country: this.props.groups.group_leader.country });
+
   };
 
   render() {
