@@ -44,6 +44,10 @@ const Group = Class.create({
     date_created: Date,
     group_language: String,
     use_own_meeting_resources: Boolean,
+    meditators: {
+      type: Object,
+      optional: true
+    },
     group_leader: {
       type: GroupLeader
     },
@@ -62,15 +66,35 @@ const Group = Class.create({
     }
   },
   meteorMethods: {
-    insert(language, useOwnMeetRes, group_leader, meet_time) {
-      this.ownerId = this.userId,
-      this.date_created = new Date();
-      this.group_language = language;
-      this.use_own_meeting_resources = useOwnMeetRes;
-      this.group_leader = group_leader;
-      this.meet_time = meet_time;
+    insert: function(language, useOwnMeetRes, group_leader, meet_time) {
+      var currentUserId = Meteor.userId();
+      if(currentUserId){
+        this.ownerId = this.userId,
+        this.date_created = new Date();
+        this.group_language = language;
+        this.use_own_meeting_resources = useOwnMeetRes;
+        this.group_leader = group_leader;
+        this.meet_time = meet_time;
 
-      this.ownerId = Meteor.userId();
+        this.ownerId = Meteor.userId();
+        return this.save((err, result) => {
+          if(err){
+            console.log("ERROR: ", err);
+          }else{
+            console.log("RESULT: ", result);
+          }
+        });
+      }
+    },
+    addMeditator(meditator) {
+      if(this.meditators) {
+        this.meditators.push(meditator);
+      } else {
+        this.meditators = [];
+        this.meditators.push(meditator);
+      }
+
+
       return this.save((err, result) => {
         if(err){
           console.log("ERROR: ", err);
@@ -78,6 +102,9 @@ const Group = Class.create({
           console.log("RESULT: ", result);
         }
       });
+    },
+    delete(group) {
+      return this.remove(group._id);
     },
     update(group, content) {
       return this.update(group._id, { $set: { content } });

@@ -48,7 +48,7 @@ class GroupEdit extends Component {
   updateMeetTime(val) {
     //console.log('NEW VALUE ', newValue);
     //console.log(val && val.format('HH:mm:ss'));
-    this.setState({ meetTime: val && val.format(format) });
+    this.setState({ meetTime: val });
   }
 
   updateCountry(val) {
@@ -69,7 +69,7 @@ class GroupEdit extends Component {
 
     const meet_time = {
       day_of_week: this.state.meetDay,
-      meet_time: this.state.meetTime
+      meet_time: this.state.meetTime.format(format)
     }
 
     newGroup.insert(
@@ -117,11 +117,16 @@ class GroupEdit extends Component {
   }
 
   componentWillMount() {
+
     if(_.isUndefined(this.props.groups)){
       console.log("COMP WILL MOUNT ", _.isUndefined(this.props.groups));
       return browserHistory.push('/');
     };
     const meetTime = this.props.groups.meet_time.meet_time;
+
+    let mockdate = '2016-10-01';
+
+    var dateTime = moment(mockdate + ' ' + meetTime, 'DD/MM/YYYY HH:mm');
 
     let dateStr = moment(),
     timeStr = meetTime,
@@ -260,6 +265,12 @@ class GroupEdit extends Component {
                   onClick={this.updateGroup.bind(this)}
                   >
                   Update Group
+                </button>&nbsp;
+                <button
+                  className="btn btn-warning"
+                  onClick={this.confirmDelete.bind(this)}
+                  >
+                  Delete Group
                 </button>
 
               <Alert stack={{limit: 3}} />

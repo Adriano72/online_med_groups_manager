@@ -7,6 +7,7 @@ import GroupsList from './components/groups/groups_list';
 import GroupCreate from './components/groups/group_create';
 import GroupEdit from './components/groups/group_edit';
 import CreateUser from './components/admin/create_user';
+import JoinGroup from './components/groups/join_group';
 
 
 Accounts.ui.config({
@@ -24,6 +25,7 @@ const routes = (
       <Route path="newgroup" component={GroupCreate}/>
       <Route path="editgroup/:groupId" component={GroupEdit}/>
       <Route path="createuser" component={CreateUser}/>
+      <Route path="joingroup/:groupId" component={JoinGroup}/>
     </Route>
   </Router>
 )

@@ -7,9 +7,11 @@ class GroupsList extends Component {
   renderRows() {
       return this.props.groups.map(group => {
         const groupEditUrl = `/editgroup/${group._id}`;
-        const { _id, group_language, group_leader, meet_time  } = group;
+        const joinGroupUrl = `/joingroup/${group._id}`;
+        const { _id, group_language, group_leader, meet_time, meditators  } = group;
         const leader = group_leader.first_name + " " + group_leader.last_name;
         const meetingtime = meet_time.day_of_week + " at " + meet_time.meet_time;
+        const med_numbers = (_.isUndefined(meditators))?0:meditators.length;
 
         if(Roles.userIsInRole(Meteor.user(), ['admin', 'nationalresp'])){
           return (
@@ -17,7 +19,8 @@ class GroupsList extends Component {
               <td><Link to={groupEditUrl}>{group_language}</Link></td>
               <td>{leader}</td>
               <td>{meetingtime}</td>
-              <td>Join</td>
+              <td>{med_numbers}</td>
+              <td><Link to={joinGroupUrl}>Join this group</Link></td>
             </tr>
           )
         }else {
@@ -26,6 +29,7 @@ class GroupsList extends Component {
               <td>{group_language}</td>
               <td>{leader}</td>
               <td>{meetingtime}</td>
+              <td>{med_numbers}</td>
               <td>Join</td>
             </tr>
           )
@@ -43,6 +47,7 @@ class GroupsList extends Component {
                 <th>Language</th>
                 <th>Group Leader</th>
                 <th>Meeting Time</th>
+                <th>Members</th>
                 <th>Join this group</th>
               </tr>
             </thead>
@@ -58,5 +63,5 @@ class GroupsList extends Component {
 
 export default createContainer(() => {
   Meteor.subscribe('groups');
-  return { groups: Groups.find({}, { sort: { group_language: -1 } }).fetch() };
+  return { groups: Groups.find({}, { sort: { group_language: -1 } }).fetch(), currentUser: Meteor.user() || {} };
 }, GroupsList);

@@ -75,19 +75,49 @@ class GroupCreate extends Component {
         this.state.grpupLanguage,
         this.refs.useOwnMeetingRes.checked,
         gp_leader,
-        meet_time
+        meet_time,
+        (err, result) => {
+          if(result){
+
+            Meteor.call(
+              'sendEmail',
+              'adriano@wccm.org',
+              Meteor.user().emails[0].address,
+              'WCCM Online Meditation Groups',
+              'A new online group has been created!',
+              (err, result) => {
+                console.log("ERR: ", err, 'RESULT: ', result);
+              }
+            );
+
+            Meteor.call(
+              'sendEmail',
+              'adriano@wccm.org',
+              'a.massi@informatica.aci.it',
+              'WCCM Online Meditation Groups',
+              'A new online group has been created!',
+              (err, result) => {
+                console.log("ERR: ", err, 'RESULT: ', result);
+              }
+            );
+
+            Alert.success('Group created', {
+              position: 'top-left',
+              effect: 'jelly',
+              onShow: function () {
+                setTimeout(function(){
+                  browserHistory.push('/');
+                }, 2000);
+              },
+              timeout: 1500,
+              offset: 20
+            });
+          }else {
+            alert("Error during the attempt to create a new group!")
+          }
+        }
       );
-      Alert.success('Group created', {
-        position: 'top-left',
-        effect: 'jelly',
-        onShow: function () {
-          setTimeout(function(){
-            browserHistory.push('/');
-          }, 2000);
-        },
-        timeout: 1500,
-        offset: 20
-      });
+
 
   }
 

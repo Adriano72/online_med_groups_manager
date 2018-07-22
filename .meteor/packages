@@ -24,3 +24,6 @@ jagi:astronomy
 twbs:bootstrap@3.3.6
 alanning:roles
 underscore@1.0.10
+email
+mizzao:bootboxjs
+check
