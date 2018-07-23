@@ -13,14 +13,20 @@ class GroupsList extends Component {
         const meetingtime = meet_time.day_of_week + " at " + meet_time.meet_time;
         const med_numbers = (_.isUndefined(meditators))?0:meditators.length;
 
-        if(Roles.userIsInRole(Meteor.user(), ['admin', 'nationalresp'])){
+        if(Roles.userIsInRole(Meteor.user(), ['admin', 'nationalresp']) || Roles.userIsInRole(Meteor.user(), ['groupleader'], group._id)) {
           return (
             <tr key={_id}>
               <td><Link to={groupEditUrl}>{group_language}</Link></td>
               <td>{leader}</td>
               <td>{meetingtime}</td>
               <td>{med_numbers}</td>
-              <td><Link to={joinGroupUrl}>Join this group</Link></td>
+              <td>
+                <button
+                  className="btn btn-success"
+                  onClick={() => browserHistory.push(`/joingroup/${group._id}`)}>
+                  Join this group
+                </button>
+              </td>
             </tr>
           )
         }else {
@@ -30,7 +36,14 @@ class GroupsList extends Component {
               <td>{leader}</td>
               <td>{meetingtime}</td>
               <td>{med_numbers}</td>
-              <td>Join</td>
+              <td>
+                <button
+                  className="btn btn-success"
+                  onClick={() => browserHistory.push(`/joingroup/${group._id}`)}>
+                  Join this group
+                </button>
+              </td>
+
             </tr>
           )
         }

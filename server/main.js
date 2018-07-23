@@ -25,6 +25,12 @@ Accounts.config({
     forbidClientAccountCreation: true
 });
 
+Accounts.emailTemplates.resetPassword.from = () => {
+  // Overrides the value set in `Accounts.emailTemplates.from` when resetting
+  // passwords.
+  return 'WCCM Online Meditation Groups <admin@wccm.org>';
+};
+
 Meteor.startup(() => {
   //Sessions.rawCollection().drop();
   Meteor.publish('groups', function () {

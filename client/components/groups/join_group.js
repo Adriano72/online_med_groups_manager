@@ -106,7 +106,7 @@ class JoinGroup extends Component {
 
             onClick={this.handleSubmit.bind(this)}
             >
-            Create User
+            Join Group
           </button>
         <Alert stack={{limit: 3}} />
       </div>

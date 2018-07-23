@@ -55,6 +55,51 @@ class GroupCreate extends Component {
     this.setState({ country: val });
   }
 
+  password_generator( len ) {
+      var length = (len)?(len):(10);
+      var string = "abcdefghijklmnopqrstuvwxyz"; //to upper
+      var numeric = '0123456789';
+      var punctuation = '!@#$%^&*()_+~`|}{[]\:;?><,./-=';
+      var password = "";
+      var character = "";
+      var crunch = true;
+      while( password.length<length ) {
+          let entity1 = Math.ceil(string.length * Math.random()*Math.random());
+          let entity2 = Math.ceil(numeric.length * Math.random()*Math.random());
+          let entity3 = Math.ceil(punctuation.length * Math.random()*Math.random());
+          let hold = string.charAt( entity1 );
+          hold = (entity1%2==0)?(hold.toUpperCase()):(hold);
+          character += hold;
+          character += numeric.charAt( entity2 );
+          character += punctuation.charAt( entity3 );
+          password = character;
+      }
+      return password;
+  }
+
+  createLeaderUser(newUserData) {
+    console.log("NEW USER DATA: ", newUserData);
+    Meteor.call('mCreateUser', newUserData, (error, result) => {
+        if (error) {
+             console.log(error);
+              return;
+        }
+        Alert.success('Group Leader User created and notified!', {
+          position: 'top-left',
+          effect: 'jelly',
+          onShow: function () {
+            setTimeout(function(){
+              console.log("Result: ", result);
+              browserHistory.push('/');
+            }, 2000);
+          },
+          timeout: 1500,
+          offset: 20
+        });
+
+    });
+  }
+
   onSaveClick() {
 
       const gp_leader = {
@@ -100,6 +145,30 @@ class GroupCreate extends Component {
                 console.log("ERR: ", err, 'RESULT: ', result);
               }
             );
+
+            Meteor.call(
+              'sendEmail',
+              'adriano@wccm.org',
+              this.refs.group_leader_email.value,
+              'WCCM Online Meditation Groups - Leadership assignment',
+              'You are going to lead a newly created online group',
+              (err, result) => {
+                console.log("ERR: ", err, 'RESULT: ', result);
+              }
+            );
+
+            let leaderPassword = this.password_generator(7);
+
+            var newLeaderUserData = {
+             username: this.refs.group_leader_first_name.value,
+             email: this.refs.group_leader_email.value,
+             password: leaderPassword,
+             roles: ['groupleader'],
+             groupId: result,
+             country: this.state.country
+            };
+
+            this.createLeaderUser(newLeaderUserData);
 
             Alert.success('Group created', {
               position: 'top-left',
