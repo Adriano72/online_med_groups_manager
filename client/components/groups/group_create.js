@@ -35,6 +35,14 @@ class GroupCreate extends Component {
     this.updateMeetTime = this.updateMeetTime.bind(this);
   }
 
+  componentWillMount() {
+
+    if(!(Roles.userIsInRole(Meteor.user(), ['admin', 'nationalresp']))) {
+      console.log("USER ", Meteor.user());
+      return browserHistory.push('/');
+    };
+  }
+
   updateLanguage(e) {
     //console.log('NEW VALUE ', newValue);
     this.setState({ grpupLanguage: e.target.value });
@@ -310,5 +318,5 @@ class GroupCreate extends Component {
 
 export default createContainer(() => {
   Meteor.subscribe('group');
-  return { group: Groups.find({}).fetch() };
+  return { group: Groups.find({}).fetch(), currentUser: Meteor.user() || {} };
 }, GroupCreate);

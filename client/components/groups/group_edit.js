@@ -10,7 +10,6 @@ import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 import Group from '../../../imports/classes/Group';
-import { ValidationError } from 'meteor/jagi:astronomy';
 
 const format = 'h:mm a';
 
@@ -24,7 +23,7 @@ class GroupEdit extends Component {
     this.state = {
       error: '',
       country: '',
-      groupLanguage: 'English',
+      groupLanguage: '',
       meetDay: '',
       meetTime: moment(),
     };
@@ -139,6 +138,7 @@ class GroupEdit extends Component {
     });
 
     this.setState({ meetTime: date });
+    this.setState({ groupLanguage: this.props.groups.group_language });
     this.setState({ meetDay: this.props.groups.meet_time.day_of_week });
     this.setState({ country: this.props.groups.group_leader.country });
 
@@ -168,7 +168,7 @@ class GroupEdit extends Component {
                     <div className="panel-body">
                       <div className="form-group">
                         <label htmlFor="select1" >Grooup languge</label>
-                        <select value={groupLanguage} onChange={this.updateLanguage} className="form-control">
+                        <select value={this.state.groupLanguage} onChange={this.updateLanguage} className="form-control">
                           <option value="English">English</option>
                           <option value="French">French</option>
                           <option value="Italian">Italian</option>

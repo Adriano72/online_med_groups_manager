@@ -8,7 +8,9 @@ import GroupCreate from './components/groups/group_create';
 import GroupEdit from './components/groups/group_edit';
 import CreateUser from './components/admin/create_user';
 import JoinGroup from './components/groups/join_group';
+import GroupMeditators from './components/groups/group_meditators';
 
+_ = lodash;
 
 Accounts.ui.config({
   passwordSignupFields: "USERNAME_AND_EMAIL"
@@ -26,6 +28,7 @@ const routes = (
       <Route path="editgroup/:groupId" component={GroupEdit}/>
       <Route path="createuser" component={CreateUser}/>
       <Route path="joingroup/:groupId" component={JoinGroup}/>
+      <Route path="groupmeditators/:groupId" component={GroupMeditators}/>
     </Route>
   </Router>
 )

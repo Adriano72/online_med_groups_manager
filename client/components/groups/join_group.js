@@ -55,7 +55,7 @@ class JoinGroup extends Component {
 
     selectedGroup.addMeditator(meditators);
 
-    Alert.success('Group Updated', {
+    Alert.success('Group joined succesfully!', {
       position: 'top-left',
       effect: 'jelly',
       onShow: function () {

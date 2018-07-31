@@ -66,7 +66,7 @@ const Group = Class.create({
     }
   },
   meteorMethods: {
-    insert: function(language, useOwnMeetRes, group_leader, meet_time) {
+    insert: function(language, useOwnMeetRes, group_leader, meet_time, meditators) {
       var currentUserId = Meteor.userId();
       if(currentUserId){
         this.ownerId = this.userId,
@@ -75,13 +75,17 @@ const Group = Class.create({
         this.use_own_meeting_resources = useOwnMeetRes;
         this.group_leader = group_leader;
         this.meet_time = meet_time;
+        if(meditators){
+          console.log("IF mEDITATORS ", meditators);
+          this.meditators = meditators;
+        }
 
         this.ownerId = Meteor.userId();
         return this.save((err, result) => {
           if(err){
-            console.log("ERROR: ", err);
+            console.log("GROUP INSERT ERROR: ", err);
           }else{
-            console.log("RESULT: ", result);
+            console.log("GROUP INSERT RESULT: ", result);
           }
         });
       }
