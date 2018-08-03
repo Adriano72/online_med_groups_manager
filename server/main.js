@@ -31,9 +31,19 @@ Accounts.emailTemplates.resetPassword.from = () => {
   return 'WCCM Online Meditation Groups <admin@wccm.org>';
 };
 
+Accounts.emailTemplates.enrollAccount.from = () => {
+  // Overrides the value set in `Accounts.emailTemplates.from` when resetting
+  // passwords.
+  return 'WCCM Online Meditation Groups <admin@wccm.org>';
+};
+
 Meteor.startup(() => {
   //Sessions.rawCollection().drop();
   Meteor.publish('groups', function () {
     return Groups.find();
+  });
+
+  Meteor.publish('allUsers', function () {
+    return Meteor.users.find();
   });
 });

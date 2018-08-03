@@ -56,7 +56,7 @@ class GroupMeditators extends Component {
       meet_time,
       medList,
     );
-    Alert.warning('User BANNED!', {
+    Alert.warning('User removed from this group', {
       position: 'top-left',
       effect: 'jelly',
       onShow: function () {
@@ -69,19 +69,30 @@ class GroupMeditators extends Component {
     });
   }
 
-  ban(memberToBan) {
+  remove(memberToremove) {
 
-    console.log("OLD ARRAY: ", this.state.meditatorsList);
-    let finalSet = _.reject(this.state.meditatorsList, function(value){
-      return value.email === memberToBan;
+    bootbox.confirm({
+        message: "Are you sure you want to remove this user from the group?",
+        buttons: {
+            confirm: {
+                label: 'Yes',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'No',
+                className: 'btn-danger'
+            }
+        },
+        callback:  (result)  => {
+            if(result){
+              let finalSet = _.reject(this.state.meditatorsList, function(value){
+                return value.email === memberToremove;
+              });
+              this.setState({ meditatorsList: finalSet });
+              this.updateGroup(finalSet);
+            }
+        }
     });
-    console.log("FINALSET: ", finalSet);
-    this.setState({ meditatorsList: finalSet });
-
-    console.log("STATE TEST: ", this.state.meditatorsList);
-
-    this.updateGroup(finalSet);
-    console.log("NEW MEDIATORS STATE: ", this.state.meditatorsList);
   }
 
   renderRows() {
@@ -104,8 +115,8 @@ class GroupMeditators extends Component {
             <button
               className="btn btn-warning"
 
-              onClick={() => this.ban(meditator.email)}>
-              Ban
+              onClick={() => this.remove(meditator.email)}>
+              Remove
             </button>
           </td>
 
@@ -138,7 +149,7 @@ class GroupMeditators extends Component {
                 <th>Email</th>
                 <th>Country</th>
                 <th>Send email</th>
-                <th>Ban</th>
+                <th>remove</th>
               </tr>
             </thead>
             <tbody>

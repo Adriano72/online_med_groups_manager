@@ -8,8 +8,9 @@ Meteor.methods({
                 var id = Accounts.createUser({
                     username: user.username,
                     email: user.email,
-                    password: user.password
+                    //password: user.password
                 });
+                Accounts.sendEnrollmentEmail(id);
 
                 if (user.roles.length > 0) {
                     // Need _id of existing user record so this call must come

@@ -38,7 +38,7 @@ export default class CreateUser extends Component {
     var newUserData = {
      username: name,
      email: email,
-     password: password,
+     //password: password,
      roles: ['nationalresp'],
      country: this.state.country
     };
@@ -47,8 +47,14 @@ export default class CreateUser extends Component {
 
     Meteor.call('mCreateUser', newUserData, (error, result) => {
         if (error) {
-             console.log(error);
-              return;
+          console.log("ERROR ", error);
+          if(error.reason == "Email already exists."){
+            bootbox.alert("Error: a user with the same email already exist in the database");
+             return;
+          }else {
+            bootbox.alert("Error: impossible to save the user. Contact the sysadmin");
+          }
+
         }
         Alert.success('User created succesfully!', {
           position: 'top-left',

@@ -19,6 +19,13 @@ class Header extends Component {
     }
   }
 
+  onBindAuthUsersList(event) {
+    event.preventDefault();
+    if(Meteor.user()){
+      browserHistory.push(`/meditatorslist`);
+    }
+  }
+
   renderCreateGroupLink(){
     var loggedInUser = Meteor.user();
     console.log("USER - header.js: ", Meteor.user());
@@ -37,6 +44,15 @@ class Header extends Component {
     return;
   }
 
+  renderUserListLink(){
+    var loggedInUser = Meteor.user();
+    console.log("USER - header.js: ", Meteor.user());
+    if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
+     return (<a href="#" onClick={this.onBindAuthUsersList.bind(this)}>Authorized Users</a>);
+    }
+    return;
+  }
+
   render() {
     return (
       <nav className="nav navbar-default">
@@ -49,6 +65,7 @@ class Header extends Component {
           </li>
           <li>{this.renderCreateGroupLink()}</li>
           <li>{this.renderCreateUserLink()}</li>
+          <li>{this.renderUserListLink()}</li>
         </ul>
       </nav>
     );

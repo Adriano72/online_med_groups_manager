@@ -27,6 +27,7 @@ class JoinGroup extends Component {
     let email = document.getElementById("email").value;
 
     if(name == "" || email == "" || this.state.country == '') {
+      console.log("Name: ", name, " Email: ", email, " Country: ", this.state.country);
       Alert.error('Name, Email, Password and Country are mandatory fields!', {
         position: 'top-left',
         effect: 'slide',
