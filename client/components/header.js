@@ -22,7 +22,14 @@ class Header extends Component {
   onBindAuthUsersList(event) {
     event.preventDefault();
     if(Meteor.user()){
-      browserHistory.push(`/meditatorslist`);
+      browserHistory.push(`/authuserslist`);
+    }
+  }
+
+  onBindApprovalPendingGroups(event) {
+    event.preventDefault();
+    if(Meteor.user()){
+      browserHistory.push(`/pendinggroups`);
     }
   }
 
@@ -31,6 +38,16 @@ class Header extends Component {
     console.log("USER - header.js: ", Meteor.user());
     if ( Roles.userIsInRole(loggedInUser, ['admin', 'nationalresp'])) { // il gruppo va messo dinamico o globale
      return (<a href="#" onClick={this.onBindCreateNewGroup.bind(this)}>Create new group</a>);
+    }
+    return;
+  }
+
+  renderGroupsToApproveLink(){
+    var loggedInUser = Meteor.user();
+    var numberOfGroupsToApprove = Counts.get("groups-to-approve");
+    console.log("USER - header.js: ", Meteor.user());
+    if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
+    return (<a href="#" onClick={this.onBindApprovalPendingGroups.bind(this)}>Groups Pending Approval <span className="badge">{numberOfGroupsToApprove}</span></a>);
     }
     return;
   }
@@ -63,6 +80,7 @@ class Header extends Component {
           <li>
             <Accounts />
           </li>
+          <li>{this.renderGroupsToApproveLink()}</li>
           <li>{this.renderCreateGroupLink()}</li>
           <li>{this.renderCreateUserLink()}</li>
           <li>{this.renderUserListLink()}</li>
@@ -73,6 +91,7 @@ class Header extends Component {
 }
 
 export default createContainer(() => {
+  Meteor.subscribe('groupsToApproveCount');
   return {
     currentUser: Meteor.user() || {}, // default to plain object
   };

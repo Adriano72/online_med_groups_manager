@@ -6,19 +6,38 @@ const GroupLeader = Class.create({
   /* No collection attribute */
   fields: {
     first_name: {
-      type: String
+      type: String,
+      validators: [{
+        type: 'minLength',
+        param: 2,
+        message: 'Group Leader First Name is mandatory!'
+      }]
     },
     last_name: {
-      type: String
+      type: String,
+      validators: [{
+        type: 'minLength',
+        param: 2,
+        message: 'Group Leader Last Name is mandatory!'
+      }]
     },
     country: {
-      type: String
+      type: String,
+      validators: [{
+        type: 'minLength',
+        param: 2,
+        message: 'Group Leader Country is mandatory!'
+      }]
     },
     phone: {
       type: String
     },
     email: {
-      type: String
+      type: String,
+      validators: [{
+        type: 'email',
+        message: 'Group Leader Email should be a valid email!'
+      }]
     }
   }
 });
@@ -28,10 +47,20 @@ const MeetTime = Class.create({
   /* No collection attribute */
   fields: {
     day_of_week: {
-      type: String
+      type: String,
+      validators: [{
+        type: 'minLength',
+        param: 2,
+        message: 'Meet Day is mandatory!'
+      }]
     },
     meet_time: {
-      type: String
+      type: String,
+      validators: [{
+        type: 'minLength',
+        param: 2,
+        message: 'Meet time is mandatory!'
+      }]
     }
   }
 });
@@ -44,6 +73,7 @@ const Group = Class.create({
     date_created: Date,
     group_language: String,
     use_own_meeting_resources: Boolean,
+    approved: Boolean,
     meditators: {
       type: Object,
       optional: true
@@ -66,7 +96,7 @@ const Group = Class.create({
     }
   },
   meteorMethods: {
-    insert: function(language, useOwnMeetRes, group_leader, meet_time, meditators) {
+    insert: function(language, useOwnMeetRes, group_leader, meet_time, approved, meditators) {
       var currentUserId = Meteor.userId();
       if(currentUserId){
         this.ownerId = this.userId,
@@ -75,19 +105,14 @@ const Group = Class.create({
         this.use_own_meeting_resources = useOwnMeetRes;
         this.group_leader = group_leader;
         this.meet_time = meet_time;
+        this.approved = approved;
         if(meditators){
           console.log("IF mEDITATORS ", meditators);
           this.meditators = meditators;
         }
 
         this.ownerId = Meteor.userId();
-        return this.save((err, result) => {
-          if(err){
-            console.log("GROUP INSERT ERROR: ", err);
-          }else{
-            console.log("GROUP INSERT RESULT: ", result);
-          }
-        });
+        return this.save();
       }
     },
     addMeditator(meditator) {

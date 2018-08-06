@@ -22,7 +22,6 @@ export default class CreateUser extends Component {
     e.preventDefault();
     let name = document.getElementById("signup-name").value;
     let email = document.getElementById("signup-email").value;
-    let password = document.getElementById("signup-password").value;
 
     if(name == "" || email == "" || this.state.country == '') {
       Alert.error('Name, Email, Password and Country are mandatory fields!', {
@@ -49,10 +48,10 @@ export default class CreateUser extends Component {
         if (error) {
           console.log("ERROR ", error);
           if(error.reason == "Email already exists."){
-            bootbox.alert("Error: a user with the same email already exist in the database");
+            bootbox.alert(error.reason);
              return;
           }else {
-            bootbox.alert("Error: impossible to save the user. Contact the sysadmin");
+            bootbox.alert(error.reason);
           }
 
         }
@@ -102,12 +101,6 @@ export default class CreateUser extends Component {
           <div className="form-group">
             <input type="email" id="signup-email"
                   className="form-control input-lg" placeholder="email"
-            />
-          </div>
-          <div className="form-group">
-            <input type="password" id="signup-password"
-                  className="form-control input-lg"
-                  placeholder="password"
             />
           </div>
           <button

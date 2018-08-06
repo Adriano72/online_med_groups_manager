@@ -40,10 +40,18 @@ Accounts.emailTemplates.enrollAccount.from = () => {
 Meteor.startup(() => {
   //Sessions.rawCollection().drop();
   Meteor.publish('groups', function () {
-    return Groups.find();
+    return Groups.find({ approved: true });
+  });
+
+  Meteor.publish('groupsToApprove', function () {
+    return Groups.find({ approved: false });
   });
 
   Meteor.publish('allUsers', function () {
     return Meteor.users.find();
+  });
+
+  Meteor.publish('groupsToApproveCount', function() {
+    Counts.publish(this, 'groups-to-approve', Groups.find({ approved: false }));
   });
 });

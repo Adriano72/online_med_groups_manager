@@ -87,7 +87,7 @@ class GroupCreate extends Component {
 
   createLeaderUser(newUserData) {
     console.log("NEW USER DATA: ", newUserData);
-    Meteor.call('mCreateUser', newUserData, (error, result) => {
+    Meteor.call('mCreateGroupLeader', newUserData, (error, result) => {
         if (error) {
              console.log(error);
               return;
@@ -129,10 +129,12 @@ class GroupCreate extends Component {
         this.refs.useOwnMeetingRes.checked,
         gp_leader,
         meet_time,
+        false,
         (err, result) => {
+          console.log("ERROR LOG: ", err);
           if(result){
 
-            Meteor.call(
+            Meteor.call( // Notify the Logged in User that created the group
               'sendEmail',
               'adriano@wccm.org',
               Meteor.user().emails[0].address,
@@ -143,7 +145,7 @@ class GroupCreate extends Component {
               }
             );
 
-            Meteor.call(
+            Meteor.call( // Notify the SuperAdmin
               'sendEmail',
               'adriano@wccm.org',
               'a.massi@informatica.aci.it',
@@ -154,7 +156,7 @@ class GroupCreate extends Component {
               }
             );
 
-            Meteor.call(
+            Meteor.call( // Notify the group leader
               'sendEmail',
               'adriano@wccm.org',
               this.refs.group_leader_email.value,
@@ -165,12 +167,12 @@ class GroupCreate extends Component {
               }
             );
 
-            let leaderPassword = this.password_generator(7);
+            //let leaderPassword = this.password_generator(7);
 
             var newLeaderUserData = {
              username: this.refs.group_leader_first_name.value,
              email: this.refs.group_leader_email.value,
-             password: leaderPassword,
+             //password: leaderPassword,
              roles: ['groupleader'],
              groupId: result,
              country: this.state.country
@@ -190,7 +192,12 @@ class GroupCreate extends Component {
               offset: 20
             });
           }else {
-            alert("Error during the attempt to create a new group!")
+            Alert.error(err.message, {
+              position: 'top-left',
+              effect: 'slide',
+              timeout: 3000,
+              offset: 20
+            });
           }
         }
       );
