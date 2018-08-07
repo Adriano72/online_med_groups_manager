@@ -4,15 +4,21 @@ import { Link, browserHistory } from 'react-router';
 import { Groups } from '../../../imports/collections/groups';
 
 class GroupsToApprove extends Component {
+
+  componentWillMount() {
+
+    if(!(Roles.userIsInRole(Meteor.user(), ['admin']))) {
+      return browserHistory.push('/');
+    };
+  }
+
   renderRows() {
     return this.props.groups.map(group => {
-      const groupEditUrl = `/editgroup/${group._id}`;
-      const { _id, group_language, group_leader, meet_time, meditators  } = group;
+      const groupEditUrl = `/checkgroup/${group._id}`;
+      const { _id, group_language, group_leader, meet_time, approved, meditators } = group;
       const leader = group_leader.first_name + " " + group_leader.last_name;
       const meetingtime = meet_time.day_of_week + " at " + meet_time.meet_time;
-      const med_numbers = (_.isUndefined(meditators))?0:meditators.length;
-
-      if(Roles.userIsInRole(Meteor.user(), ['admin', 'nationalresp'])) {
+      if(Roles.userIsInRole(Meteor.user(), ['admin'])){
         return (
           <tr key={_id}>
             <td><Link to={groupEditUrl}>{group_language}</Link></td>
@@ -22,7 +28,22 @@ class GroupsToApprove extends Component {
               <button
                 className="btn btn-success"
                 onClick={() => browserHistory.push(`/joingroup/${group._id}`)}>
-                Review
+                Join this group
+              </button>
+            </td>
+          </tr>
+        )
+      }else {
+        return (
+          <tr key={_id}>
+            <td><Link to={groupEditUrl}>{group_language}</Link></td>
+            <td>{leader}</td>
+            <td>{meetingtime}</td>
+            <td>
+              <button
+                className="btn btn-success"
+                onClick={() => browserHistory.push(`/joingroup/${group._id}`)}>
+                Join this group
               </button>
             </td>
           </tr>

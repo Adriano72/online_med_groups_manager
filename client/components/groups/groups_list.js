@@ -11,8 +11,11 @@ class GroupsList extends Component {
       const leader = group_leader.first_name + " " + group_leader.last_name;
       const meetingtime = meet_time.day_of_week + " at " + meet_time.meet_time;
       const med_numbers = (_.isUndefined(meditators))?0:meditators.length;
+      if(Roles.userIsInRole(Meteor.user(),['admin']) ||
+        Roles.userIsInRole(Meteor.user(), ['groupleader'], group._id) ||
+        Meteor.user()._id == group.ownerId
 
-      if(Roles.userIsInRole(Meteor.user(), ['admin', 'nationalresp']) || Roles.userIsInRole(Meteor.user(), ['groupleader'], group._id)) {
+      ) {
         return (
           <tr key={_id}>
             <td><Link to={groupEditUrl}>{group_language}</Link></td>

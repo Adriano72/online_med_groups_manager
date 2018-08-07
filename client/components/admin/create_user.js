@@ -45,29 +45,28 @@ export default class CreateUser extends Component {
     console.log("COUNTRY: ", newUserData.country);
 
     Meteor.call('mCreateUser', newUserData, (error, result) => {
-        if (error) {
-          console.log("ERROR ", error);
-          if(error.reason == "Email already exists."){
-            bootbox.alert(error.reason);
-             return;
-          }else {
-            bootbox.alert(error.reason);
-          }
+        if (result) {
+          Alert.success('User created succesfully!', {
+            position: 'top-left',
+            effect: 'jelly',
+            onShow: function () {
+              setTimeout(function(){
+                console.log("Result: ", result);
+                browserHistory.push('/');
+              }, 2000);
+            },
+            timeout: 1500,
+            offset: 20
+          });
+        } else if (error) {
 
+          Alert.error(error.message, {
+            position: 'top-left',
+            effect: 'slide',
+            timeout: 3000,
+            offset: 20
+          });
         }
-        Alert.success('User created succesfully!', {
-          position: 'top-left',
-          effect: 'jelly',
-          onShow: function () {
-            setTimeout(function(){
-              console.log("Result: ", result);
-              browserHistory.push('/');
-            }, 2000);
-          },
-          timeout: 1500,
-          offset: 20
-        });
-
     });
   }
 

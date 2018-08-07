@@ -15,7 +15,7 @@ const format = 'h:mm a';
 
 const now = moment().hour(0).minute(0);
 
-class GroupEdit extends Component {
+class CheckAndApproveGroup extends Component {
 
   constructor(props) {
     super(props);
@@ -286,7 +286,7 @@ export default createContainer((props) => {
   const { groupId } = props.params;
   console.log("GROUP ID: ", { groupId });
 
-  Meteor.subscribe('groups');
+  Meteor.subscribe('groupsToApprove');
 
   return { groups: Groups.findOne(groupId) };
-}, GroupEdit);
+}, CheckAndApproveGroup);

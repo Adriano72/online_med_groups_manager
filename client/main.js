@@ -9,9 +9,9 @@ import GroupEdit from './components/groups/group_edit';
 import CreateUser from './components/admin/create_user';
 import AuthUsersList from './components/admin/auth_users_list';
 import GroupsToApprove from './components/admin/groups_to_approve';
+import CheckAndApproveGroup from './components/admin/group_check_approve';
 import JoinGroup from './components/groups/join_group';
 import GroupMeditators from './components/groups/group_meditators';
-
 
 _ = lodash;
 
@@ -32,6 +32,7 @@ const routes = (
       <Route path="createuser" component={CreateUser}/>
       <Route path="authuserslist" component={AuthUsersList}/>
       <Route path="pendinggroups" component={GroupsToApprove}/>
+      <Route path="checkgroup/:groupId" component={CheckAndApproveGroup}/>
       <Route path="joingroup/:groupId" component={JoinGroup}/>
       <Route path="groupmeditators/:groupId" component={GroupMeditators}/>
     </Route>
