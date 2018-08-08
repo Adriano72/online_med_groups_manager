@@ -179,18 +179,13 @@ class GroupCreate extends Component {
             };
 
             this.createLeaderUser(newLeaderUserData);
+            bootbox.alert({
+              size: "small",
+              title: "New group submitted succesfully",
+              message: "Your group will be reviewed by our staff for approvation and public listing. You will be notified by email about the approval progress",
+              callback: function(){ /* your callback code */ }
+            })
 
-            Alert.success('Group created', {
-              position: 'top-left',
-              effect: 'jelly',
-              onShow: function () {
-                setTimeout(function(){
-                  browserHistory.push('/');
-                }, 2000);
-              },
-              timeout: 1500,
-              offset: 20
-            });
           }else {
             Alert.error(err.message, {
               position: 'top-left',
@@ -208,7 +203,7 @@ class GroupCreate extends Component {
   render() {
     return (
         <div className="container-fluid top-buffer">
-            <h2>New online group</h2><br />
+            <h2>New Group</h2><br />
 
               <div className="panel panel-primary">
                 <div className="panel-heading">Group Info</div>

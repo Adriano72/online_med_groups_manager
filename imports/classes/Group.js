@@ -136,7 +136,7 @@ const Group = Class.create({
       return this.remove(group._id);
     },
     update(group, content) {
-      return this.update(group._id, { $set: { content } });
+      return Groups.update(group, { $set: content });
     },
   }
 });

@@ -71,24 +71,31 @@ class GroupEdit extends Component {
       meet_time: this.state.meetTime.format(format)
     }
 
-    newGroup.insert(
-      this.state.groupLanguage,
-      this.refs.useOwnMeetingRes.checked,
-      gp_leader,
-      meet_time,
-      false
-    );
-    Alert.success('Group Updated', {
-      position: 'top-left',
-      effect: 'jelly',
-      onShow: function () {
-        setTimeout(function(){
-          browserHistory.push('/');
-        }, 2000);
+    newGroup.update(this.props.groups,
+      {
+        group_language: this.state.groupLanguage,
+        use_own_meeting_resources: this.refs.useOwnMeetingRes.checked,
+        group_leader: gp_leader,
+        meet_time: meet_time,
+        approved: Roles.userIsInRole(Meteor.user(), ['admin'])
       },
-      timeout: 1500,
-      offset: 20
-    });
+      (err, result) => {
+        if (result) {
+          bootbox.alert({
+            title: "Groups changes saved",
+            message: "Your group will be reviewed by our staff for approvation and public listing. You will be notified by email about the approval progress",
+            callback: function(){ browserHistory.push('/'); }
+          })
+        }else {
+          Alert.error(err.message, {
+            position: 'top-left',
+            effect: 'slide',
+            timeout: 3000,
+            offset: 20
+          });
+        }
+      }
+    );
   }
 
   confirmDelete(){
@@ -245,7 +252,7 @@ class GroupEdit extends Component {
                     </div>
                 </div>
                 <div className="panel panel-danger">
-                  <div className="panel-heading">Group Meeting Time</div>
+                  <div className="panel-heading">Online meeting service options</div>
                     <div className="panel-body">
                         <div className="form-group">
                           <div className="checkbox">

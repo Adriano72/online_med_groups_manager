@@ -71,13 +71,16 @@ class CheckAndApproveGroup extends Component {
       meet_time: this.state.meetTime.format(format)
     }
 
-    newGroup.insert(
-      this.state.groupLanguage,
-      this.refs.useOwnMeetingRes.checked,
-      gp_leader,
-      meet_time,
-      false
+    newGroup.update(this.props.groups,
+      {
+        group_language: this.state.groupLanguage,
+        use_own_meeting_resources: this.refs.useOwnMeetingRes.checked,
+        group_leader: gp_leader,
+        meet_time: meet_time,
+        approved: true
+      }
     );
+
     Alert.success('Group Updated', {
       position: 'top-left',
       effect: 'jelly',
@@ -117,9 +120,7 @@ class CheckAndApproveGroup extends Component {
   }
 
   componentWillMount() {
-    console.log("ECCOMI!!!!!!!!!!!!!!");
     if(_.isUndefined(this.props.groups)){
-      console.log("COMP WILL MOUNT ", _.isUndefined(this.props.groups));
       return browserHistory.push('/');
     };
     const meetTime = this.props.groups.meet_time.meet_time;
@@ -162,9 +163,9 @@ class CheckAndApproveGroup extends Component {
     return (
 
           <div className="container-fluid top-buffer">
-              <h2>Edit Group</h2><br />
+              <h2>Review Group Submissions</h2><br />
 
-                <div className="panel panel-primary">
+                <div className="panel panel-danger">
                   <div className="panel-heading">Group Info</div>
                     <div className="panel-body">
                       <div className="form-group">
@@ -184,7 +185,7 @@ class CheckAndApproveGroup extends Component {
                       </div>
                     </div>
                 </div>
-                <div className="panel panel-primary">
+                <div className="panel panel-danger">
                   <div className="panel-heading">Group Leader</div>
                     <div className="panel-body">
                         <div className="form-group col-xs-3">
@@ -214,7 +215,7 @@ class CheckAndApproveGroup extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="panel panel-primary">
+                <div className="panel panel-danger">
                   <div className="panel-heading">Group Meeting Time</div>
                     <div className="panel-body">
                         <div className="form-group col-xs-2">
@@ -245,7 +246,7 @@ class CheckAndApproveGroup extends Component {
                     </div>
                 </div>
                 <div className="panel panel-danger">
-                  <div className="panel-heading">Group Meeting Time</div>
+                  <div className="panel-heading">Online meeting service options</div>
                     <div className="panel-body">
                         <div className="form-group">
                           <div className="checkbox">
@@ -257,23 +258,13 @@ class CheckAndApproveGroup extends Component {
                         </div>
                     </div>
                 </div>
-
-
-
                 <div className="text-danger">{this.state.error}</div>
                 <button
                   className="btn btn-primary"
                   onClick={this.updateGroup.bind(this)}
                   >
-                  Update Group
-                </button>&nbsp;
-                <button
-                  className="btn btn-warning"
-                  onClick={this.confirmDelete.bind(this)}
-                  >
-                  Delete Group
+                  Approve Group
                 </button>
-
               <Alert stack={{limit: 3}} />
 
           </div>

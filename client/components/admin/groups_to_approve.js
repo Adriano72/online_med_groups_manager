@@ -21,14 +21,14 @@ class GroupsToApprove extends Component {
       if(Roles.userIsInRole(Meteor.user(), ['admin'])){
         return (
           <tr key={_id}>
-            <td><Link to={groupEditUrl}>{group_language}</Link></td>
+            <td>{group_language}</td>
             <td>{leader}</td>
             <td>{meetingtime}</td>
             <td>
               <button
                 className="btn btn-success"
-                onClick={() => browserHistory.push(`/joingroup/${group._id}`)}>
-                Join this group
+                onClick={() => browserHistory.push(groupEditUrl)}>
+                Review
               </button>
             </td>
           </tr>
@@ -42,8 +42,8 @@ class GroupsToApprove extends Component {
             <td>
               <button
                 className="btn btn-success"
-                onClick={() => browserHistory.push(`/joingroup/${group._id}`)}>
-                Join this group
+                onClick={() => browserHistory.push(groupEditUrl)}>
+                Review
               </button>
             </td>
           </tr>
@@ -62,7 +62,7 @@ class GroupsToApprove extends Component {
                 <th>Language</th>
                 <th>Group Leader</th>
                 <th>Meeting Time</th>
-                <th>Join this group</th>
+                <th>Review group submission</th>
               </tr>
             </thead>
             <tbody>

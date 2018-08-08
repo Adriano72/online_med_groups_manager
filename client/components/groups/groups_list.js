@@ -13,7 +13,7 @@ class GroupsList extends Component {
       const med_numbers = (_.isUndefined(meditators))?0:meditators.length;
       if(Roles.userIsInRole(Meteor.user(),['admin']) ||
         Roles.userIsInRole(Meteor.user(), ['groupleader'], group._id) ||
-        Meteor.user()._id == group.ownerId
+        Meteor.user() && (Meteor.user()._id == group.ownerId)
 
       ) {
         return (
@@ -70,7 +70,7 @@ class GroupsList extends Component {
               <tr>
                 <th>Language</th>
                 <th>Group Leader</th>
-                <th>Meeting Time</th>
+                <th>Meeting Day and Time</th>
                 <th>Members</th>
                 <th>Join this group</th>
               </tr>

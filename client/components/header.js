@@ -35,7 +35,6 @@ class Header extends Component {
 
   renderCreateGroupLink(){
     var loggedInUser = Meteor.user();
-    console.log("USER - header.js: ", Meteor.user());
     if ( Roles.userIsInRole(loggedInUser, ['admin', 'nationalresp'])) { // il gruppo va messo dinamico o globale
      return (<a href="#" onClick={this.onBindCreateNewGroup.bind(this)}>Create new group</a>);
     }
@@ -45,7 +44,6 @@ class Header extends Component {
   renderGroupsToApproveLink(){
     var loggedInUser = Meteor.user();
     var numberOfGroupsToApprove = Counts.get("groups-to-approve");
-    console.log("USER - header.js: ", Meteor.user());
     if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
     return (<a href="#" onClick={this.onBindApprovalPendingGroups.bind(this)}>Groups Pending Approval <span className="badge">{numberOfGroupsToApprove}</span></a>);
     }
@@ -54,7 +52,6 @@ class Header extends Component {
 
   renderCreateUserLink(){
     var loggedInUser = Meteor.user();
-    console.log("USER - header.js: ", Meteor.user());
     if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
      return (<a href="#" onClick={this.onBindCreateNewAuthUser.bind(this)}>Create Authorized User</a>);
     }
@@ -63,7 +60,6 @@ class Header extends Component {
 
   renderUserListLink(){
     var loggedInUser = Meteor.user();
-    console.log("USER - header.js: ", Meteor.user());
     if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
      return (<a href="#" onClick={this.onBindAuthUsersList.bind(this)}>Authorized Users</a>);
     }
