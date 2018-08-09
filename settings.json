@@ -1,0 +1,7 @@
+{
+  "galaxy.meteor.com": {
+     "env": {
+       "MONGO_URL": "mongodb://adriano:Khataplasm72@ds115992-a0.mlab.com:15992/onlinegroups"
+     }
+   }
+}
