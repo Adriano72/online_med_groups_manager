@@ -26,10 +26,10 @@ class JoinGroup extends Component {
     let name = document.getElementById("full_name").value;
     let email = document.getElementById("email").value;
     let gdpr = this.refs.gdpr_consent.checked
-
+    /*
     if(name == "" || email == "" || this.state.country == '' || !gdpr) {
       console.log("Name: ", name, " Email: ", email, " Country: ", this.state.country);
-      Alert.error('Name, Email, Password and Country are mandatory fields!', {
+      Alert.error('Name, Email, Password, Country  and Communication Permission are mandatory fields!', {
         position: 'top-left',
         effect: 'slide',
         timeout: 3000,
@@ -38,6 +38,7 @@ class JoinGroup extends Component {
 
       return;
     }
+    */
 
     var selectedGroup = new Group(this.props.groups);
 
@@ -48,8 +49,30 @@ class JoinGroup extends Component {
       gdpr_ok: gdpr
     }
 
-    selectedGroup.addMeditator(meditators);
-
+    selectedGroup.addMeditator(meditators, (err, result) => {
+      console.log("ERROR LOG: ", err);
+      if(result){
+        Alert.success('Group joined succesfully!', {
+          position: 'top-left',
+          effect: 'jelly',
+          onShow: function () {
+            setTimeout(function(){
+              browserHistory.push('/');
+            }, 2000);
+          },
+          timeout: 1500,
+          offset: 20
+        });
+      }else {
+        Alert.error(err.message, {
+          position: 'top-left',
+          effect: 'slide',
+          timeout: 3000,
+          offset: 20
+        });
+      }
+    });
+    /*
     Alert.success('Group joined succesfully!', {
       position: 'top-left',
       effect: 'jelly',
@@ -61,6 +84,7 @@ class JoinGroup extends Component {
       timeout: 1500,
       offset: 20
     });
+    */
 
   }
 

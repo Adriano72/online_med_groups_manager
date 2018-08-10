@@ -54,6 +54,7 @@ class GroupMeditators extends Component {
       this.props.groups.use_own_meeting_resources,
       gp_leader,
       meet_time,
+      true,
       medList,
     );
     Alert.warning('User removed from this group', {

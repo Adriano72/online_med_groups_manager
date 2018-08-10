@@ -42,6 +42,44 @@ const GroupLeader = Class.create({
   }
 });
 
+const Meditator = Class.create({
+  name: 'Meditator',
+  /* No collection attribute */
+  fields: {
+    full_name: {
+      type: String,
+      validators: [{
+        type: 'minLength',
+        param: 2,
+        message: 'Name is mandatory!'
+      }]
+    },
+    email: {
+      type: String,
+      validators: [{
+        type: 'email',
+        message: 'Email should be a valid email!'
+      }]
+    },
+    country: {
+      type: String,
+      validators: [{
+        type: 'minLength',
+        param: 2,
+        message: 'Country is mandatory!'
+      }]
+    },
+    gdpr_ok: {
+      type: Boolean,
+      validators: [{
+        type: 'gt',
+        param: 0,
+        message: 'Permission to be contacted by email is mandatory'
+      }]
+    }
+  }
+});
+
 const MeetTime = Class.create({
   name: 'MeetTime',
   /* No collection attribute */
@@ -75,7 +113,7 @@ const Group = Class.create({
     use_own_meeting_resources: Boolean,
     approved: Boolean,
     meditators: {
-      type: Object,
+      type: [Meditator],
       optional: true
     },
     group_leader: {
@@ -122,15 +160,7 @@ const Group = Class.create({
         this.meditators = [];
         this.meditators.push(meditator);
       }
-
-
-      return this.save((err, result) => {
-        if(err){
-          console.log("ERROR: ", err);
-        }else{
-          console.log("RESULT: ", result);
-        }
-      });
+      return this.save();
     },
     delete(group) {
       return this.remove(group._id);
