@@ -3,6 +3,10 @@
   font-size: 14px;
 }
 
+.table > tbody > tr > td {
+     vertical-align: middle;
+}
+
 html, body {
   height: 100%;
   margin: 0;

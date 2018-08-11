@@ -41,10 +41,17 @@ Accounts.emailTemplates.enrollAccount.from = () => {
 Accounts.emailTemplates.enrollAccount.text = (user, url) => {
   return 'Dear '+user.username
     + '\n\n'
-    + 'To activate your account on the WCCM Online Groups Meditation portal please click on the link below!'
+    + 'To activate your account on the WCCM Online Meditation Groups portal please click on the link below:'
     + '\n\n'
     + url
-    + 'Welcome aboard'
+    + '\n\n'
+    + 'Please note than once set your password you will find yourself already logged in on the groups portal. '
+    + 'Should you logout and need to login again, you will need your uername: - '+user.username+' - or your email, together with your chosen password'
+    + '\n\n'
+    + 'Welcome aboard!'
+    + '\n\n'
+    + 'For any help you might need please write to leonardo@wccm.org'
+    + '\n\n'
     + 'The World Community for Christian Meditation - Online Meditation Groups';
 };
 

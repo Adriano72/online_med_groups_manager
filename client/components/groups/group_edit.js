@@ -81,11 +81,20 @@ class GroupEdit extends Component {
       },
       (err, result) => {
         if (result) {
-          bootbox.alert({
-            title: "Groups changes saved",
-            message: "Your group will be reviewed by our staff for approvation and public listing. You will be notified by email about the approval progress",
-            callback: function(){ browserHistory.push('/'); }
-          })
+          if(Roles.userIsInRole(Meteor.user(), ['admin'])) {
+            bootbox.alert({
+              title: "Groups changes saved",
+              message: "Group changes saved successfully",
+              callback: function(){ browserHistory.push('/'); }
+            })
+          }else{
+            bootbox.alert({
+              title: "Groups changes saved",
+              message: "Your group will be reviewed by our staff for approvation and public listing. You will be notified by email about the approval progress",
+              callback: function(){ browserHistory.push('/'); }
+            })
+          }
+
         }else {
           Alert.error(err.message, {
             position: 'top-left',

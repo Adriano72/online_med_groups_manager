@@ -52,7 +52,7 @@ export default class CreateUser extends Component {
             'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
             email,
             'WCCM Online Meditation Groups - National Referent Role Assignment',
-            '<p>Dear '+name+'</p><h4>You have been granted an administrative access to manage online meditation groups in <b>'+this.state.country+' </b></h4><p>You will receive another email to setup your account password following a personalized link.</p><p>For any help you might need please write to leonardo@wccm.org<p><em>The WCCM Online Mediation Groups Staff</em></p>',
+            '<p>Dear '+name+'</p><h4>You have been granted an administrative account to manage online meditation groups in <b>'+this.state.country+' </b></h4><p>You will receive another email to setup your account password following a personalized link.</p><p>For any help you might need please write to leonardo@wccm.org<p><em>The WCCM Online Mediation Groups Staff</em></p>',
             (err, result) => {
               console.log("ERR: ", err, 'RESULT: ', result);
             }

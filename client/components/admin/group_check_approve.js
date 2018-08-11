@@ -56,7 +56,12 @@ class CheckAndApproveGroup extends Component {
   }
 
   updateGroup() {
+
     var newGroup = new Group(this.props.groups);
+
+    const utenti = this.props.allUsers;
+
+    const groupSubmitter = _.find(utenti, { '_id': newGroup.ownerId });
 
     const gp_leader = {
       first_name: this.refs.group_leader_first_name.value,
@@ -86,7 +91,7 @@ class CheckAndApproveGroup extends Component {
            email: this.refs.group_leader_email.value,
            //password: leaderPassword,
            roles: ['groupleader'],
-           groupId: result,
+           groupId: this.props.groups._id,
            country: this.state.country
           };
 
@@ -97,6 +102,32 @@ class CheckAndApproveGroup extends Component {
               console.log("GROUP LEADER CREATION ERROR: ", err);
             }
           });
+
+          Meteor.call( // Notify the group leader
+            'sendEmail',
+            'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
+            gp_leader.email,
+            'WCCM Online Meditation Groups - Group Leader Role Assignment',
+            '<p>Dear '+gp_leader.first_name+'</p><h4>You have been assigned to be the Group Leader of an Online Meditation Group</h4><ul><li>Group Language: '+this.state.groupLanguage+'</li><li>Group Meeting Day and Time: '+this.state.meetDay+ ' at '+this.state.meetTime.format(format)+'</li></ul><p>In another email you should have received the link to set your password, once done so you will be able to login on the Online Meditation Group platform at https://www.onlinemeditationwccm.org and manage the groups you are leader of.</p><p>For any help you might need please write to leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+
+            (err, result) => {
+              console.log("ERR: ", err, 'RESULT: ', result);
+            }
+          );
+
+          Meteor.call( // Notify the National Resp that submitted the group
+            'sendEmail',
+            'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
+            groupSubmitter.emails[0].address,
+            'WCCM Online Meditation Groups - Group submission accepted!',
+            '<p>Dear '+groupSubmitter.username+'</p><h4>Your Group request submission has been reviewed and accepted!</h4><ul><li>Group Language: '+this.state.groupLanguage+'</li><li>Group Meeting Day and Time: '+this.state.meetDay+ ' at '+this.state.meetTime.format(format)+'</li></ul><p>The new group is now visible on the public group listing page: https://www.onlinemeditationwccm.org</p><p>The person you assigned to lead the group, <b>'+gp_leader.first_name+' '+gp_leader.last_name+'</b>, has received an email that notifies him/her of his group role and another one to complete the account creation that will be needed to manage the communications with the group members</p><p>For any help you might need please write to leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+
+            (err, result) => {
+              console.log("ERR: ", err, 'RESULT: ', result);
+            }
+          );
+
+
         }
       }
     );
@@ -143,6 +174,7 @@ class CheckAndApproveGroup extends Component {
     if(_.isUndefined(this.props.groups)){
       return browserHistory.push('/');
     };
+
     const meetTime = this.props.groups.meet_time.meet_time;
 
     let mockdate = '2016-10-01';
@@ -282,22 +314,19 @@ class CheckAndApproveGroup extends Component {
                 <button
                   className="btn btn-primary"
                   onClick={this.updateGroup.bind(this)}
-                  >
+                >
                   Approve Group
                 </button>
               <Alert stack={{limit: 3}} />
-
           </div>
     )
   }
 }
 
 export default createContainer((props) => {
-  console.log("PROPS: ", props);
   const { groupId } = props.params;
-  console.log("GROUP ID: ", { groupId });
-
   Meteor.subscribe('groupsToApprove');
+  Meteor.subscribe('allUsers');
 
-  return { groups: Groups.findOne(groupId) };
+  return { groups: Groups.findOne(groupId), allUsers: Meteor.users.find({}).fetch() };
 }, CheckAndApproveGroup);

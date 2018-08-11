@@ -24,7 +24,7 @@ class AuthUsersList extends Component {
       return users.map(user => {
 
           const userViewUrl = `/student_detail/${user._id}`;
-          const group = Object.keys(user.roles);
+          const group = Object.keys(user.roles)||"ciao";
           const roles = Roles.getRolesForUser(user);
           const email = user.emails[0].address;
           return (
