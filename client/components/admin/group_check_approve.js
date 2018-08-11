@@ -77,7 +77,27 @@ class CheckAndApproveGroup extends Component {
         use_own_meeting_resources: this.refs.useOwnMeetingRes.checked,
         group_leader: gp_leader,
         meet_time: meet_time,
-        approved: true
+        approved: true,
+      },
+      (err, result) => {
+        if(result) {
+          const newLeaderUserData = {
+           username: this.refs.group_leader_first_name.value,
+           email: this.refs.group_leader_email.value,
+           //password: leaderPassword,
+           roles: ['groupleader'],
+           groupId: result,
+           country: this.state.country
+          };
+
+          Meteor.call('mCreateGroupLeader', newLeaderUserData, (error, res) => {
+            if (res) {
+              console.log("GROUP LEADER CREATION RESULT: ", res);
+            }else if(err) {
+              console.log("GROUP LEADER CREATION ERROR: ", err);
+            }
+          });
+        }
       }
     );
 

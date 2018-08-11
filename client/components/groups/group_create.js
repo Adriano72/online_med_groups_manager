@@ -63,139 +63,72 @@ class GroupCreate extends Component {
     this.setState({ country: val });
   }
 
-  password_generator( len ) {
-      var length = (len)?(len):(10);
-      var string = "abcdefghijklmnopqrstuvwxyz"; //to upper
-      var numeric = '0123456789';
-      var punctuation = '!@#$%^&*()_+~`|}{[]\:;?><,./-=';
-      var password = "";
-      var character = "";
-      var crunch = true;
-      while( password.length<length ) {
-          let entity1 = Math.ceil(string.length * Math.random()*Math.random());
-          let entity2 = Math.ceil(numeric.length * Math.random()*Math.random());
-          let entity3 = Math.ceil(punctuation.length * Math.random()*Math.random());
-          let hold = string.charAt( entity1 );
-          hold = (entity1%2==0)?(hold.toUpperCase()):(hold);
-          character += hold;
-          character += numeric.charAt( entity2 );
-          character += punctuation.charAt( entity3 );
-          password = character;
-      }
-      return password;
-  }
-
-  createLeaderUser(newUserData) {
-    console.log("NEW USER DATA: ", newUserData);
-    Meteor.call('mCreateGroupLeader', newUserData, (error, result) => {
-        if (error) {
-             console.log(error);
-              return;
-        }
-        Alert.success('Group Leader User created and notified!', {
-          position: 'top-left',
-          effect: 'jelly',
-          onShow: function () {
-            setTimeout(function(){
-              console.log("Result: ", result);
-              browserHistory.push('/');
-            }, 2000);
-          },
-          timeout: 1500,
-          offset: 20
-        });
-
-    });
-  }
-
   onSaveClick() {
+    const allAdmins = Roles.getUsersInRole('admin', Roles.GLOBAL_GROUP);
 
-      const gp_leader = {
-        first_name: this.refs.group_leader_first_name.value,
-        last_name: this.refs.group_leader_second_name.value,
-        country: this.state.country,
-        phone: this.refs.group_leader_phone.value,
-        email: this.refs.group_leader_email.value
-      }
+    const gp_leader = {
+      first_name: this.refs.group_leader_first_name.value,
+      last_name: this.refs.group_leader_second_name.value,
+      country: this.state.country,
+      phone: this.refs.group_leader_phone.value,
+      email: this.refs.group_leader_email.value
+    }
 
-      const meet_time = {
-        day_of_week: this.state.meetDay,
-        meet_time: this.state.meetTime
-      }
+    const meet_time = {
+      day_of_week: this.state.meetDay,
+      meet_time: this.state.meetTime
+    }
 
-      var newGroup = new Group();
-      newGroup.insert(
-        this.state.grpupLanguage,
-        this.refs.useOwnMeetingRes.checked,
-        gp_leader,
-        meet_time,
-        false,
-        (err, result) => {
-          console.log("ERROR LOG: ", err);
-          if(result){
+    var newGroup = new Group();
+    newGroup.insert(
+      this.state.grpupLanguage,
+      this.refs.useOwnMeetingRes.checked,
+      gp_leader,
+      meet_time,
+      false,
+      (err, result) => {
+        console.log("ERROR LOG: ", err);
+        if(result){
 
-            Meteor.call( // Notify the Logged in User that created the group
+          Meteor.call( // Notify the Logged in User that created the group
+            'sendEmail',
+            'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
+            Meteor.user().emails[0].address,
+            'WCCM Online Meditation Groups - New Group Submission',
+            '<h4>Your Group request submission has been received</h4><p>As soon as one of the sfaff administrator will review and approve your submission you will receive a notification by email</p><p>For any help you might need please write to leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+
+            (err, result) => {
+              console.log("ERR: ", err, 'RESULT: ', result);
+            }
+          );
+
+          allAdmins.forEach(admin => { // Notify all the SuperAdmins
+            console.log("ALLUS", admin.emails[0].address);
+            Meteor.call(
               'sendEmail',
-              'adriano@wccm.org',
-              Meteor.user().emails[0].address,
+              'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
+              admin.emails[0].address,
               'WCCM Online Meditation Groups',
-              'A new online group has been created!',
-              (err, result) => {
-                console.log("ERR: ", err, 'RESULT: ', result);
-              }
+              '<h4>A new group creation request has been submitted</h4><p>Please login wth your administrative credentials and review this submission in order to approve or reject it</p><p><em>The WCCM Online Mediation Groups Automatic Notification Bot</em></p>'
             );
+          });
 
-            Meteor.call( // Notify the SuperAdmin
-              'sendEmail',
-              'adriano@wccm.org',
-              'a.massi@informatica.aci.it',
-              'WCCM Online Meditation Groups',
-              'A new online group has been created!',
-              (err, result) => {
-                console.log("ERR: ", err, 'RESULT: ', result);
-              }
-            );
+          bootbox.alert({
+            title: "New group submitted succesfully",
+            message: "Your group will be reviewed by our staff for approvation and public listing. You will be notified by email about the approval progress",
+            callback: function(){ /* your callback code */ }
+          })
 
-            Meteor.call( // Notify the group leader
-              'sendEmail',
-              'adriano@wccm.org',
-              this.refs.group_leader_email.value,
-              'WCCM Online Meditation Groups - Leadership assignment',
-              'You are going to lead a newly created online group',
-              (err, result) => {
-                console.log("ERR: ", err, 'RESULT: ', result);
-              }
-            );
-
-            //let leaderPassword = this.password_generator(7);
-
-            var newLeaderUserData = {
-             username: this.refs.group_leader_first_name.value,
-             email: this.refs.group_leader_email.value,
-             //password: leaderPassword,
-             roles: ['groupleader'],
-             groupId: result,
-             country: this.state.country
-            };
-
-            this.createLeaderUser(newLeaderUserData);
-            bootbox.alert({
-              size: "small",
-              title: "New group submitted succesfully",
-              message: "Your group will be reviewed by our staff for approvation and public listing. You will be notified by email about the approval progress",
-              callback: function(){ /* your callback code */ }
-            })
-
-          }else {
-            Alert.error(err.message, {
-              position: 'top-left',
-              effect: 'slide',
-              timeout: 3000,
-              offset: 20
-            });
-          }
+        }else {
+          Alert.error(err.message, {
+            position: 'top-left',
+            effect: 'slide',
+            timeout: 3000,
+            offset: 20
+          });
         }
-      );
+      }
+    );
 
 
   }
@@ -292,14 +225,12 @@ class GroupCreate extends Component {
                         <div className="checkbox">
                           <label>
                             <input type="checkbox" ref="useOwnMeetingRes" value="" />
-                            We are going to use our own live meeting service (Hangouts, Zoom, Webex...)
+                            We will use our own live meeting service (Hangouts, Zoom, Webex...)
                           </label>
                         </div>
                       </div>
                   </div>
               </div>
-
-
 
               <div className="text-danger">{this.state.error}</div>
               <button
@@ -316,9 +247,8 @@ class GroupCreate extends Component {
   }
 }
 
-//export default SessionsCreate;
-
 export default createContainer(() => {
+  Meteor.subscribe('allUsers');
   Meteor.subscribe('group');
-  return { group: Groups.find({}).fetch(), currentUser: Meteor.user() || {} };
+  return { group: Groups.find({}).fetch(), currentUser: Meteor.user() || {}, allUsers: Meteor.users.find({}).fetch(), };
 }, GroupCreate);

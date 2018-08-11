@@ -7,6 +7,7 @@ import Group from '../imports/classes/Group';
 Meteor.methods({
   sendEmail: function(sender, recipient, subject, body) {
     check([sender, recipient, subject, body], [String]);
+    this.unblock();
     if (Meteor.isServer) {
       var currentUserId = Meteor.userId();
       if(currentUserId){
@@ -14,7 +15,7 @@ Meteor.methods({
           from: sender,
           to: recipient,
           subject: subject,
-          text: body
+          html: body
         });
       }
     }
@@ -35,6 +36,16 @@ Accounts.emailTemplates.enrollAccount.from = () => {
   // Overrides the value set in `Accounts.emailTemplates.from` when resetting
   // passwords.
   return 'WCCM Online Meditation Groups <admin@wccm.org>';
+};
+
+Accounts.emailTemplates.enrollAccount.text = (user, url) => {
+  return 'Dear '+user.username
+    + '\n\n'
+    + 'To activate your account on the WCCM Online Groups Meditation portal please click on the link below!'
+    + '\n\n'
+    + url
+    + 'Welcome aboard'
+    + 'The World Community for Christian Meditation - Online Meditation Groups';
 };
 
 Meteor.startup(() => {

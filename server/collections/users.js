@@ -54,7 +54,7 @@ Meteor.methods({
 
                 _.extend(user, {id: id});
 
-                return user;
+                return id;
             }
         }
     }
