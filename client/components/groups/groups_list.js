@@ -1,11 +1,24 @@
 import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link, browserHistory } from 'react-router';
+import Select from 'react-select';
 import { Groups } from '../../../imports/collections/groups';
 
 class GroupsList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      groupSelected: 'all',
+      groupsCollection: props.groups,
+    };
+  }
+
   renderRows() {
-    return this.props.groups.map(group => {
+
+    var groupsToShow = this.state.groupsCollection;
+
+    return groupsToShow.map(group => {
       const groupEditUrl = `/editgroup/${group._id}`;
       const { _id, group_language, group_leader, meet_time, meditators  } = group;
       const leader = group_leader.first_name + " " + group_leader.last_name;
@@ -61,10 +74,36 @@ class GroupsList extends Component {
     });
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps){
+    this.setState({
+      groupsCollection: nextProps.groups
+    });
+  }
+
+  filterByDayOfWeek = (dayOfWeek) => {
+    let tempList;
+    this.setState({ filterBy: dayOfWeek });
+    if(dayOfWeek.value === 'All'){
+      tempList = this.props.groups
+    }else {
+      tempList = _.filter(this.props.groups, function(o) { return o.meet_time.day_of_week == dayOfWeek.value; });
+    }
+    this.setState({ groupsCollection: tempList });
+  }
+
   render() {
+
+    const daysOfWeek = [{value: 'All', label: 'All'}, {value: 'Monday', label: 'Monday'}, {value: 'Tuesday', label: 'Tuesday'}, {value: 'Wednesday', label: 'Wednesday'}, {value: 'Thursday', label: 'Thursday'}, {value: 'Friday', label: 'Friday'}, {value: 'Saturday', label: 'Saturday'}, {value: 'Sunday', label: 'Sunday'}];
+
+
     return (
       <div className="container-fluid top-buffer">
-        <pre>
+
+          <div className="form-group" >
+
+            <Select name="form-field-name" value={this.state.filterBy} placeholder="Filter by Meeting Day" searchable options={daysOfWeek} onChange={this.filterByDayOfWeek} />
+
+          </div>
           <table className="table table-striped">
             <thead>
               <tr>
@@ -79,7 +118,7 @@ class GroupsList extends Component {
               {this.renderRows()}
             </tbody>
           </table>
-        </pre>
+
       </div>
     );
   }
@@ -87,5 +126,5 @@ class GroupsList extends Component {
 
 export default createContainer(() => {
   Meteor.subscribe('groups');
-  return { groups: Groups.find({}, { sort: { group_language: -1 } }).fetch(), currentUser: Meteor.user() || {} };
+  return { groups: Groups.find({}, { sort: { group_language: 1 } }).fetch(), currentUser: Meteor.user() || {} };
 }, GroupsList);

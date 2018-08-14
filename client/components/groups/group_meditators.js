@@ -122,6 +122,62 @@ class GroupMeditators extends Component {
               console.log("ERR: ", err, 'RESULT: ', result);
             }
           );
+          Alert.success('Message sent!', {
+            position: 'top-left',
+            effect: 'jelly',
+            onShow: function () {
+              setTimeout(function(){
+                //browserHistory.push('/');
+              }, 2000);
+            },
+            timeout: 1500,
+            offset: 20
+          });
+        }
+      }
+    });
+  }
+
+  sendBulkEmail() {
+
+    bootbox.prompt({
+      inputType: "textarea",
+      title: "Enter the text of your message to all group's member",
+      buttons: {
+        cancel: {
+            label: '<i class="fa fa-times"></i> Cancel'
+        },
+        confirm: {
+            label: '<i class="fa fa-check"></i> Send'
+        }
+    },
+      callback:  (result) => {
+        if(result){
+
+          _.each(this.state.meditatorsList, (value) => {
+            Meteor.call( // Notify the Logged in User that created the group
+              'sendEmail',
+              'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
+              value.email,
+              //'adriano.massi@gmail.com',
+              'WCCM Online Meditation Groups - Message from your Group Leader',
+              '<h4>This is a message from '+this.props.groups.group_leader.first_name +' '+this.props.groups.group_leader.last_name+' </h4><h4>Leader of the group you are a member of in '+this.props.groups.group_language+' language</h4><h4> Meeting every '+this.props.groups.meet_time.day_of_week+' at '+this.props.groups.meet_time.meet_time+' </h4><p>Message begins -------------------</p><p><b><em> '+result+' </em></b></p><p>Message ends ---------------------</hp><p>Please if you want to reply to this messag write directly to your group leader at:  '+this.props.groups.group_leader.email+' </p><p>For any help/complaints please write to leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+              (err, result) => {
+                console.log("ERR: ", err, 'RESULT: ', result);
+              }
+            );
+          });
+          Alert.success('Message sent!', {
+            position: 'top-left',
+            effect: 'jelly',
+            onShow: function () {
+              setTimeout(function(){
+                //browserHistory.push('/');
+              }, 2000);
+            },
+            timeout: 1500,
+            offset: 20
+          });
         }
       }
     });
@@ -191,6 +247,12 @@ class GroupMeditators extends Component {
           </table>
         </pre>
         <Alert stack={{limit: 3}} />
+        <button
+          className="btn btn-primary"
+          onClick={this.sendBulkEmail.bind(this)}
+          >
+          Send an email to all members
+        </button>
       </div>
     );
   }

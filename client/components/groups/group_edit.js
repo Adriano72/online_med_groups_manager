@@ -273,10 +273,6 @@ class GroupEdit extends Component {
                         </div>
                     </div>
                 </div>
-
-
-
-                <div className="text-danger">{this.state.error}</div>
                 <button
                   className="btn btn-primary"
                   onClick={this.updateGroup.bind(this)}
