@@ -95,13 +95,30 @@ class CheckAndApproveGroup extends Component {
            country: this.state.country
           };
 
-          Meteor.call('mCreateGroupLeader', newLeaderUserData, (error, res) => {
+          Meteor.call('mcheckUserExistence', newLeaderUserData.email, (error, res) => {
             if (res) {
-              console.log("GROUP LEADER CREATION RESULT: ", res);
+              if(res === "exist"){
+                console.log("$$$ EXIST $$$");
+                Meteor.call('mAddAnotherLeadershipToUser', newLeaderUserData, (error, res) => {
+                  if (res) {
+                    console.log("FURTHER LEADERSHIP RESULT: ", res);
+                  }else if(err) {
+                    console.log("FURTHER LEADERSHIP ERROR: ", err);
+                  }
+                });
+              }else{
+                Meteor.call('mCreateGroupLeader', newLeaderUserData, (error, res) => {
+                  if (res) {
+                    console.log("GROUP LEADER CREATION RESULT: ", res);
+                  }else if(err) {
+                    console.log("GROUP LEADER CREATION ERROR: ", err);
+                  }
+                });
+              }
             }else if(err) {
-              console.log("GROUP LEADER CREATION ERROR: ", err);
+              console.log("GROUP LEADER EXISTENCE CHECK ERROR: ", err);
             }
-          });
+          })
 
           Meteor.call( // Notify the group leader
             'sendEmail',
@@ -127,22 +144,14 @@ class CheckAndApproveGroup extends Component {
             }
           );
 
-
+          bootbox.alert({
+            title: "Group Submission Approved",
+            message: "The National Referent that submitted the group creation request and the appointed Group Leader will receive a notification email. The Group Leader will also receive the link to create an account that will permit access to the system and group's users management.",
+            callback: function(){ return browserHistory.push('/'); }
+          })
         }
       }
     );
-
-    Alert.success('Group Updated', {
-      position: 'top-left',
-      effect: 'jelly',
-      onShow: function () {
-        setTimeout(function(){
-          browserHistory.push('/');
-        }, 2000);
-      },
-      timeout: 1500,
-      offset: 20
-    });
   }
 
   confirmDelete(){

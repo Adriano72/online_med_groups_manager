@@ -33,10 +33,40 @@ class Header extends Component {
     }
   }
 
+  onBindNatRefGroups(event) {
+    event.preventDefault();
+    if(Meteor.user()){
+      browserHistory.push(`/natrefgroups`);
+    }
+  }
+
+  onBindLeaderGroups(event) {
+    event.preventDefault();
+    if(Meteor.user()){
+      browserHistory.push(`/leadergroups`);
+    }
+  }
+
   renderCreateGroupLink(){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, ['admin', 'nationalresp'])) { // il gruppo va messo dinamico o globale
      return (<a href="#" onClick={this.onBindCreateNewGroup.bind(this)}>Create new group</a>);
+    }
+    return;
+  }
+
+  renderNatRefGroups(){
+    var loggedInUser = Meteor.user();
+    if ( Roles.userIsInRole(loggedInUser, ['nationalresp'])) { // il gruppo va messo dinamico o globale
+     return (<a href="#" onClick={this.onBindNatRefGroups.bind(this)}>Groups I Created</a>);
+    }
+    return;
+  }
+
+  renderLeaderGroups(){
+    var loggedInUser = Meteor.user();
+    if ( Roles.userIsInRole(loggedInUser, ['itsaleader'])) { // il gruppo va messo dinamico o globale
+     return (<a href="#" onClick={this.onBindLeaderGroups.bind(this)}>Groups I Lead</a>);
     }
     return;
   }
@@ -68,19 +98,23 @@ class Header extends Component {
 
   render() {
     return (
-      <nav className="nav navbar-default">
-        <div className="navbar-header">
-          <Link to="/" className="navbar-brand">Online group manager</Link>
+      <nav className="nav navbar-inverse">
+        <div className="container-fluid">
+          <div className="navbar-header">
+            <Link to="/" className="navbar-brand">WCCM Online Meditation Groups</Link>
+          </div>
+          <ul className="nav navbar-nav">
+            <li>
+              <Accounts />
+            </li>
+            <li>{this.renderGroupsToApproveLink()}</li>
+            <li>{this.renderNatRefGroups()}</li>
+            <li>{this.renderLeaderGroups()}</li>
+            <li>{this.renderCreateGroupLink()}</li>
+            <li>{this.renderCreateUserLink()}</li>
+            <li>{this.renderUserListLink()}</li>
+          </ul>
         </div>
-        <ul className="nav navbar-nav">
-          <li>
-            <Accounts />
-          </li>
-          <li>{this.renderGroupsToApproveLink()}</li>
-          <li>{this.renderCreateGroupLink()}</li>
-          <li>{this.renderCreateUserLink()}</li>
-          <li>{this.renderUserListLink()}</li>
-        </ul>
       </nav>
     );
   }

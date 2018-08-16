@@ -108,7 +108,7 @@ class GroupCreate extends Component {
               'sendEmail',
               'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
               admin.emails[0].address,
-              'WCCM Online Meditation Groups',
+              'WCCM Online Meditation Groups - New Group Pending Approval',
               '<h4>A new group creation request has been submitted</h4><p>Please login wth your administrative credentials and review this submission in order to approve or reject it</p><p><em>The WCCM Online Mediation Groups Automatic Notification Bot</em></p>'
             );
           });
@@ -116,7 +116,7 @@ class GroupCreate extends Component {
           bootbox.alert({
             title: "New group submitted succesfully",
             message: "Your group will be reviewed by our staff for approvation and public listing. You will be notified by email about the approval progress",
-            callback: function(){ /* your callback code */ }
+            callback: function(){ browserHistory.push('/'); }
           })
 
         }else {

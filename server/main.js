@@ -65,6 +65,17 @@ Meteor.startup(() => {
     return Groups.find({ approved: false });
   });
 
+  Meteor.publish('natRefGroups', function () {
+    return Groups.find({ ownerId: Meteor.user()._id });
+  });
+
+  Meteor.publish('leaderGroups', function () {
+    return Groups.find(Groups, function(o){
+      return 2 > 0;
+      //Roles.userIsInRole(Meteor.user(), ['groupleader'], group._id)
+    });
+  });
+
   Meteor.publish('allUsers', function () {
     return Meteor.users.find();
   });

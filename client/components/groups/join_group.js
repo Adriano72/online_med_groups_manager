@@ -26,19 +26,6 @@ class JoinGroup extends Component {
     let name = document.getElementById("full_name").value;
     let email = document.getElementById("email").value;
     let gdpr = this.refs.gdpr_consent.checked
-    /*
-    if(name == "" || email == "" || this.state.country == '' || !gdpr) {
-      console.log("Name: ", name, " Email: ", email, " Country: ", this.state.country);
-      Alert.error('Name, Email, Password, Country  and Communication Permission are mandatory fields!', {
-        position: 'top-left',
-        effect: 'slide',
-        timeout: 3000,
-        offset: 20
-      });
-
-      return;
-    }
-    */
 
     var selectedGroup = new Group(this.props.groups);
 
@@ -52,6 +39,31 @@ class JoinGroup extends Component {
     selectedGroup.addMeditator(meditators, (err, result) => {
       console.log("ERROR LOG: ", err);
       if(result){
+
+        console.log("PROPS _____ ", this.props.groups);
+
+        Meteor.call( // Notify the group leader
+          'sendEmail',
+          'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
+          this.props.groups.group_leader.email,
+          'WCCM Online Meditation Groups - New group subscription',
+          '<p>Dear '+this.props.groups.group_leader.first_name+'</p><p>A new meditator, <b>'+name+'</b>, joined the group you lead in <b>'+this.props.groups.group_language+'</b> language, meeting every <b>'+this.props.groups.meet_time.day_of_week+ ' at '+this.props.groups.meet_time.meet_time+'</b></p><p>For any help you might need please write to leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+
+          (err, result) => {
+            console.log("ERR: ", err, 'RESULT: ', result);
+          }
+        );
+        Meteor.call( // Notify the user
+          'sendEmail',
+          'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
+          email,
+          'WCCM Online Meditation Groups - You joined an online meditation group!',
+          '<p>Dear '+name+'</p><h4>You have succesfully joined the following online meditation group</h4><ul><li>Group Language: '+this.props.groups.groupLanguage+'</li><li>Group Meeting Day and Time: '+this.props.groups.meet_time.day_of_week+ ' at '+this.props.groups.meet_time.meet_time+'</li></ul><p>For any information you might need please refer to your group leader <b>'+this.props.groups.group_leader.first_name+' '+this.props.groups.group_leader.last_name+'</b> at '+this.props.groups.group_leader.email+'</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+
+          (err, result) => {
+            console.log("ERR: ", err, 'RESULT: ', result);
+          }
+        );
         Alert.success('Group joined succesfully!', {
           position: 'top-left',
           effect: 'jelly',

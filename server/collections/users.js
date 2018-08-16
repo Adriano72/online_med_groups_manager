@@ -48,8 +48,9 @@ Meteor.methods({
                     // Need _id of existing user record so this call must come
                     // after `Accounts.createUser` or `Accounts.onCreate`
                     //[].concat(user);
-                    //Roles.addUsersToRoles(id, user.roles, user.country);
-                    Roles.addUsersToRoles(id, user.roles, user.groupId);
+                    //Roles.addUsersToRoles(id, user.roles, user.country);itsaleader
+                    Roles.addUsersToRoles(id, 'itsaleader', Roles.GLOBAL_GROUP);
+                    Roles.setUserRoles(id, user.roles, user.groupId);
                 }
 
                 _.extend(user, {id: id});
@@ -57,5 +58,28 @@ Meteor.methods({
                 return id;
             }
         }
+    },
+    mAddAnotherLeadershipToUser: function (user) {
+        console.log("USER TO ADD LEADERSHIP TO: ", user);
+        if(_.isObject(user)) {
+
+            if (user.username) {
+
+                const existingUser = Meteor.users.findOne({ 'emails.address': user.email })
+
+                if (user.roles.length > 0) {
+                    // Need _id of existing user record so this call must come
+                    // after `Accounts.createUser` or `Accounts.onCreate`
+                    //[].concat(user);
+                    //Roles.addUsersToRoles(id, user.roles, user.country);
+                    Roles.setUserRoles(existingUser, user.roles, user.groupId);
+                }
+
+                return existingUser;
+            }
+        }
+    },
+    mcheckUserExistence: function(p_email) {
+      return (Meteor.users.findOne({ 'emails.address': p_email })) ? 'exist' : 'not found';
     }
 });

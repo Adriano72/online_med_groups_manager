@@ -4,21 +4,12 @@ import { Link, browserHistory } from 'react-router';
 import Select from 'react-select';
 import { Groups } from '../../../imports/collections/groups';
 
-class GroupsList extends Component {
-  constructor(props) {
-    super(props);
+class NatRefGroups extends Component {
 
-    this.state = {
-      groupSelected: 'all',
-      groupsCollection: props.groups,
-    };
-  }
 
   renderRows() {
 
-    var groupsToShow = this.state.groupsCollection;
-
-    return groupsToShow.map(group => {
+    return this.props.groups.map(group => {
       const groupEditUrl = `/editgroup/${group._id}`;
       const { _id, group_language, group_leader, meet_time, meditators  } = group;
       const leader = group_leader.first_name + " " + group_leader.last_name;
@@ -59,24 +50,16 @@ class GroupsList extends Component {
             <td>{group_language}</td>
             <td>{leader}</td>
             <td>{meetingtime}</td>
-              <td><button
-                className="btn btn-info"
-                onClick={() => {
-                    if(med_numbers > 0){
-                      browserHistory.push(`/groupmeditators/${group._id}`)
-                    }
+            <td><button
+              className="btn btn-info"
+              onClick={() => {
+                  if(med_numbers > 0){
+                    browserHistory.push(`/groupmeditators/${group._id}`)
                   }
-                }>
-                {med_numbers}
-              </button></td>
-            <td>
-              <button
-                className="btn btn-success"
-                onClick={() => browserHistory.push(`/joingroup/${group._id}`)}>
-                Join this group
-              </button>
-            </td>
-
+                }
+              }>
+              {med_numbers}
+            </button></td>
           </tr>
         )
       }else {
@@ -86,35 +69,10 @@ class GroupsList extends Component {
             <td>{leader}</td>
             <td>{meetingtime}</td>
             <td>{med_numbers}</td>
-            <td>
-              <button
-                className="btn btn-success"
-                onClick={() => browserHistory.push(`/joingroup/${group._id}`)}>
-                Join this group
-              </button>
-            </td>
-
           </tr>
         )
       }
     });
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps){
-    this.setState({
-      groupsCollection: nextProps.groups
-    });
-  }
-
-  filterByDayOfWeek = (dayOfWeek) => {
-    let tempList;
-    this.setState({ filterBy: dayOfWeek });
-    if(dayOfWeek.value === 'All'){
-      tempList = this.props.groups
-    }else {
-      tempList = _.filter(this.props.groups, function(o) { return o.meet_time.day_of_week == dayOfWeek.value; });
-    }
-    this.setState({ groupsCollection: tempList });
   }
 
   render() {
@@ -124,12 +82,6 @@ class GroupsList extends Component {
 
     return (
       <div className="container-fluid top-buffer">
-
-          <div className="form-group" >
-
-            <Select name="form-field-name" value={this.state.filterBy} placeholder="Filter by Meeting Day" searchable options={daysOfWeek} onChange={this.filterByDayOfWeek} />
-
-          </div>
           <table className="table table-striped">
             <thead>
               <tr>
@@ -137,7 +89,6 @@ class GroupsList extends Component {
                 <th>Group Leader</th>
                 <th>Meeting Day and Time</th>
                 <th>Members</th>
-                <th>Join this group</th>
               </tr>
             </thead>
             <tbody>
@@ -151,6 +102,6 @@ class GroupsList extends Component {
 }
 
 export default createContainer(() => {
-  Meteor.subscribe('groups');
+  Meteor.subscribe('natRefGroups');
   return { groups: Groups.find({}, { sort: { group_language: 1 } }).fetch(), currentUser: Meteor.user() || {} };
-}, GroupsList);
+}, NatRefGroups);

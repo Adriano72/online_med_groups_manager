@@ -132,8 +132,21 @@ class GroupEdit extends Component {
     });
   }
 
+  renderDeleteButton() {
+    if(Roles.userIsInRole(Meteor.user(), ['admin']) || Meteor.user()._id == this.props.groups.ownerId) {
+      return(
+        <button
+          className="btn btn-warning"
+          onClick={this.confirmDelete.bind(this)}
+          >
+          Delete Group
+        </button>
+      )
+    }
+    return;
+  }
+
   componentWillMount() {
-    console.log("ECCOMI!!!!!!!!!!!!!!");
     if(_.isUndefined(this.props.groups)){
       console.log("COMP WILL MOUNT ", _.isUndefined(this.props.groups));
       return browserHistory.push('/');
@@ -279,12 +292,7 @@ class GroupEdit extends Component {
                   >
                   Update Group
                 </button>&nbsp;
-                <button
-                  className="btn btn-warning"
-                  onClick={this.confirmDelete.bind(this)}
-                  >
-                  Delete Group
-                </button>
+                {this.renderDeleteButton()}
 
               <Alert stack={{limit: 3}} />
 
