@@ -288,8 +288,16 @@ class GroupCreate extends Component {
                         />
                       </div>
                       <div className="form-group col-xs-2">
-                        <label>Time Zone</label>
-                        <div id='tzsel'></div>
+                        <label htmlFor="select1" >Day of week</label>
+                        <select value={this.state.meetDay} onChange={this.updateMeetDay} className="form-control">
+                          <option value="Monday">Monday</option>
+                          <option value="Tuesday">Tuesday</option>
+                          <option value="Wednesday">Wednesday</option>
+                          <option value="Thursday">Thursday</option>
+                          <option value="Friday">Friday</option>
+                          <option value="Saturday">Saturday</option>
+                          <option value="Sunday">Sunday</option>
+                        </select>
                       </div>
 
                   </div>
