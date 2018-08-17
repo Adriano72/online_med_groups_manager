@@ -8,6 +8,7 @@ import NatRefGroups from './components/groups/natref_groups';
 import LeaderGroups from './components/groups/leader_groups';
 import GroupCreate from './components/groups/group_create';
 import GroupEdit from './components/groups/group_edit';
+import GroupsManage from './components/admin/groups_manage';
 import CreateUser from './components/admin/create_user';
 import AuthUsersList from './components/admin/auth_users_list';
 import GroupsToApprove from './components/admin/groups_to_approve';
@@ -36,6 +37,7 @@ const routes = (
       <Route path="natrefgroups" component={NatRefGroups}/>
       <Route path="leadergroups" component={LeaderGroups}/>
       <Route path="pendinggroups" component={GroupsToApprove}/>
+      <Route path="groupsmanage" component={GroupsManage}/>
       <Route path="checkgroup/:groupId" component={CheckAndApproveGroup}/>
       <Route path="joingroup/:groupId" component={JoinGroup}/>
       <Route path="groupmeditators/:groupId" component={GroupMeditators}/>

@@ -4,7 +4,7 @@ import { Link, browserHistory } from 'react-router';
 import Select from 'react-select';
 import { Groups } from '../../../imports/collections/groups';
 
-class GroupsList extends Component {
+class GroupsManage extends Component {
   constructor(props) {
     super(props);
 
@@ -27,17 +27,19 @@ class GroupsList extends Component {
 
       return (
         <tr key={_id}>
-          <td>{group_language}</td>
+          <td><Link to={groupEditUrl}>{group_language}</Link></td>
           <td>{leader}</td>
           <td>{meetingtime}</td>
-          <td>
-            <button
-              className="btn btn-success"
-              onClick={() => browserHistory.push(`/joingroup/${group._id}`)}>
-              Join this group
-            </button>
-          </td>
-
+          <td><button
+            className="btn btn-info"
+            onClick={() => {
+                if(med_numbers > 0){
+                  browserHistory.push(`/groupmeditators/${group._id}`)
+                }
+              }
+            }>
+            {med_numbers}
+          </button></td>
         </tr>
       )
     });
@@ -79,7 +81,7 @@ class GroupsList extends Component {
                 <th>Language</th>
                 <th>Group Leader</th>
                 <th>Meeting Day and Time</th>
-                <th>Join this group</th>
+                <th>Members</th>
               </tr>
             </thead>
             <tbody>
@@ -95,4 +97,4 @@ class GroupsList extends Component {
 export default createContainer(() => {
   Meteor.subscribe('groups');
   return { groups: Groups.find({}, { sort: { group_language: 1 } }).fetch(), currentUser: Meteor.user() || {} };
-}, GroupsList);
+}, GroupsManage);

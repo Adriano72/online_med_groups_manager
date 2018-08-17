@@ -3,7 +3,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Link, browserHistory } from 'react-router';
 import { CountryDropdown } from 'react-country-region-selector';
 import { Groups } from '../../../imports/collections/groups';
-import moment from 'moment';
+//import moment from 'moment';
+import moment from 'moment-timezone';
 import TimePicker from 'rc-time-picker';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
@@ -25,7 +26,7 @@ class GroupCreate extends Component {
       error: '',
       country: '',
       grpupLanguage: 'English',
-      meetDay: '',
+      meetDay: 'Monday',
       meetTime: ''
     };
 
@@ -36,6 +37,9 @@ class GroupCreate extends Component {
   }
 
   componentWillMount() {
+
+    console.log("TIME ZONES: ", moment.tz.names() );
+    console.log("TIME ZONE GUESS: ", moment.tz(moment.tz.guess()).format("Z z") );
 
     if(!(Roles.userIsInRole(Meteor.user(), ['admin', 'nationalresp']))) {
       console.log("USER ", Meteor.user());
@@ -79,45 +83,112 @@ class GroupCreate extends Component {
       meet_time: this.state.meetTime
     }
 
+    const noNeedToApprove = Roles.userIsInRole(Meteor.user(), ['admin', 'nationalresp']) || this.refs.useOwnMeetingRes.checked;
+    console.log("TO BE APPROVED: ", noNeedToApprove);
+
     var newGroup = new Group();
     newGroup.insert(
       this.state.grpupLanguage,
       this.refs.useOwnMeetingRes.checked,
       gp_leader,
       meet_time,
-      false,
+      noNeedToApprove,
       (err, result) => {
-        console.log("ERROR LOG: ", err);
         if(result){
+          console.log("GROUP RESULT: ", result);
+          if(noNeedToApprove){
+            const newLeaderUserData = {
+             username: gp_leader.first_name,
+             email: gp_leader.email,
+             //password: leaderPassword,
+             roles: ['groupleader'],
+             groupId: result,
+             country: this.state.country
+            };
 
-          Meteor.call( // Notify the Logged in User that created the group
-            'sendEmail',
-            'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
-            Meteor.user().emails[0].address,
-            'WCCM Online Meditation Groups - New Group Submission',
-            '<h4>Your Group request submission has been received</h4><p>As soon as one of the sfaff administrator will review and approve your submission you will receive a notification by email</p><p>For any help you might need please write to leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+            Meteor.call('mcheckUserExistence', newLeaderUserData.email, (error, res) => {
+              if (res) {
+                if(res === "exist"){
+                  Meteor.call('mAddAnotherLeadershipToUser', newLeaderUserData, (error, res) => {
+                    if (res) {
+                      console.log("FURTHER LEADERSHIP RESULT: ", res);
+                    }else if(err) {
+                      console.log("FURTHER LEADERSHIP ERROR: ", err);
+                    }
+                  });
+                }else{
+                  Meteor.call('mCreateGroupLeader', newLeaderUserData, (error, res) => {
+                    if (res) {
+                      console.log("GROUP LEADER CREATION RESULT: ", res);
+                    }else if(err) {
+                      console.log("GROUP LEADER CREATION ERROR: ", err);
+                    }
+                  });
+                }
+              }else if(err) {
+                console.log("GROUP LEADER EXISTENCE CHECK ERROR: ", err);
+              }
+            })
 
-            (err, result) => {
-              console.log("ERR: ", err, 'RESULT: ', result);
-            }
-          );
-
-          allAdmins.forEach(admin => { // Notify all the SuperAdmins
-            console.log("ALLUS", admin.emails[0].address);
-            Meteor.call(
+            Meteor.call( // Notify the group leader
               'sendEmail',
               'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
-              admin.emails[0].address,
-              'WCCM Online Meditation Groups - New Group Pending Approval',
-              '<h4>A new group creation request has been submitted</h4><p>Please login wth your administrative credentials and review this submission in order to approve or reject it</p><p><em>The WCCM Online Mediation Groups Automatic Notification Bot</em></p>'
-            );
-          });
+              gp_leader.email,
+              'WCCM Online Meditation Groups - Group Leader Role Assignment',
+              '<p>Dear '+gp_leader.first_name+'</p><h4>You have been assigned to be the Group Leader of an Online Meditation Group</h4><ul><li>Group Language: '+this.state.grpupLanguage+'</li><li>Group Meeting Day and Time: '+this.state.meetDay+ ' at '+this.state.meetTime+'</li></ul><p>In another email you should have received the link to set your password, once done so you will be able to login on the Online Meditation Group platform at https://www.onlinemeditationwccm.org and manage the groups you are leader of.</p><p>For any help you might need please write to leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
 
-          bootbox.alert({
-            title: "New group submitted succesfully",
-            message: "Your group will be reviewed by our staff for approvation and public listing. You will be notified by email about the approval progress",
-            callback: function(){ browserHistory.push('/'); }
-          })
+              (err, result) => {
+                console.log("ERR: ", err, 'RESULT: ', result);
+              }
+            );
+
+            Meteor.call( // Notify the National Resp that submitted the group
+              'sendEmail',
+              'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
+              Meteor.user().emails[0].address,
+              'WCCM Online Meditation Groups - New Group Created!',
+              '<p>Dear '+Meteor.user().username+'</p><h4>You succesfully created a new online group that is now listed in the public directory</h4><ul><li>Group Language: '+this.state.grpupLanguage+'</li><li>Group Meeting Day and Time: '+this.state.meetDay+ ' at '+this.state.meetTime+'</li></ul><p>The new group is now visible on the public group listing page: https://www.onlinemeditationwccm.org</p><p>The person you assigned to lead the group, <b>'+gp_leader.first_name+' '+gp_leader.last_name+'</b>, has received an email that notifies him/her of his group role and another one to complete the account creation that will be needed to manage the communications with the group members</p><p>For any help you might need please write to leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+
+              (err, result) => {
+                console.log("ERR: ", err, 'RESULT: ', result);
+              }
+            );
+
+            bootbox.alert({
+              title: "Group Creation Complete",
+              message: "You succesfully created a new online group that is now listed in the public directory. The Group Leader will also receive the link to create an account that will permit access to the system and group's users management.",
+              callback: function(){ return browserHistory.push('/'); }
+            })
+          }else {
+            Meteor.call( // Notify the Logged in User that created the group
+              'sendEmail',
+              'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
+              Meteor.user().emails[0].address,
+              'WCCM Online Meditation Groups - New Group Submission',
+              '<h4>Your Group request submission has been received</h4><p>As soon as one of the sfaff administrator will review and approve your submission you will receive a notification by email</p><p>For any help you might need please write to leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+
+              (err, result) => {
+                console.log("ERR: ", err, 'RESULT: ', result);
+              }
+            );
+
+            allAdmins.forEach(admin => { // Notify all the SuperAdmins
+              console.log("ALLUS", admin.emails[0].address);
+              Meteor.call(
+                'sendEmail',
+                'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
+                admin.emails[0].address,
+                'WCCM Online Meditation Groups - New Group Pending Approval',
+                '<h4>A new group creation request has been submitted</h4><p>Please login wth your administrative credentials and review this submission in order to approve or reject it</p><p><em>The WCCM Online Mediation Groups Automatic Notification Bot</em></p>'
+              );
+            });
+
+            bootbox.alert({
+              title: "New group submitted succesfully",
+              message: "Your group will be reviewed by our staff for approvation and public listing. You will be notified by email about the approval progress",
+              callback: function(){ browserHistory.push('/'); }
+            })
+          }
 
         }else {
           Alert.error(err.message, {
@@ -216,6 +287,11 @@ class GroupCreate extends Component {
                           inputReadOnly
                         />
                       </div>
+                      <div className="form-group col-xs-2">
+                        <label>Time Zone</label>
+                        <div id='tzsel'></div>
+                      </div>
+
                   </div>
               </div>
               <div className="panel panel-danger">

@@ -26,6 +26,13 @@ class Header extends Component {
     }
   }
 
+  onBindManageGroups(event) {
+    event.preventDefault();
+    if(Meteor.user()){
+      browserHistory.push(`/groupsmanage`);
+    }
+  }
+
   onBindApprovalPendingGroups(event) {
     event.preventDefault();
     if(Meteor.user()){
@@ -71,6 +78,14 @@ class Header extends Component {
     return;
   }
 
+  renderManageGroups(){
+    var loggedInUser = Meteor.user();
+    if ( Roles.userIsInRole(loggedInUser, ['admin'])) { // il gruppo va messo dinamico o globale
+     return (<a href="#" onClick={this.onBindManageGroups.bind(this)}>Manage Groups</a>);
+    }
+    return;
+  }
+
   renderGroupsToApproveLink(){
     var loggedInUser = Meteor.user();
     var numberOfGroupsToApprove = Counts.get("groups-to-approve");
@@ -101,6 +116,7 @@ class Header extends Component {
       <nav className="nav navbar-inverse">
         <div className="container-fluid">
           <div className="navbar-header">
+            <a href="/"><img className="navbar-brand" src="logo.jpg" alt="HomePage"></img></a>
             <Link to="/" className="navbar-brand">WCCM Online Meditation Groups</Link>
           </div>
           <ul className="nav navbar-nav">
@@ -110,6 +126,7 @@ class Header extends Component {
             <li>{this.renderGroupsToApproveLink()}</li>
             <li>{this.renderNatRefGroups()}</li>
             <li>{this.renderLeaderGroups()}</li>
+            <li>{this.renderManageGroups()}</li>
             <li>{this.renderCreateGroupLink()}</li>
             <li>{this.renderCreateUserLink()}</li>
             <li>{this.renderUserListLink()}</li>
