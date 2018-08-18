@@ -160,9 +160,12 @@ class GroupEdit extends Component {
 
     let timeZoneString = '';
 
-    for (let x = 0; x < selectedOption.value.length; x++){
-         timeZoneString += selectedOption.value[x];
-         //console.log("RESULT: ", testVal);
+    if(!(_.isUndefined(selectedOption))) {
+
+      for (let x = 0; x < selectedOption.value.length; x++){
+           timeZoneString += selectedOption.value[x];
+           //console.log("RESULT: ", testVal);
+      }
     }
 
     this.setState({ selectedOption });
