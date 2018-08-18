@@ -3,17 +3,24 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Link, browserHistory } from 'react-router';
 import { CountryDropdown } from 'react-country-region-selector';
 import { Groups } from '../../../imports/collections/groups';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import TimePicker from 'rc-time-picker';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
+import Select from 'react-select';
 import Group from '../../../imports/classes/Group';
 
 const format = 'h:mm a';
 
 const now = moment().hour(0).minute(0);
+
+const allTimeZones = [];
+
+$.each(moment.tz.names(), function() {
+    allTimeZones.push({value: this, label: this });
+});
 
 class GroupEdit extends Component {
 
@@ -26,6 +33,8 @@ class GroupEdit extends Component {
       groupLanguage: '',
       meetDay: '',
       meetTime: moment(),
+      selectedOption: null,
+      timeZone: null
     };
 
     this.updateLanguage = this.updateLanguage.bind(this);
@@ -68,7 +77,8 @@ class GroupEdit extends Component {
 
     const meet_time = {
       day_of_week: this.state.meetDay,
-      meet_time: this.state.meetTime.format(format)
+      meet_time: this.state.meetTime.format(format),
+      time_zone: this.state.timeZone
     }
 
     newGroup.update(this.props.groups,
@@ -146,7 +156,22 @@ class GroupEdit extends Component {
     return;
   }
 
+  updateTimeZone = (selectedOption) => {
+
+    let timeZoneString = '';
+
+    for (let x = 0; x < selectedOption.value.length; x++){
+         timeZoneString += selectedOption.value[x];
+         //console.log("RESULT: ", testVal);
+    }
+
+    this.setState({ selectedOption });
+    this.setState({ timeZone: timeZoneString });
+  }
+
   componentWillMount() {
+
+
     if(_.isUndefined(this.props.groups)){
       console.log("COMP WILL MOUNT ", _.isUndefined(this.props.groups));
       return browserHistory.push('/');
@@ -168,11 +193,14 @@ class GroupEdit extends Component {
     });
 
     this.setState({ meetTime: date });
+    this.setState({ timeZone: this.props.groups.meet_time.time_zone });
     this.setState({ groupLanguage: this.props.groups.group_language });
     this.setState({ meetDay: this.props.groups.meet_time.day_of_week });
     this.setState({ country: this.props.groups.group_leader.country });
 
-  };
+
+
+  }
 
   render() {
 
@@ -271,6 +299,10 @@ class GroupEdit extends Component {
                             inputReadOnly
                           />
                         </div>
+                        <div className="form-group col-xs-2">
+                          <label htmlFor="timeZonesSelect" >Time Zone</label>
+                          <Select onChange={this.updateTimeZone} options={allTimeZones} defaultValue={{ value: this.state.timeZone, label: this.state.timeZone }} />
+                        </div>
                     </div>
                 </div>
                 <div className="panel panel-danger">
@@ -302,11 +334,7 @@ class GroupEdit extends Component {
 }
 
 export default createContainer((props) => {
-  console.log("PROPS: ", props);
   const { groupId } = props.params;
-  console.log("GROUP ID: ", { groupId });
-
   Meteor.subscribe('groups');
-
   return { groups: Groups.findOne(groupId) };
 }, GroupEdit);

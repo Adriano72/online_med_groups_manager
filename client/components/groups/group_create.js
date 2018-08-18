@@ -27,24 +27,28 @@ class GroupCreate extends Component {
       country: '',
       grpupLanguage: 'English',
       meetDay: 'Monday',
-      meetTime: ''
+      meetTime: '',
+      timeZone: ''
     };
 
     this.updateLanguage = this.updateLanguage.bind(this);
     this.updateCountry = this.updateCountry.bind(this);
     this.updateMeetDay = this.updateMeetDay.bind(this);
     this.updateMeetTime = this.updateMeetTime.bind(this);
+    this.updateTimeZone = this.updateTimeZone.bind(this);
   }
 
   componentWillMount() {
 
-    console.log("TIME ZONES: ", moment.tz.names() );
-    console.log("TIME ZONE GUESS: ", moment.tz(moment.tz.guess()).format("Z z") );
+    //  console.log("TIME ZONES: ", moment.tz.names() );
+    console.log("TIME ZONE GUESS: ", moment.tz.guess());
 
     if(!(Roles.userIsInRole(Meteor.user(), ['admin', 'nationalresp']))) {
       console.log("USER ", Meteor.user());
       return browserHistory.push('/');
     };
+
+    this.setState({ timeZone: moment.tz.guess() });
   }
 
   updateLanguage(e) {
@@ -60,6 +64,10 @@ class GroupCreate extends Component {
   updateMeetTime(val) {
     //console.log('NEW VALUE ', newValue);
     this.setState({ meetTime: val && val.format(format) });
+  }
+
+  updateTimeZone(e) {
+    this.setState({ timeZone: e.target.value });
   }
 
   updateCountry(val) {
@@ -80,10 +88,11 @@ class GroupCreate extends Component {
 
     const meet_time = {
       day_of_week: this.state.meetDay,
-      meet_time: this.state.meetTime
+      meet_time: this.state.meetTime,
+      time_zone: this.state.timeZone
     }
 
-    const noNeedToApprove = Roles.userIsInRole(Meteor.user(), ['admin', 'nationalresp']) || this.refs.useOwnMeetingRes.checked;
+    const noNeedToApprove = Roles.userIsInRole(Meteor.user(), ['admin']) || this.refs.useOwnMeetingRes.checked;
     console.log("TO BE APPROVED: ", noNeedToApprove);
 
     var newGroup = new Group();
@@ -205,6 +214,13 @@ class GroupCreate extends Component {
   }
 
   render() {
+
+    let $dropdown = $("#timeZonesSelect");
+    let allTZ = moment.tz.names();
+    $.each(allTZ, function() {
+        $dropdown.append($("<option />").val(this).text(this));
+    });
+
     return (
         <div className="container-fluid top-buffer">
             <h2>New Group</h2><br />
@@ -288,18 +304,9 @@ class GroupCreate extends Component {
                         />
                       </div>
                       <div className="form-group col-xs-2">
-                        <label htmlFor="select1" >Day of week</label>
-                        <select value={this.state.meetDay} onChange={this.updateMeetDay} className="form-control">
-                          <option value="Monday">Monday</option>
-                          <option value="Tuesday">Tuesday</option>
-                          <option value="Wednesday">Wednesday</option>
-                          <option value="Thursday">Thursday</option>
-                          <option value="Friday">Friday</option>
-                          <option value="Saturday">Saturday</option>
-                          <option value="Sunday">Sunday</option>
-                        </select>
+                        <label htmlFor="timeZonesSelect" >Time Zone</label>
+                        <select value={this.state.timeZone} onChange={this.updateTimeZone} className="form-control" id="timeZonesSelect" />
                       </div>
-
                   </div>
               </div>
               <div className="panel panel-danger">

@@ -22,7 +22,7 @@ class GroupsList extends Component {
       const groupEditUrl = `/editgroup/${group._id}`;
       const { _id, group_language, group_leader, meet_time, meditators  } = group;
       const leader = group_leader.first_name + " " + group_leader.last_name;
-      const meetingtime = meet_time.day_of_week + " at " + meet_time.meet_time;
+      const meetingtime = meet_time.day_of_week + " at " + meet_time.meet_time +' - Time zone: '+meet_time.time_zone;
       const med_numbers = (_.isUndefined(meditators))?0:meditators.length;
 
       return (

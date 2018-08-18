@@ -99,6 +99,14 @@ const MeetTime = Class.create({
         param: 2,
         message: 'Meet time is mandatory!'
       }]
+    },
+    time_zone: {
+      type: String,
+      validators: [{
+        type: 'minLength',
+        param: 2,
+        message: 'Time Zone is mandatory!'
+      }]
     }
   }
 });
