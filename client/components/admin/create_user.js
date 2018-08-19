@@ -94,7 +94,7 @@ export default class CreateUser extends Component {
       <div className="container-fluid top-buffer">
         { error.length > 0 ?<div className="alert alert-danger fade in">{error}</div>:''}
         <div className="panel panel-primary">
-          <div className="panel-heading">Create Authorized User</div>
+          <div className="panel-heading">Create National Referent User</div>
           <div className="panel-body">
           <div className="form-group">
             <input type="text" id="signup-name"

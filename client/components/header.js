@@ -19,6 +19,13 @@ class Header extends Component {
     }
   }
 
+  onBindCreateNewAdminUser(event) {
+    event.preventDefault();
+    if(Meteor.user()){
+      browserHistory.push(`/createadmin`);
+    }
+  }
+
   onBindAuthUsersList(event) {
     event.preventDefault();
     if(Meteor.user()){
@@ -98,7 +105,15 @@ class Header extends Component {
   renderCreateUserLink(){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
-     return (<a href="#" onClick={this.onBindCreateNewAuthUser.bind(this)}>Create Authorized User</a>);
+     return (<a href="#" onClick={this.onBindCreateNewAuthUser.bind(this)}>Create Nat Ref User</a>);
+    }
+    return;
+  }
+
+  renderCreateAdminLink(){
+    var loggedInUser = Meteor.user();
+    if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
+     return (<a href="#" onClick={this.onBindCreateNewAdminUser.bind(this)}>Create Admin User</a>);
     }
     return;
   }
@@ -128,7 +143,13 @@ class Header extends Component {
             <li>{this.renderLeaderGroups()}</li>
             <li>{this.renderManageGroups()}</li>
             <li>{this.renderCreateGroupLink()}</li>
-            <li>{this.renderCreateUserLink()}</li>
+            <li className="dropdown">
+            <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users Accounts<span className="caret"></span></a>
+            <ul className="dropdown-menu">
+              <li>{this.renderCreateUserLink()}</li>
+              <li>{this.renderCreateAdminLink()}</li>
+            </ul>
+          </li>
             <li>{this.renderUserListLink()}</li>
           </ul>
         </div>
