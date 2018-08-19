@@ -186,9 +186,8 @@ class GroupEdit extends Component {
     var dateTime = moment(mockdate + ' ' + meetTime, 'DD/MM/YYYY HH:mm');
 
     let dateStr = moment(),
-    timeStr = meetTime,
     date    = moment(dateStr),
-    time    = moment(timeStr, 'h:mm a');
+    time    = moment(meetTime, 'h:mm a');
 
     date.set({
         hour:   time.get('hour'),

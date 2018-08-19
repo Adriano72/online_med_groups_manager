@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import Accounts from './accounts';
 import { Link, browserHistory } from 'react-router';
+import moment from 'moment-timezone';
 
 class Header extends Component {
 
@@ -107,10 +108,11 @@ class Header extends Component {
     if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
      return (
        <li className="dropdown">
-         <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users Accounts<span className="caret"></span></a>
+         <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users Management<span className="caret"></span></a>
          <ul className="dropdown-menu">
            <li>{this.renderCreateUserLink()}</li>
            <li>{this.renderCreateAdminLink()}</li>
+           <li>{this.renderUserListLink()}</li>
          </ul>
        </li>
      );
@@ -160,7 +162,9 @@ class Header extends Component {
             <li>{this.renderManageGroups()}</li>
             <li>{this.renderCreateGroupLink()}</li>
             {this.renderMenuAuthUsersCreation()}
-            <li>{this.renderUserListLink()}</li>
+          </ul>
+          <ul className="nav navbar-nav navbar-right">
+            <li><p className="navbar-text">Timezone: {moment.tz.guess()}</p></li>
           </ul>
         </div>
       </nav>

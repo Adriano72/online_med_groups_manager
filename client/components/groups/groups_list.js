@@ -3,6 +3,10 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Link, browserHistory } from 'react-router';
 import Select from 'react-select';
 import { Groups } from '../../../imports/collections/groups';
+import moment from 'moment-timezone';
+
+const userTimeZone = moment.tz.guess();
+const format = 'h:mm a';
 
 class GroupsList extends Component {
   constructor(props) {
@@ -22,8 +26,40 @@ class GroupsList extends Component {
       const groupEditUrl = `/editgroup/${group._id}`;
       const { _id, group_language, group_leader, meet_time, meditators  } = group;
       const leader = group_leader.first_name + " " + group_leader.last_name;
-      const meetingtime = meet_time.day_of_week + " at " + meet_time.meet_time +' - Time zone: '+meet_time.time_zone;
+
       const med_numbers = (_.isUndefined(meditators))?0:meditators.length;
+
+      //_____________
+      const meetTime = meet_time.meet_time;
+
+      let mockdate = '2016-10-01';
+
+      moment.tz.setDefault(meet_time.time_zone);
+
+      var dateTime = moment(mockdate + ' ' + meetTime, 'DD/MM/YYYY HH:mm');
+
+      let dateStr = moment(),
+      date    = moment(dateStr),
+      time    = moment(meetTime, 'h:mm a');
+
+      date.set({
+          hour:   time.get('hour'),
+          minute: time.get('minute')
+      });
+
+      let setTimeZone = moment.tz(date, meet_time.time_zone);
+
+      let convertedTime = moment(setTimeZone).tz(userTimeZone).format(format);
+
+      const meetingtime = meet_time.day_of_week + " at " + convertedTime;
+
+      //console.log("Conversion: ", convertedTime);
+
+
+
+      //______________
+
+
 
       return (
         <tr key={_id}>
@@ -78,7 +114,7 @@ class GroupsList extends Component {
               <tr>
                 <th>Language</th>
                 <th>Group Leader</th>
-                <th>Meeting Day and Time</th>
+                <th>Meeting Schedule [in your local time]</th>
                 <th>Join this group</th>
               </tr>
             </thead>
