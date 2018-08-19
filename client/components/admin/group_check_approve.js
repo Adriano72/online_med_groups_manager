@@ -335,7 +335,7 @@ class CheckAndApproveGroup extends Component {
                     </div>
                 </div>
                 <div className="panel panel-danger">
-                  <div className="panel-heading">Online meeting service options</div>
+                  <div className="panel-heading">Online Meeting Service Option</div>
                     <div className="panel-body">
                         <div className="form-group">
                           <div className="checkbox">

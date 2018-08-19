@@ -102,6 +102,22 @@ class Header extends Component {
     return;
   }
 
+  renderMenuAuthUsersCreation() {
+    var loggedInUser = Meteor.user();
+    if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
+     return (
+       <li className="dropdown">
+         <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users Accounts<span className="caret"></span></a>
+         <ul className="dropdown-menu">
+           <li>{this.renderCreateUserLink()}</li>
+           <li>{this.renderCreateAdminLink()}</li>
+         </ul>
+       </li>
+     );
+    }
+    return;
+  }
+
   renderCreateUserLink(){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
@@ -143,13 +159,7 @@ class Header extends Component {
             <li>{this.renderLeaderGroups()}</li>
             <li>{this.renderManageGroups()}</li>
             <li>{this.renderCreateGroupLink()}</li>
-            <li className="dropdown">
-            <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users Accounts<span className="caret"></span></a>
-            <ul className="dropdown-menu">
-              <li>{this.renderCreateUserLink()}</li>
-              <li>{this.renderCreateAdminLink()}</li>
-            </ul>
-          </li>
+            {this.renderMenuAuthUsersCreation()}
             <li>{this.renderUserListLink()}</li>
           </ul>
         </div>
