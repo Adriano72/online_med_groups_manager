@@ -11,9 +11,16 @@ import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 import Group from '../../../imports/classes/Group';
+import Select from 'react-select';
 import { ValidationError } from 'meteor/jagi:astronomy';
 
 const format = 'h:mm a';
+
+const allTimeZones = [];
+
+$.each(moment.tz.names(), function() {
+    allTimeZones.push({value: this, label: this });
+});
 
 const now = moment().hour(0).minute(0);
 
@@ -66,8 +73,20 @@ class GroupCreate extends Component {
     this.setState({ meetTime: val && val.format(format) });
   }
 
-  updateTimeZone(e) {
-    this.setState({ timeZone: e.target.value });
+  updateTimeZone = (selectedOption) => {
+
+    let timeZoneString = '';
+
+    if(!(_.isUndefined(selectedOption))) {
+
+      for (let x = 0; x < selectedOption.value.length; x++){
+           timeZoneString += selectedOption.value[x];
+           //console.log("RESULT: ", testVal);
+      }
+    }
+
+    this.setState({ selectedOption });
+    this.setState({ timeZone: timeZoneString });
   }
 
   updateCountry(val) {
@@ -215,12 +234,6 @@ class GroupCreate extends Component {
 
   render() {
 
-    let $dropdown = $("#timeZonesSelect");
-    let allTZ = moment.tz.names();
-    $.each(allTZ, function() {
-        $dropdown.append($("<option />").val(this).text(this));
-    });
-
     return (
         <div className="container-fluid top-buffer">
             <h2>New Group</h2><br />
@@ -305,7 +318,7 @@ class GroupCreate extends Component {
                       </div>
                       <div className="form-group col-xs-2">
                         <label htmlFor="timeZonesSelect" >Time Zone</label>
-                        <select value={this.state.timeZone} onChange={this.updateTimeZone} className="form-control" id="timeZonesSelect" />
+                        <Select defaultValue={this.state.timeZone} onChange={this.updateTimeZone} options={allTimeZones} />
                       </div>
                   </div>
               </div>

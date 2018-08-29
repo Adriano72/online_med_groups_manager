@@ -5,10 +5,14 @@ import { Groups } from '../../../imports/collections/groups';
 import { Accounts } from 'meteor/accounts-base';
 import { CountryDropdown } from 'react-country-region-selector';
 import Alert from 'react-s-alert';
+import ReCAPTCHA from "react-google-recaptcha";
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 import Group from '../../../imports/classes/Group';
+
+const TEST_SITE_KEY = "6LeKW2wUAAAAAKLEwOVTvUVdkEaYZTVcAAoJNjsb";
+const DELAY = 1500;
 
 class JoinGroup extends Component {
 
@@ -16,10 +20,34 @@ class JoinGroup extends Component {
     super(props);
     this.state = {
       error: '',
-      country: ''
+      country: '',
+      load: false,
+      value: "[empty]",
+      expired: "false"
     };
     this.updateCountry = this.updateCountry.bind(this);
+    this._reCaptchaRef = React.createRef();
   }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ load: true });
+    }, DELAY);
+    console.log("didMount - reCaptcha Ref-", this._reCaptchaRef);
+  }
+
+  handleChange = value => {
+    console.log("Captcha value:", value);
+    this.setState({ value });
+  };
+
+  asyncScriptOnLoad = () => {
+    this.setState({ callback: "called!" });
+    console.log("scriptLoad - reCaptcha Ref-", this._reCaptchaRef);
+  };
+  handleExpired = () => {
+    this.setState({ expired: "true" });
+  };
 
   handleSubmit(e){
     e.preventDefault();
@@ -34,6 +62,14 @@ class JoinGroup extends Component {
       country: this.state.country,
       email: email,
       gdpr_ok: gdpr
+    }
+
+    if(this.state.value === "[empty]"){
+      bootbox.alert({
+        title: "Captcha validation failed",
+        message: "Please validate captcha to confirm you are a human being!",
+      })
+      return;
     }
 
     selectedGroup.addMeditator(meditators, (err, result) => {
@@ -108,6 +144,9 @@ class JoinGroup extends Component {
 
   render(){
     const error = this.state.error;
+
+    const { value, callback, load, expired } = this.state || {};
+
     return (
       <div className="container-fluid top-buffer">
         { error.length > 0 ?<div className="alert alert-danger fade in">{error}</div>:''}
@@ -151,6 +190,15 @@ class JoinGroup extends Component {
                 </div>
             </div>
         </div>
+        <ReCAPTCHA
+          style={{ display: "inline-block" }}
+          theme="dark"
+          ref={this._reCaptchaRef}
+          sitekey={TEST_SITE_KEY}
+          onChange={this.handleChange}
+          asyncScriptOnLoad={this.asyncScriptOnLoad}
+        />
+      <br />
         <button className="btn btn-primary" onClick={this.handleSubmit.bind(this)}>
           Join Group
         </button>
