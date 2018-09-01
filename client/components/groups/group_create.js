@@ -3,7 +3,6 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Link, browserHistory } from 'react-router';
 import { CountryDropdown } from 'react-country-region-selector';
 import { Groups } from '../../../imports/collections/groups';
-//import moment from 'moment';
 import moment from 'moment-timezone';
 import TimePicker from 'rc-time-picker';
 import Alert from 'react-s-alert';
@@ -17,6 +16,8 @@ import { ValidationError } from 'meteor/jagi:astronomy';
 const format = 'h:mm a';
 
 const allTimeZones = [];
+
+var validUrl = require('valid-url');
 
 $.each(moment.tz.names(), function() {
     allTimeZones.push({value: this, label: this });
@@ -97,6 +98,27 @@ class GroupCreate extends Component {
   onSaveClick() {
     const allAdmins = Roles.getUsersInRole('admin', Roles.GLOBAL_GROUP);
 
+    if (this.refs.group_detail_url.value !== '' && !validUrl.isUri(this.refs.group_detail_url.value)) {
+      bootbox.alert({
+        title: "Not a valid URL!",
+        message: "The 'URL to Detail Page' field has to be a valid URL (like 'http://google.com')"
+      });
+      return;
+    }
+
+    if (this.refs.group_detail_url.value !== '' && this.refs.group_detail_text.value == ''){
+      bootbox.alert({
+        title: "No detail text provided",
+        message: "If you enter an Detail Page URL, you must also provide a Group Detail text"
+      });
+      return;
+    }
+
+    const gp_detail = {
+      detail_text: this.refs.group_detail_text.value,
+      detail_url: this.refs.group_detail_url.value
+    }
+
     const gp_leader = {
       first_name: this.refs.group_leader_first_name.value,
       last_name: this.refs.group_leader_second_name.value,
@@ -117,6 +139,7 @@ class GroupCreate extends Component {
     var newGroup = new Group();
     newGroup.insert(
       this.state.grpupLanguage,
+      gp_detail,
       this.refs.useOwnMeetingRes.checked,
       gp_leader,
       meet_time,
@@ -187,7 +210,9 @@ class GroupCreate extends Component {
               message: "You succesfully created a new online group that is now listed in the public directory. The Group Leader will also receive the link to create an account that will permit access to the system and group's users management.",
               callback: function(){ return browserHistory.push('/'); }
             })
+
           }else {
+
             Meteor.call( // Notify the Logged in User that created the group
               'sendEmail',
               'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
@@ -241,7 +266,7 @@ class GroupCreate extends Component {
               <div className="panel panel-primary">
                 <div className="panel-heading">Group Info</div>
                   <div className="panel-body">
-                    <div className="form-group">
+                    <div className="form-group col-md-4">
                       <label htmlFor="select1" >Grooup languge</label>
                       <select value={this.state.grpupLanguage} onChange={this.updateLanguage} className="form-control">
                         <option value="English">English</option>
@@ -255,6 +280,14 @@ class GroupCreate extends Component {
                         <option value="Chinese">Chinese</option>
                         <option value="Indonesian">Indonesian</option>
                       </select>
+                    </div>
+                    <div className="form-group col-md-4">
+                      <label>Group Detail</label>
+                      <input type="text" className="form-control" placeholder="Group Detail" ref="group_detail_text" />
+                    </div>
+                    <div className="form-group col-md-4">
+                      <label>URL to Detail Page</label>
+                      <input type="text" className="form-control" placeholder="Detail URL" ref="group_detail_url" />
                     </div>
                   </div>
               </div>
@@ -318,7 +351,7 @@ class GroupCreate extends Component {
                       </div>
                       <div className="form-group col-xs-2">
                         <label htmlFor="timeZonesSelect" >Time Zone</label>
-                        <Select defaultValue={this.state.timeZone} onChange={this.updateTimeZone} options={allTimeZones} />
+                        <Select defaultValue={{ value: this.state.timeZone, label: this.state.timeZone }} onChange={this.updateTimeZone} options={allTimeZones} />
                       </div>
                   </div>
               </div>

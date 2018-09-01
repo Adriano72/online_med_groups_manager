@@ -33,13 +33,13 @@ class AuthUsersList extends Component {
                 rolesCovered += '<span className="label label-danger">ADMINISTRATOR</span>';
               }else if (value === 'nationalresp'){
                 let country = (Roles.getGroupsForUser(user, 'active').length)?' FOR '+Roles.getGroupsForUser(user, 'active'):'';
-                rolesCovered += ' <span className="label label-info">NATIONAL REFERENT'+country+'</span>';
+                rolesCovered += '<span className="label label-info">NATIONAL REFERENT'+country+'</span>';
               }
             });
           }
           let groupsForUser = Roles.getGroupsForUser(user);
           if(Roles.userIsInRole(user, ['groupleader'], groupsForUser.toString())){
-            rolesCovered += ' <span className="label label-warning">GROUP LEADER</span>';
+            rolesCovered += '<span className="label label-warning">GROUP LEADER</span>';
           }
           //const userViewUrl = `/student_detail/${user._id}`;
           const keys = user.roles.__global_roles__&&Object.keys(user.roles.__global_roles__);

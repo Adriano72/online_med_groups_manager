@@ -18,6 +18,8 @@ const now = moment().hour(0).minute(0);
 
 const allTimeZones = [];
 
+var validUrl = require('valid-url');
+
 $.each(moment.tz.names(), function() {
     allTimeZones.push({value: this, label: this });
 });
@@ -72,6 +74,27 @@ class CheckAndApproveGroup extends Component {
 
     const groupSubmitter = _.find(utenti, { '_id': newGroup.ownerId });
 
+    if ((this.refs.group_detail_url.value !== '' || this.refs.group_detail_url.value !== null) && !validUrl.isUri(this.refs.group_detail_url.value)) {
+      bootbox.alert({
+        title: "Not a valid URL!",
+        message: "The 'URL to Detail Page' field has to be a valid URL (like 'http://google.com')"
+      });
+      return;
+    }
+
+    if ((this.refs.group_detail_url.value !== '' || this.refs.group_detail_url.value !== null) && this.refs.group_detail_text.value == ''){
+      bootbox.alert({
+        title: "No detail text provided",
+        message: "If you enter an Detail Page URL, you must also provide a Group Detail text"
+      });
+      return;
+    }
+
+    const gp_detail = {
+      detail_text: this.refs.group_detail_text.value,
+      detail_url: this.refs.group_detail_url.value
+    }
+
     const gp_leader = {
       first_name: this.refs.group_leader_first_name.value,
       last_name: this.refs.group_leader_second_name.value,
@@ -89,6 +112,7 @@ class CheckAndApproveGroup extends Component {
     newGroup.update(this.props.groups,
       {
         group_language: this.state.groupLanguage,
+        group_detail: gp_detail,
         use_own_meeting_resources: this.refs.useOwnMeetingRes.checked,
         group_leader: gp_leader,
         meet_time: meet_time,
@@ -240,6 +264,7 @@ class CheckAndApproveGroup extends Component {
 
     console.log("GROUP : ",this.props);
 
+    const groupDetail = this.props.groups.group_detail;
     const dateCreated = this.props.groups.date_created;
     const groupLanguage = this.props.groups.group_language;
     const ownResources = this.props.groups.use_own_meeting_resources?"checked":"";
@@ -253,7 +278,7 @@ class CheckAndApproveGroup extends Component {
                 <div className="panel panel-danger">
                   <div className="panel-heading">Group Info</div>
                     <div className="panel-body">
-                      <div className="form-group">
+                      <div className="form-group col-md-4">
                         <label htmlFor="select1" >Grooup languge</label>
                         <select value={this.state.groupLanguage} onChange={this.updateLanguage} className="form-control">
                           <option value="English">English</option>
@@ -267,6 +292,14 @@ class CheckAndApproveGroup extends Component {
                           <option value="Chinese">Chinese</option>
                           <option value="Indonesian">Indonesian</option>
                         </select>
+                      </div>
+                      <div className="form-group col-md-4">
+                        <label>Group Detail</label>
+                        <input type="text" className="form-control" placeholder="Group Detail" ref="group_detail_text" defaultValue={groupDetail&&groupDetail.detail_text} />
+                      </div>
+                      <div className="form-group col-md-4">
+                        <label>URL to Detail Page</label>
+                        <input type="text" className="form-control" placeholder="Detail URL" ref="group_detail_url" defaultValue={groupDetail&&groupDetail.detail_url} />
                       </div>
                     </div>
                 </div>

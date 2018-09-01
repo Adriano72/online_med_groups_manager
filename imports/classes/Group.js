@@ -111,6 +111,21 @@ const MeetTime = Class.create({
   }
 });
 
+const GroupDetail = Class.create({
+  name: 'GroupDetail',
+  /* No collection attribute */
+  fields: {
+    detail_text: {
+      type: String,
+      optional: true
+    },
+    detail_url: {
+      type: String,
+      optional: true
+    }
+  }
+});
+
 const Group = Class.create({
   name: 'Group',
   collection: Groups,
@@ -120,6 +135,9 @@ const Group = Class.create({
     group_language: String,
     use_own_meeting_resources: Boolean,
     approved: Boolean,
+    group_detail: {
+      type: GroupDetail
+    },
     meditators: {
       type: [Meditator],
       optional: true
@@ -142,12 +160,13 @@ const Group = Class.create({
     }
   },
   meteorMethods: {
-    insert: function(language, useOwnMeetRes, group_leader, meet_time, approved, meditators) {
+    insert: function(language, groupDetail, useOwnMeetRes, group_leader, meet_time, approved, meditators) {
       var currentUserId = Meteor.userId();
       if(currentUserId){
         this.ownerId = this.userId,
         this.date_created = new Date();
         this.group_language = language;
+        this.group_detail = groupDetail;
         this.use_own_meeting_resources = useOwnMeetRes;
         this.group_leader = group_leader;
         this.meet_time = meet_time;

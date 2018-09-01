@@ -65,7 +65,7 @@ class Header extends Component {
   renderCreateGroupLink(){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, ['admin', 'nationalresp'])) { // il gruppo va messo dinamico o globale
-     return (<a href="#" onClick={this.onBindCreateNewGroup.bind(this)}>Create new group</a>);
+     return (<a href="#" onClick={this.onBindCreateNewGroup.bind(this)}>Create New Group</a>);
     }
     return;
   }
@@ -73,7 +73,7 @@ class Header extends Component {
   renderNatRefGroups(){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, ['nationalresp'])) { // il gruppo va messo dinamico o globale
-     return (<a href="#" onClick={this.onBindNatRefGroups.bind(this)}>Groups I Created</a>);
+     return (<a href="#" onClick={this.onBindNatRefGroups.bind(this)}>Groups You Created</a>);
     }
     return;
   }
@@ -81,7 +81,7 @@ class Header extends Component {
   renderLeaderGroups(){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, ['itsaleader'])) { // il gruppo va messo dinamico o globale
-     return (<a href="#" onClick={this.onBindLeaderGroups.bind(this)}>Groups I Lead</a>);
+     return (<a href="#" onClick={this.onBindLeaderGroups.bind(this)}>Groups You Lead</a>);
     }
     return;
   }

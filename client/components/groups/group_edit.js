@@ -67,6 +67,11 @@ class GroupEdit extends Component {
   updateGroup() {
     var newGroup = new Group(this.props.groups);
 
+    const gp_detail = {
+      detail_text: this.refs.group_detail_text.value,
+      detail_url: this.refs.group_detail_url.value
+    }
+
     const gp_leader = {
       first_name: this.refs.group_leader_first_name.value,
       last_name: this.refs.group_leader_second_name.value,
@@ -84,6 +89,7 @@ class GroupEdit extends Component {
     newGroup.update(this.props.groups,
       {
         group_language: this.state.groupLanguage,
+        group_detail: gp_detail,
         use_own_meeting_resources: this.refs.useOwnMeetingRes.checked,
         group_leader: gp_leader,
         meet_time: meet_time,
@@ -213,6 +219,7 @@ class GroupEdit extends Component {
 
     console.log("GROUP : ",this.props);
 
+    const groupDetail = this.props.groups.group_detail;
     const dateCreated = this.props.groups.date_created;
     const groupLanguage = this.props.groups.group_language;
     const ownResources = this.props.groups.use_own_meeting_resources?"checked":"";
@@ -226,7 +233,7 @@ class GroupEdit extends Component {
                 <div className="panel panel-primary">
                   <div className="panel-heading">Group Info</div>
                     <div className="panel-body">
-                      <div className="form-group">
+                      <div className="form-group col-md-4">
                         <label htmlFor="select1" >Grooup languge</label>
                         <select value={this.state.groupLanguage} onChange={this.updateLanguage} className="form-control">
                           <option value="English">English</option>
@@ -240,6 +247,14 @@ class GroupEdit extends Component {
                           <option value="Chinese">Chinese</option>
                           <option value="Indonesian">Indonesian</option>
                         </select>
+                      </div>
+                      <div className="form-group col-md-4">
+                        <label>Group Detail</label>
+                        <input type="text" className="form-control" placeholder="Group Detail" ref="group_detail_text" defaultValue={groupDetail&&groupDetail.detail_text} />
+                      </div>
+                      <div className="form-group col-md-4">
+                        <label>URL to Detail Page</label>
+                        <input type="text" className="form-control" placeholder="Detail URL" ref="group_detail_url" defaultValue={groupDetail&&groupDetail.detail_url} />
                       </div>
                     </div>
                 </div>

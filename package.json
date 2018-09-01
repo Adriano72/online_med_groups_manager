@@ -21,7 +21,8 @@
     "react-router": "^3.2.1",
     "react-router-dom": "^4.3.1",
     "react-s-alert": "^1.4.1",
-    "react-select": "^2.0.0"
+    "react-select": "^2.0.0",
+    "valid-url": "^1.0.9"
   },
   "devDependencies": {
     "eslint-config-rallycoding": "^3.2.0"
