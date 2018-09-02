@@ -3,6 +3,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import Accounts from './accounts';
 import { Link, browserHistory } from 'react-router';
 import moment from 'moment-timezone';
+import { translate, Trans } from 'react-i18next';
 
 class Header extends Component {
 
@@ -145,12 +146,13 @@ class Header extends Component {
   }
 
   render() {
+    const t = this.props.t;
     return (
       <nav className="nav navbar-inverse">
         <div className="container-fluid">
           <div className="navbar-header">
             <a href="/"><img className="navbar-brand" src="logo.jpg" alt="HomePage"></img></a>
-            <Link to="/" className="navbar-brand">WCCM Online Meditation Groups</Link>
+            <Link to="/" className="navbar-brand">{t('WCCM Online Meditation Groups')}</Link>
           </div>
           <ul className="nav navbar-nav">
             <li>
@@ -177,4 +179,4 @@ export default createContainer(() => {
   return {
     currentUser: Meteor.user() || {}, groupsToApprove: Counts.get('groups-to-approve') // default to plain object
   };
-}, Header);
+}, translate('translations')(Header));

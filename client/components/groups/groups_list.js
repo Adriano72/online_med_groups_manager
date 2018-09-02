@@ -5,6 +5,7 @@ import Select from 'react-select';
 import Parser from 'html-react-parser';
 import moment from 'moment-timezone';
 import { Groups } from '../../../imports/collections/groups';
+import { translate, Trans } from 'react-i18next';
 
 let userTimeZone = moment.tz.guess();
 const format = 'h:mm a';
@@ -66,7 +67,6 @@ class GroupsList extends Component {
       }
 
       const meetingtime = computedMeetingDay + " at " + formattedConvertedTime;
-      console.log("BZZZZZZZ: ", detail_text);
 
       if(this.state.filterByDay.value !== 'All' &&  computedMeetingDay !== this.state.filterByDay.value) return;
       if(this.state.filterByLang.value !== 'All' &&  group_language !== this.state.filterByLang.value) return;
@@ -113,8 +113,20 @@ class GroupsList extends Component {
     this.setState({ filterByGroupType: {value: 'All', label: 'All' } });
   }
 
-  render() {
+  changeLanguageToEn = () => {
+    this.props.i18n.changeLanguage('en');
+  };
 
+  changeLanguageToEl = () => {
+    this.props.i18n.changeLanguage('el');
+  };
+
+  changeLanguageToIt = () => {
+    this.props.i18n.changeLanguage('it');
+  };
+
+  render() {
+    const t = this.props.t;
     return (
       <div className="container-fluid top-buffer">
         <div className="form-group col-md-4" >
@@ -151,7 +163,20 @@ class GroupsList extends Component {
             {this.renderRows()}
           </tbody>
         </table>
-
+        <button onClick={this.changeLanguageToEl.bind(this)}>el</button>
+        <button onClick={this.changeLanguageToEn.bind(this)}>en</button>
+        <button onClick={this.changeLanguageToIt.bind(this)}>it</button>
+        <h3 className="focus">
+          {t('WCCM Online Meditation Groups')}
+        </h3>
+        <div>
+          <p>
+            <Trans>
+              React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes.
+            </Trans>
+          </p>
+          <p><Trans>Declarative views make your code more predictable and easier to debug.</Trans></p>
+        </div>
       </div>
     );
   }
@@ -160,4 +185,4 @@ class GroupsList extends Component {
 export default createContainer(() => {
   Meteor.subscribe('groups');
   return { groups: Groups.find({}, { sort: { group_language: 1 } }).fetch(), currentUser: Meteor.user() || {} };
-}, GroupsList);
+}, translate('translations')(GroupsList));
