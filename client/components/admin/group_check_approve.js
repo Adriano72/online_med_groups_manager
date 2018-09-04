@@ -74,7 +74,11 @@ class CheckAndApproveGroup extends Component {
 
     const groupSubmitter = _.find(utenti, { '_id': newGroup.ownerId });
 
-    if ((this.refs.group_detail_url.value !== '' || this.refs.group_detail_url.value !== null) && !validUrl.isUri(this.refs.group_detail_url.value)) {
+    console.log("---- ", this.refs.group_detail_url.value);
+    console.log("---- ", this.refs.group_detail_url.value !== '');
+    console.log("---- ", this.refs.group_detail_url.value !== null);
+
+    if ((this.refs.group_detail_url.value !== '') && !validUrl.isUri(this.refs.group_detail_url.value)) {
       bootbox.alert({
         title: "Not a valid URL!",
         message: "The 'URL to Detail Page' field has to be a valid URL (like 'http://google.com')"
@@ -82,7 +86,7 @@ class CheckAndApproveGroup extends Component {
       return;
     }
 
-    if ((this.refs.group_detail_url.value !== '' || this.refs.group_detail_url.value !== null) && this.refs.group_detail_text.value == ''){
+    if ((this.refs.group_detail_url.value !== '') && this.refs.group_detail_text.value == ''){
       bootbox.alert({
         title: "No detail text provided",
         message: "If you enter an Detail Page URL, you must also provide a Group Detail text"

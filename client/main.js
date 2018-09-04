@@ -7,6 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
 
 import App from './components/app';
+import LoginPage from './components/loginPage';
 import GroupsList from './components/groups/groups_list';
 import NatRefGroups from './components/groups/natref_groups';
 import LeaderGroups from './components/groups/leader_groups';
@@ -36,6 +37,7 @@ const routes = (
     <Router history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute component={GroupsList} />
+        <Route path="login" component={LoginPage}/>
         <Route path="newgroup" component={GroupCreate}/>
         <Route path="editgroup/:groupId" component={GroupEdit}/>
         <Route path="createuser" component={CreateUser}/>

@@ -10,18 +10,15 @@ import { translate, Trans } from 'react-i18next';
 let userTimeZone = moment.tz.guess();
 const format = 'h:mm a';
 const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const daysOfWeek = [{ value: 'All', label: 'All'}, {value: 'Monday', label: 'Monday'}, {value: 'Tuesday', label: 'Tuesday'}, {value: 'Wednesday', label: 'Wednesday'}, {value: 'Thursday', label: 'Thursday'}, {value: 'Friday', label: 'Friday'}, {value: 'Saturday', label: 'Saturday'}, {value: 'Sunday', label: 'Sunday' }];
-const languages = [{ value: 'All', label: 'All'}, {value: 'English', label: 'English'}, {value: 'French', label: 'French'}, {value: 'Italian', label: 'Italian'}, {value: 'Spanish', label: 'Spanish'}, {value: 'German', label: 'German'}, {value: 'Dutch', label: 'Dutch'}, {value: 'Portuguese', label: 'Portuguese'}, {value: 'Russian', label: 'Russian'}, {value: 'Chinese', label: 'Chinese'}, {value: 'Indonesian', label: 'Indonesian' }];
-const groupTypes = [{ value: 'All', label: 'All'}, {value: 'Special Groups', label: 'Special Groups' }];
 
 class GroupsList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      filterByDay: { value: 'All', label: 'All' },
-      filterByLang: { value: 'All', label: 'All' },
-      filterByGroupType: { value: 'All', label: 'All' }
+      filterByDay: { value: 'All', label: this.props.i18n.t('All') },
+      filterByLang: { value: 'All', label: this.props.i18n.t('All') },
+      filterByGroupType: { value: 'All', label: this.props.i18n.t('All') }
     };
   }
 
@@ -30,6 +27,7 @@ class GroupsList extends Component {
     return this.props.groups.map(group => {
       const groupEditUrl = `/editgroup/${group._id}`;
       const { _id, group_language, group_leader, group_detail, meet_time, meditators  } = group;
+      const translatedLanguage = this.props.i18n.t(group_language);
       const detail_text = group_detail && group_detail.detail_text;
       const detail_url = group_detail && group_detail.detail_url;
       const leader = group_leader.first_name + " " + group_leader.last_name;
@@ -66,7 +64,7 @@ class GroupsList extends Component {
         }
       }
 
-      const meetingtime = computedMeetingDay + " at " + formattedConvertedTime;
+      const meetingtime = this.props.i18n.t(computedMeetingDay) + " "+this.props.i18n.t('at')+" " + formattedConvertedTime;
 
       if(this.state.filterByDay.value !== 'All' &&  computedMeetingDay !== this.state.filterByDay.value) return;
       if(this.state.filterByLang.value !== 'All' &&  group_language !== this.state.filterByLang.value) return;
@@ -78,7 +76,7 @@ class GroupsList extends Component {
 
       return (
         <tr key={_id}>
-          <td>{group_language}</td>
+          <td>{translatedLanguage}</td>
           <td>{groupDetailInfo}{Parser(groupDetailURL)}</td>
           <td>{leader}</td>
           <td>{meetingtime}</td>
@@ -86,7 +84,7 @@ class GroupsList extends Component {
             <button
               className="btn btn-success"
               onClick={() => browserHistory.push(`/joingroup/${group._id}`)}>
-              Join this group
+              {this.props.i18n.t('Join This Group')}
             </button>
           </td>
 
@@ -94,6 +92,17 @@ class GroupsList extends Component {
       )
     });
   }
+  /*
+  translateDays = () => {
+    let translatedObjectArray = [{ value: 'All', label: 'All'}];
+    _.forEach(weekDays, function(value){
+      let temp = t(value)
+      translatedObjectArray.push(temp);
+    })
+
+    console.log("FINAL OBJ: ", translatedObjectArray);
+  }
+  */
 
   filterByDayOfWeek = (dayOfWeek) => {
     this.setState({ filterByDay: dayOfWeek });
@@ -108,9 +117,9 @@ class GroupsList extends Component {
   }
 
   resetFilters = () => {
-    this.setState({ filterByDay: {value: 'All', label: 'All' } });
-    this.setState({ filterByLang: {value: 'All', label: 'All' } });
-    this.setState({ filterByGroupType: {value: 'All', label: 'All' } });
+    this.setState({ filterByDay: {value: 'All', label: this.props.i18n.t('All') } });
+    this.setState({ filterByLang: {value: 'All', label: this.props.i18n.t('All') } });
+    this.setState({ filterByGroupType: {value: 'All', label: this.props.i18n.t('All') } });
   }
 
   changeLanguageToEn = () => {
@@ -125,20 +134,29 @@ class GroupsList extends Component {
     this.props.i18n.changeLanguage('it');
   };
 
+  changeLanguageToPt = () => {
+    this.props.i18n.changeLanguage('pt');
+  };
+
   render() {
     const t = this.props.t;
+    const i18n = this.props.i18n;
+    const languages = [{ value: 'All', label: t('All')}, {value: 'English', label: t('English') }, {value: 'French', label: t('French') }, {value: 'Italian', label: t('Italian') }, {value: 'Spanish', label: t('Spanish') }, {value: 'German', label: t('German') }, {value: 'Dutch', label: t('Dutch') }, {value: 'Portuguese', label: t('Portuguese') }, {value: 'Russian', label: t('Russian') }, {value: 'Chinese', label: t('Chinese') }, {value: 'Indonesian', label: t('Indonesian') }];
+    const daysOfWeek = [{ value: 'All', label: t('All') }, { value: 'Monday', label: t('Monday') }, { value: 'Tuesday', label: t('Tuesday') }, {value: 'Wednesday', label: t('Wednesday') }, {value: 'Thursday', label: t('Thursday') }, {value: 'Friday', label: t('Friday') }, {value: 'Saturday', label: t('Saturday') }, {value: 'Sunday', label: t('Sunday') }];
+    const groupTypes = [{ value: 'All', label: t('All') }, { value: 'Special Groups', label: t('Special Groups') }];
+
     return (
       <div className="container-fluid top-buffer">
         <div className="form-group col-md-4" >
-          <label>Filter by Language</label>
+          <label>{t('Filter by Language')}</label>
           <Select id="filter-by-language" value={this.state.filterByLang} placeholder="Filter by Language" searchable options={languages} onChange={this.filterByLanguage} />
         </div>
         <div className="form-group col-md-4">
-          <label>Filter by Week Day</label>
+          <label>{t('Filter by Week Day')}</label>
           <Select name="filter-by-day" value={this.state.filterByDay} placeholder="Filter by Meeting Day" searchable options={daysOfWeek} onChange={this.filterByDayOfWeek} />
         </div>
         <div className="form-group col-md-4">
-          <label>Group Type</label>
+          <label>{t('Group Type')}</label>
           <Select name="filter-by-day" value={this.state.filterByGroupType} placeholder="Filter by Group Type" searchable options={groupTypes} onChange={this.filterByGroupTypes} />
         </div>
         <div className="form-group col-md-6">
@@ -146,37 +164,30 @@ class GroupsList extends Component {
             className="btn btn-warning"
             onClick={this.resetFilters}
           >
-            Reset filters
+            {t('Reset Filters')}
           </button>
         </div>
         <table className="table table-striped">
           <thead>
             <tr>
-              <th>Language</th>
-              <th>Group Info</th>
-              <th>Group Leader</th>
-              <th>Meeting Schedule [in your local time]</th>
-              <th>Join this group</th>
+              <th>{t('Language')}</th>
+              <th>{t('Group Info')}</th>
+              <th>{t('Group Leader')}</th>
+              <th>{t('Meeting Schedule [in your local time]')}</th>
+              <th>{t('Join This Group')}</th>
             </tr>
           </thead>
           <tbody>
             {this.renderRows()}
           </tbody>
         </table>
-        <button onClick={this.changeLanguageToEl.bind(this)}>el</button>
+        {/*
+          <button onClick={this.changeLanguageToEl.bind(this)}>el</button>
+          <button onClick={this.changeLanguageToIt.bind(this)}>it</button>
+        */}
         <button onClick={this.changeLanguageToEn.bind(this)}>en</button>
-        <button onClick={this.changeLanguageToIt.bind(this)}>it</button>
-        <h3 className="focus">
-          {t('WCCM Online Meditation Groups')}
-        </h3>
-        <div>
-          <p>
-            <Trans>
-              React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes.
-            </Trans>
-          </p>
-          <p><Trans>Declarative views make your code more predictable and easier to debug.</Trans></p>
-        </div>
+
+        <button onClick={this.changeLanguageToPt.bind(this)}>pt</button>
       </div>
     );
   }

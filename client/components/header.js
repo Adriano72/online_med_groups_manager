@@ -63,57 +63,57 @@ class Header extends Component {
     }
   }
 
-  renderCreateGroupLink(){
+  renderCreateGroupLink(t){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, ['admin', 'nationalresp'])) { // il gruppo va messo dinamico o globale
-     return (<a href="#" onClick={this.onBindCreateNewGroup.bind(this)}>Create New Group</a>);
+     return (<a href="#" onClick={this.onBindCreateNewGroup.bind(this)}>{t('Create New Group')}</a>);
     }
     return;
   }
 
-  renderNatRefGroups(){
+  renderNatRefGroups(t){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, ['nationalresp'])) { // il gruppo va messo dinamico o globale
-     return (<a href="#" onClick={this.onBindNatRefGroups.bind(this)}>Groups You Created</a>);
+     return (<a href="#" onClick={this.onBindNatRefGroups.bind(this)}>{t('Groups You Created')}</a>);
     }
     return;
   }
 
-  renderLeaderGroups(){
+  renderLeaderGroups(t){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, ['itsaleader'])) { // il gruppo va messo dinamico o globale
-     return (<a href="#" onClick={this.onBindLeaderGroups.bind(this)}>Groups You Lead</a>);
+     return (<a href="#" onClick={this.onBindLeaderGroups.bind(this)}>{t('Groups You Lead')}</a>);
     }
     return;
   }
 
-  renderManageGroups(){
+  renderManageGroups(t){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, ['admin'])) { // il gruppo va messo dinamico o globale
-     return (<a href="#" onClick={this.onBindManageGroups.bind(this)}>Manage Groups</a>);
+     return (<a href="#" onClick={this.onBindManageGroups.bind(this)}>{t('Manage Groups')}</a>);
     }
     return;
   }
 
-  renderGroupsToApproveLink(){
+  renderGroupsToApproveLink(t){
     var loggedInUser = Meteor.user();
     var numberOfGroupsToApprove = Counts.get("groups-to-approve");
     if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
-    return (<a href="#" onClick={this.onBindApprovalPendingGroups.bind(this)}>Groups Pending Approval <span className="badge">{numberOfGroupsToApprove}</span></a>);
+    return (<a href="#" onClick={this.onBindApprovalPendingGroups.bind(this)}>{t('Groups Pending Approval')} <span className="badge">{numberOfGroupsToApprove}</span></a>);
     }
     return;
   }
 
-  renderMenuAuthUsersCreation() {
+  renderMenuAuthUsersCreation(t) {
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
      return (
        <li className="dropdown">
-         <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users Management<span className="caret"></span></a>
+         <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{t('Users Management')}<span className="caret"></span></a>
          <ul className="dropdown-menu">
-           <li>{this.renderCreateUserLink()}</li>
-           <li>{this.renderCreateAdminLink()}</li>
-           <li>{this.renderUserListLink()}</li>
+           <li>{this.renderCreateUserLink(t)}</li>
+           <li>{this.renderCreateAdminLink(t)}</li>
+           <li>{this.renderUserListLink(t)}</li>
          </ul>
        </li>
      );
@@ -121,26 +121,26 @@ class Header extends Component {
     return;
   }
 
-  renderCreateUserLink(){
+  renderCreateUserLink(t){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
-     return (<a href="#" onClick={this.onBindCreateNewAuthUser.bind(this)}>Create Nat Ref User</a>);
+     return (<a href="#" onClick={this.onBindCreateNewAuthUser.bind(this)}>{t('Create Nat Ref User')}</a>);
     }
     return;
   }
 
-  renderCreateAdminLink(){
+  renderCreateAdminLink(t){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
-     return (<a href="#" onClick={this.onBindCreateNewAdminUser.bind(this)}>Create Admin User</a>);
+     return (<a href="#" onClick={this.onBindCreateNewAdminUser.bind(this)}>{t('Create Admin User')}</a>);
     }
     return;
   }
 
-  renderUserListLink(){
+  renderUserListLink(t){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
-     return (<a href="#" onClick={this.onBindAuthUsersList.bind(this)}>Authorized Users</a>);
+     return (<a href="#" onClick={this.onBindAuthUsersList.bind(this)}>{t('Authorized Users')}</a>);
     }
     return;
   }
@@ -158,15 +158,15 @@ class Header extends Component {
             <li>
               <Accounts />
             </li>
-            <li>{this.renderGroupsToApproveLink()}</li>
-            <li>{this.renderNatRefGroups()}</li>
-            <li>{this.renderLeaderGroups()}</li>
-            <li>{this.renderManageGroups()}</li>
-            <li>{this.renderCreateGroupLink()}</li>
-            {this.renderMenuAuthUsersCreation()}
+            <li>{this.renderGroupsToApproveLink(t)}</li>
+            <li>{this.renderNatRefGroups(t)}</li>
+            <li>{this.renderLeaderGroups(t)}</li>
+            <li>{this.renderManageGroups(t)}</li>
+            <li>{this.renderCreateGroupLink(t)}</li>
+            {this.renderMenuAuthUsersCreation(t)}
           </ul>
           <ul className="nav navbar-nav navbar-right">
-            <li><p className="navbar-text">Timezone: {moment.tz.guess()}</p></li>
+            <li><p className="navbar-text">{t('Timezone')}: {moment.tz.guess()}</p></li>
           </ul>
         </div>
       </nav>

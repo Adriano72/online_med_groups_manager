@@ -56,6 +56,52 @@ i18n
 
         }
       },
+      pt: {
+        translations: {
+          "WCCM Online Meditation Groups": "WCCM Grupos de Meditação Online",
+          "Groups Pending Approval": "Grupos pendentes de aprovação",
+          "Groups You Created": "Grupos Criados",
+          "Manage Groups": "Administrar Grupos",
+          "Create New Group": "Criar Novo Grupo",
+          "Timezone": "Fuso Horário",
+          "Users Management": "Administrar usuários",
+          "Create Nat Ref User": "Criar Nat Ref Usuário",
+          "Create Admin User": "Criar Admin Usuário",
+          "Authorized Users": "Usuários Licenciados",
+          "Members": "Membros",
+          "Language": "Idioma",
+          "English": "Inglês",
+          "French": "Francês",
+          "Italian": "Italiano",
+          "Spanish": "Espanhol",
+          "German": "Alemão",
+          "Dutch": "Holdandês",
+          "Portuguese": "Português",
+          "Russian": "Russo",
+          "Chinese": "Chinês",
+          "Indonesian": "Indonésio",
+          "Group Info": "Informação do Grupo",
+          "Join This Group": "Junte-se a Este Grupo",
+          "Group Leader": "Líder do Grupo",
+          "Meeting Schedule [in your local time]": "Calendário do Grupo (no seu horário local)",
+          "Reset Filters": "Limpar Filtros",
+          "Filter by Language": "Filtrar por Idioma",
+          "Filter by Week Day": "Filtrar do Dia da Semana",
+          "Group Type": "Tipos de Grupo",
+          "All": "Todos",
+          "Special Groups": "Grupos Especiais",
+          "Monday": "Segunda-feira",
+          "Tuesday": "Terça-feira",
+          "Wednesday": "Quarta-feira",
+          "Thursday": "Quinta-feira",
+          "Friday": "Sexta-feira",
+          "Saturday": "Sábado",
+          "Sunday": "Domingo",
+          "at": "às"
+
+
+        }
+      }
     },
     fallbackLng: 'en',
     debug: true,

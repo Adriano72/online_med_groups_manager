@@ -267,7 +267,7 @@ class GroupCreate extends Component {
                 <div className="panel-heading">Group Info</div>
                   <div className="panel-body">
                     <div className="form-group col-md-4">
-                      <label htmlFor="select1" >Grooup languge</label>
+                      <label htmlFor="select1" >Group languge</label>
                       <select value={this.state.grpupLanguage} onChange={this.updateLanguage} className="form-control">
                         <option value="English">English</option>
                         <option value="French">French</option>
