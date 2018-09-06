@@ -2,8 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import { Groups } from '../imports/collections/groups';
 import Group from '../imports/classes/Group';
 
-
-
 Meteor.methods({
   sendEmail: function(sender, recipient, subject, body) {
     check([sender, recipient, subject, body], [String]);

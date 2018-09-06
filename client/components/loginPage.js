@@ -45,7 +45,7 @@ class LoginPage extends Component {
                     className="form col-md-12 center-block"
                     onSubmit={this.handleSubmit.bind(this)}>
                 <div className="form-group">
-                  <input type="email"
+                  <input type="text"
                         id="login-email"
                         className="form-control input-lg"
                         placeholder="username or email"/>

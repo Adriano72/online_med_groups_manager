@@ -181,6 +181,7 @@ class Header extends Component {
   }
 
   render() {
+
     const t = this.props.t;
     return (
       <nav className="nav navbar-inverse">
@@ -190,6 +191,7 @@ class Header extends Component {
             <Link to="/" className="navbar-brand">{t('WCCM Online Meditation Groups')}</Link>
           </div>
           <ul className="nav navbar-nav">
+            <li><Accounts /></li>
             <li>{this.renderGroupsToApproveLink(t)}</li>
             <li>{this.renderNatRefGroups(t)}</li>
             <li>{this.renderLeaderGroups(t)}</li>
