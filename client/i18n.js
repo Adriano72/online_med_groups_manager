@@ -97,7 +97,12 @@ i18n
           "Friday": "Sexta-feira",
           "Saturday": "Sábado",
           "Sunday": "Domingo",
-          "at": "às"
+          "at": "às",
+          "Login": "Entrar",
+          "Forgot password": "Esqueceu a senha",
+          "Logout": "Sair",
+          "Incorrect password": "Senha incorreta",
+          "User not found": "Usuário não encontrado"
 
 
         }

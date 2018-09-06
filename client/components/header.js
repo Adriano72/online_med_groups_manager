@@ -7,6 +7,22 @@ import { translate, Trans } from 'react-i18next';
 
 class Header extends Component {
 
+  logout(e){
+    e.preventDefault();
+    Meteor.logout( (err) => {
+        if (err) {
+            console.log( err.reason );
+        } else {
+            browserHistory.push('/');
+        }
+    });
+  }
+
+  login(e){
+    e.preventDefault();
+    browserHistory.push('/login');
+  }
+
   onBindCreateNewGroup(event) {
     event.preventDefault();
     if(Meteor.user()){
@@ -145,6 +161,25 @@ class Header extends Component {
     return;
   }
 
+  reservedAreaMenu(t){
+    var loggedInUser = Meteor.user();
+    if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
+     return (
+       <li className="dropdown">
+         <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{this.props.currentUser.username}<span className="caret"></span></a>
+         <ul className="dropdown-menu">
+           <li><a href="#" onClick={this.logout}>{t('Logout')}</a></li>
+         </ul>
+       </li>
+     );
+   } else {
+     return (
+       <li><a href="#" onClick={this.login} className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{t('Reserved Area')}</a></li>
+     );
+   }
+    return;
+  }
+
   render() {
     const t = this.props.t;
     return (
@@ -155,9 +190,6 @@ class Header extends Component {
             <Link to="/" className="navbar-brand">{t('WCCM Online Meditation Groups')}</Link>
           </div>
           <ul className="nav navbar-nav">
-            <li>
-              <Accounts />
-            </li>
             <li>{this.renderGroupsToApproveLink(t)}</li>
             <li>{this.renderNatRefGroups(t)}</li>
             <li>{this.renderLeaderGroups(t)}</li>
@@ -167,6 +199,7 @@ class Header extends Component {
           </ul>
           <ul className="nav navbar-nav navbar-right">
             <li><p className="navbar-text">{t('Timezone')}: {moment.tz.guess()}</p></li>
+            {this.reservedAreaMenu(t)}
           </ul>
         </div>
       </nav>

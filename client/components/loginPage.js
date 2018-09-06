@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Link, browserHistory } from 'react-router';
 import { createContainer } from 'meteor/react-meteor-data';
+import { translate, Trans } from 'react-i18next';
 
-export default class LoginPage extends Component {
+class LoginPage extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -18,7 +19,7 @@ export default class LoginPage extends Component {
     Meteor.loginWithPassword(email, password, (err) => {
       if(err){
         this.setState({
-          error: err.reason
+          error: this.props.i18n.t(err.reason)
         });
       } else {
         browserHistory.push('/');
@@ -27,13 +28,14 @@ export default class LoginPage extends Component {
   }
 
   render(){
+    const t = this.props.t;
     const error = this.state.error;
     return (
       <div className="modal show">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="text-center">Login</h1>
+              <h1 className="text-center">{t('Login')}</h1>
             </div>
             <div className="modal-body">
               { error.length > 0 ?
@@ -58,11 +60,11 @@ export default class LoginPage extends Component {
                   <input type="submit"
                         id="login-button"
                         className="btn btn-primary btn-lg btn-block"
-                        value="Login" />
+                        value={t('Login')} />
                 </div>
                 <div className="form-group text-center">
                   <p className="text-center">
-                    <Link to="/signup">Forgot password?</Link>
+                    <Link to="/signup">{t('Forgot password')}?</Link>
                   </p>
                 </div>
               </form>
@@ -74,3 +76,5 @@ export default class LoginPage extends Component {
     );
   }
 }
+
+export default translate('translations')(LoginPage);
