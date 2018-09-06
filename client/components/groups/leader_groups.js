@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
-import { Link, browserHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 import Select from 'react-select';
 import Parser from 'html-react-parser';
 import { Groups } from '../../../imports/collections/groups';

@@ -3,32 +3,27 @@ import { Link, browserHistory } from 'react-router';
 import { createContainer } from 'meteor/react-meteor-data';
 import { translate, Trans } from 'react-i18next';
 
-class LoginPage extends Component {
+class ForgotPassword extends Component {
   constructor(props){
     super(props);
     this.state = {
       error: ''
     };
-    //this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(e){
+  handleSubmit(e) {
     e.preventDefault();
-    let email = document.getElementById('login-email').value;
-    let password = document.getElementById('login-password').value;
-    Meteor.loginWithPassword(email, password, (err) => {
-      if(err){
-        this.setState({
-          error: this.props.i18n.t(err.reason)
-        });
+
+    const email = document.getElementById('email-of-user').value;
+    console.log("EMAIL OF USER: ", email);
+
+    Meteor.call('mResetForgottenPassword', email, (error, res) => {
+      if (res) {
+        console.log("GOOD!: ", res);
       } else {
-        browserHistory.push('/');
+        console.log("BAD!: ", error);
       }
     });
-  }
-
-  forgotPassword() {
-    browserHistory.push('/forgotpassword');
   }
 
   render(){
@@ -39,12 +34,7 @@ class LoginPage extends Component {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <div className="form-group text-left">
-                <p className="text-left">
-                  <Link to='/'>Close</Link>
-                </p>
-              </div>
-              <h1 className="text-center">{t('Login')}</h1>
+              <h1 className="text-center">{t('Reset password')}</h1>
             </div>
             <div className="modal-body">
               { error.length > 0 ?
@@ -52,29 +42,22 @@ class LoginPage extends Component {
                 :''}
               <form  id="login-form"
                     className="form col-md-12 center-block"
-                    onSubmit={this.handleSubmit.bind(this)}>
+                    onSubmit={this.handleSubmit.bind(this)}
+              >
+
                 <div className="form-group">
-                  <input type="text"
-                        id="login-email"
+                  <input type="email"
+                        id="email-of-user"
                         className="form-control input-lg"
-                        placeholder="username or email"/>
-                </div>
-                <div className="form-group">
-                  <input type="password"
-                        id="login-password"
-                        className="form-control input-lg"
-                        placeholder="password"/>
+                        placeholder="email"/>
                 </div>
                 <div className="form-group text-center">
                   <input type="submit"
                         id="login-button"
                         className="btn btn-primary btn-lg btn-block"
-                        value={t('Login')} />
+                        value={t('Reset password')} />
                 </div>
                 <div className="form-group text-center">
-                  <p className="text-center">
-                    <a href="#" onClick={this.forgotPassword.bind(this)}>{t('Forgot password')}?</a>
-                  </p>
                 </div>
               </form>
             </div>
@@ -86,4 +69,4 @@ class LoginPage extends Component {
   }
 }
 
-export default translate('translations')(LoginPage);
+export default translate('translations')(ForgotPassword);
