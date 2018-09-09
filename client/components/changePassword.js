@@ -7,7 +7,7 @@ import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 
-class ForgotPassword extends Component {
+class ChangePassword extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -17,22 +17,30 @@ class ForgotPassword extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    let current_password = document.getElementById('current-password').value;
+    let new_password = document.getElementById('new-password').value;
 
-    const email = document.getElementById('email-of-user').value;
-    console.log("EMAIL OF USER: ", email);
-
-    Meteor.call('mResetForgottenPassword', email, () => {
-      Alert.success(this.props.i18n.t('Email sent'), {
-        position: 'top-left',
-        effect: 'jelly',
-        onShow: function () {
-          setTimeout(function(){
-            browserHistory.push('/');
-          }, 2000);
-        },
-        timeout: 1500,
-        offset: 20
-      });
+    Accounts.changePassword(current_password, new_password, (error) => {
+      if(error) {
+        this.setState({
+          error: this.props.i18n.t(error.reason)
+        });
+      } else {
+        this.setState({
+          error: ''
+        });
+        Alert.success(this.props.i18n.t('Password has been changed!'), {
+          position: 'top-left',
+          effect: 'jelly',
+          onShow: function () {
+            setTimeout(function(){
+              browserHistory.push('/');
+            }, 2000);
+          },
+          timeout: 1500,
+          offset: 20
+        });
+      }
     });
   }
 
@@ -49,7 +57,7 @@ class ForgotPassword extends Component {
                   <Link to='/'>{t('Close')}</Link>
                 </p>
               </div>
-              <h1 className="text-center">{t('Reset password')}</h1>
+              <h1 className="text-center">{t('Change password')}</h1>
             </div>
             <div className="modal-body">
               { error.length > 0 ?
@@ -59,30 +67,38 @@ class ForgotPassword extends Component {
                     className="form col-md-12 center-block"
                     onSubmit={this.handleSubmit.bind(this)}
               >
-
                 <div className="form-group">
-                  <input type="email"
-                        id="email-of-user"
-                        className="form-control input-lg"
-                        placeholder="email"/>
+                  <input type="password"
+                    id="current-password"
+                    className="form-control input-lg"
+                    placeholder="Current password"
+                  />
+                </div>
+                <div className="form-group">
+                  <input type="password"
+                    id="new-password"
+                    className="form-control input-lg"
+                    placeholder="New password"
+                  />
                 </div>
                 <div className="form-group text-center">
                   <input type="submit"
-                        id="login-button"
-                        className="btn btn-primary btn-lg btn-block"
-                        value={t('Reset password')} />
+                    id="login-button"
+                    className="btn btn-primary btn-lg btn-block"
+                    value={t('Change password')}
+                  />
                 </div>
                 <div className="form-group text-center">
                 </div>
               </form>
             </div>
             <div className="modal-footer" style={{borderTop: 0}}></div>
+            <Alert stack={{limit: 3}} />
           </div>
-          <Alert stack={{limit: 3}} />
         </div>
       </div>
     );
   }
 }
 
-export default translate('translations')(ForgotPassword);
+export default translate('translations')(ChangePassword);

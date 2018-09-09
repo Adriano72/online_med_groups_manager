@@ -172,7 +172,6 @@ const Group = Class.create({
         this.meet_time = meet_time;
         this.approved = approved;
         if(meditators){
-          console.log("IF mEDITATORS ", meditators);
           this.meditators = meditators;
         }
 

@@ -2,12 +2,8 @@ import React, { Component } from 'react';
 import { Link, browserHistory } from 'react-router';
 import { createContainer } from 'meteor/react-meteor-data';
 import { translate, Trans } from 'react-i18next';
-import Alert from 'react-s-alert';
-import 'react-s-alert/dist/s-alert-default.css';
-import 'react-s-alert/dist/s-alert-css-effects/slide.css';
-import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 
-class ForgotPassword extends Component {
+class ResetPassword extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -17,22 +13,12 @@ class ForgotPassword extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    let password = document.getElementById('new-password').value;
 
-    const email = document.getElementById('email-of-user').value;
-    console.log("EMAIL OF USER: ", email);
+    const { resettoken } = this.props.params;
 
-    Meteor.call('mResetForgottenPassword', email, () => {
-      Alert.success(this.props.i18n.t('Email sent'), {
-        position: 'top-left',
-        effect: 'jelly',
-        onShow: function () {
-          setTimeout(function(){
-            browserHistory.push('/');
-          }, 2000);
-        },
-        timeout: 1500,
-        offset: 20
-      });
+    Accounts.resetPassword(resettoken, password, () => {
+      browserHistory.push('/');
     });
   }
 
@@ -61,16 +47,16 @@ class ForgotPassword extends Component {
               >
 
                 <div className="form-group">
-                  <input type="email"
-                        id="email-of-user"
+                  <input type="password"
+                        id="new-password"
                         className="form-control input-lg"
-                        placeholder="email"/>
+                        placeholder="New password"/>
                 </div>
                 <div className="form-group text-center">
                   <input type="submit"
                         id="login-button"
                         className="btn btn-primary btn-lg btn-block"
-                        value={t('Reset password')} />
+                        value={t('Set password')} />
                 </div>
                 <div className="form-group text-center">
                 </div>
@@ -78,11 +64,10 @@ class ForgotPassword extends Component {
             </div>
             <div className="modal-footer" style={{borderTop: 0}}></div>
           </div>
-          <Alert stack={{limit: 3}} />
         </div>
       </div>
     );
   }
 }
 
-export default translate('translations')(ForgotPassword);
+export default translate('translations')(ResetPassword);

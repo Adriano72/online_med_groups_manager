@@ -37,6 +37,11 @@ class AccountEnroll extends Component {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
+              <div className="form-group text-left">
+                <p className="text-left">
+                  <Link to='/'>{t('Close')}</Link>
+                </p>
+              </div>
               <h1 className="text-center">{t('Chose a password')}</h1>
             </div>
             <div className="modal-body">

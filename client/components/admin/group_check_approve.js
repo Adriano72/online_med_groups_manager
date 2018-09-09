@@ -162,8 +162,8 @@ class CheckAndApproveGroup extends Component {
             'sendEmail',
             'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
             gp_leader.email,
-            'WCCM Online Meditation Groups - Group Leader Role Assignment',
-            '<p>Dear '+gp_leader.first_name+'</p><h4>You have been assigned to be the Group Leader of an Online Meditation Group</h4><ul><li>Group Language: '+this.state.groupLanguage+'</li><li>Group Meeting Day and Time: '+this.state.meetDay+ ' at '+this.state.meetTime.format(format)+'</li></ul><p>In another email you should have received the link to set your password, once done so you will be able to login on the Online Meditation Group platform at https://www.onlinemeditationwccm.org and manage the groups you are leader of.</p><p>For any help you might need please write to leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+            this.props.i18n.t('WCCM Online Meditation Groups - Group Leader Role Assignment'),
+            '<p>'+ this.props.i18n.t('Dear') + ' '+this.props.i18n.t(gp_leader.first_name)+'</p><h4>'+this.props.i18n.t('You are now the Group Leader of an Online Meditation Group')+' </h4><ul><li>'+this.props.i18n.t('Group language')+': '+this.props.i18n.t(this.state.grpupLanguage)+'</li><li>'+this.props.i18n.t('Group Meeting Day and Time')+': '+this.props.i18n.t(this.state.meetDay)+ ' at '+this.state.meetTime+'</li></ul><p>'+this.props.i18n.t('A separate notification will be sent to you. Please follow the link in that notification to set up your password that will allow you access to  the Online Meditation Group platform.  Once in the platform you will be able to manage your group communications')+'</p><p>'+this.props.i18n.t('If you need further assistance please get in touch with Leo at')+' leonardo@wccm.org</p><p><em>'+this.props.i18n.t('The WCCM Online Mediation Groups Staff')+'</em></p>',
 
             (err, result) => {
               console.log("ERR: ", err, 'RESULT: ', result);
@@ -183,10 +183,10 @@ class CheckAndApproveGroup extends Component {
           );
 
           bootbox.alert({
-            title: "Group Submission Approved",
-            message: "The National Referent that submitted the group creation request and the appointed Group Leader will receive a notification email. The Group Leader will also receive the link to create an account that will permit access to the system and group's users management.",
+            title: this.props.i18n.t("Your group is now set up"),
+            message: this.props.i18n.t("The group is listed in the WCCM directory at WCCM.org as following our guidelines. The Group Leader will soon receive a sign-in link which allows access to the system under your supervision"),
             callback: function(){ return browserHistory.push('/'); }
-          })
+          });
         }
       }
     );

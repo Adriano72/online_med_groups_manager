@@ -18,6 +18,13 @@ class Header extends Component {
     });
   }
 
+  changePassword(e){
+    e.preventDefault();
+    if(Meteor.user()){
+      browserHistory.push(`/changepassword`);
+    }
+  }
+
   login(e){
     e.preventDefault();
     browserHistory.push('/login');
@@ -168,6 +175,7 @@ class Header extends Component {
        <li className="dropdown">
          <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{this.props.currentUser.username}<span className="caret"></span></a>
          <ul className="dropdown-menu">
+           <li><a href="#" onClick={this.changePassword}>{t('Change password')}</a></li>
            <li><a href="#" onClick={this.logout}>{t('Logout')}</a></li>
          </ul>
        </li>
@@ -191,7 +199,7 @@ class Header extends Component {
             <Link to="/" className="navbar-brand">{t('WCCM Online Meditation Groups')}</Link>
           </div>
           <ul className="nav navbar-nav">
-            <li><Accounts /></li>
+            {/*<li><Accounts /></li>*/}
             <li>{this.renderGroupsToApproveLink(t)}</li>
             <li>{this.renderNatRefGroups(t)}</li>
             <li>{this.renderLeaderGroups(t)}</li>

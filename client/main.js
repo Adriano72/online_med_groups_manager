@@ -10,6 +10,8 @@ import App from './components/app';
 import LoginPage from './components/loginPage';
 import AccountEnroll from './components/accountEnroll';
 import ForgotPassword from './components/forgotPassword';
+import ResetPassword from './components/resetPassword';
+import ChangePassword from './components/changePassword';
 import GroupsList from './components/groups/groups_list';
 import NatRefGroups from './components/groups/natref_groups';
 import LeaderGroups from './components/groups/leader_groups';
@@ -36,7 +38,6 @@ Accounts.onEnrollmentLink(function (token) {
 
 Accounts.onResetPasswordLink(function (token) {
   browserHistory.push(`/resetpassword/${token}`);
-  // devi creare la form, mettere i close su tutte queste form etc
 });
 
 Accounts.config({
@@ -50,6 +51,8 @@ const routes = (
         <IndexRoute component={GroupsList} />
         <Route path="login" component={LoginPage}/>
         <Route path="forgotpassword" component={ForgotPassword}/>
+        <Route path="resetpassword/:resettoken" component={ResetPassword}/>
+        <Route path="changepassword" component={ChangePassword}/>
         <Route path="enroll/:resettoken" component={AccountEnroll}/>
         <Route path="newgroup" component={GroupCreate}/>
         <Route path="editgroup/:groupId" component={GroupEdit}/>
