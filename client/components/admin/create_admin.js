@@ -69,12 +69,12 @@ export default class CreateAdmin extends Component {
           Meteor.call('mCreateUser', newAdminUserData, (error, result) => {
             if (result) {
 
-              Meteor.call( // Notify the group leader
+              Meteor.call( // Notify the group leader -- EDITED
                 'sendEmail',
                 'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
                 email,
-                'WCCM Online Meditation Groups - National Referent Role Assignment',
-                '<p>Dear '+name+'</p><h4>You have been granted an Administrator account to manage online meditation groups on the WCCM Meditation Groups Directory</b></h4><p>You will receive another email to setup your account password following a personalized link.</p><p>For any help you might need please write to leonardo@wccm.org<p><em>The WCCM Online Mediation Groups Staff</em></p>',
+                'WCCM Online Meditation Groups - Administrator Role Assignment',
+                '<p>Dear '+name+'</p><h4>You have to been made an administrator on the WCCM Meditation Groups Directory to manage mediation groups</b></h4><p>We have sent you an email. Please check your inbox and click on the link in the email to complete your profile</p><p>For any help you might need please contact leonardo@wccm.org<p><em>The WCCM Online Mediation Groups Staff</em></p>',
                 (err, result) => {
                   console.log("ERR: ", err, 'RESULT: ', result);
                 }

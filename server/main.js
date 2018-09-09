@@ -8,14 +8,14 @@ Meteor.methods({
     this.unblock();
     if (Meteor.isServer) {
       var currentUserId = Meteor.userId();
-      if(currentUserId){
+      
         return Email.send({
           from: sender,
           to: recipient,
           subject: subject,
           html: body
         });
-      }
+      
     }
   },
 });
@@ -36,21 +36,21 @@ Accounts.emailTemplates.enrollAccount.from = () => {
   return 'WCCM Online Meditation Groups <admin@wccm.org>';
 };
 
-Accounts.emailTemplates.enrollAccount.text = (user, url) => {
+Accounts.emailTemplates.enrollAccount.text = (user, url) => { // EDITED
   return 'Dear '+user.username
+    + '\n\n'
+    + "Welcome aboard!"
     + '\n\n'
     + 'To activate your account on the WCCM Online Meditation Groups portal please click on the link below:'
     + '\n\n'
     + url
     + '\n\n'
-    + 'Please note than once set your password you will find yourself already logged in on the groups portal. '
-    + 'Should you logout and need to login again, you will need your uername: - '+user.username+' - or your email, together with your chosen password'
+    + 'Once you setup your password you will find yourself already logged in on the groups portal. '
+    + 'When you logout and wish to log back in, you will require your username: - '+user.username+' - or email and your chosen password.'
     + '\n\n'
-    + 'Welcome aboard!'
+    + 'For any help you might need please contact leonardo@wccm.org'
     + '\n\n'
-    + 'For any help you might need please write to leonardo@wccm.org'
-    + '\n\n'
-    + 'The World Community for Christian Meditation - Online Meditation Groups';
+    + 'The WCCM Online Mediation Groups Staff';
 };
 
 Meteor.startup(() => {
@@ -64,10 +64,10 @@ Meteor.startup(() => {
   });
 
   Meteor.publish('natRefGroups', function () {
-    return Groups.find({ ownerId: Meteor.user()._id });
+    return Groups.find({ ownerId: Meteor.user()._id, approved: true });
   });
 
-  Meteor.publish('leaderGroups', function () {
+  Meteor.publish('leaderGroups', function () { // Not used, display managed in module's rendering
     return Groups.find(Groups, function(o){
       return 2 > 0;
       //Roles.userIsInRole(Meteor.user(), ['groupleader'], group._id)

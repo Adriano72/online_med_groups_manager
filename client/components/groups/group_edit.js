@@ -90,7 +90,7 @@ class GroupEdit extends Component {
       {
         group_language: this.state.groupLanguage,
         group_detail: gp_detail,
-        use_own_meeting_resources: this.refs.useOwnMeetingRes.checked,
+        use_own_meeting_resources: !this.refs.useOwnMeetingRes.checked,
         group_leader: gp_leader,
         meet_time: meet_time,
         approved: Roles.userIsInRole(Meteor.user(), ['admin'])
@@ -222,7 +222,7 @@ class GroupEdit extends Component {
     const groupDetail = this.props.groups.group_detail;
     const dateCreated = this.props.groups.date_created;
     const groupLanguage = this.props.groups.group_language;
-    const ownResources = this.props.groups.use_own_meeting_resources?"checked":"";
+    const ownResources = this.props.groups.use_own_meeting_resources?"":"checked";
     const groupLeader = this.props.groups.group_leader;
 
     return (
@@ -329,7 +329,7 @@ class GroupEdit extends Component {
                           <div className="checkbox">
                             <label>
                               <input type="checkbox" ref="useOwnMeetingRes" value="" defaultChecked={ownResources} />
-                              We are going to use our own live meeting service (Hangouts, Zoom, Webex...)
+                              This group needs to receive a link to a meeting room
                             </label>
                           </div>
                         </div>

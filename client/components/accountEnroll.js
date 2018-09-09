@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { translate, Trans } from 'react-i18next';
 
 class AccountEnroll extends Component {

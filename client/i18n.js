@@ -91,7 +91,7 @@ i18n
           "Password": "Senha",
           "Sign in": "Inscrever-se",
           "Forgot password": "Esqueci a senha",
-          "Groups Pending Approval": "Grupos Pendentes de Aprovação",
+          "Groups pending registration": "Grupos Pendentes de Aprovação",
           "Manage Groups": "Gerenciar Grupos",
           "Create New Group": "Criar Novo Grupo",
           "Groups You Created": "Grupos Criados",
@@ -155,7 +155,8 @@ i18n
           "A separate notification will be sent to you. Please follow the link in that notification to set up your password that will allow you access to  the Online Meditation Group platform.  Once in the platform you will be able to manage your group communications": 'Uma notificação individual será enviada a você. Por favor clique no link da notificação para configurar sua senha, que lhe dará acesso à plataforma de Grupos de Meditação Online. Uma vez connectado você poderá gerenciar suas comunicações',
           "If you need further assistance please get in touch with Leo at": "Se você precisa de ajuda por favor contate Leo em",
           "Your group is now set up": "Seu grupo está criado",
-          "The group is listed in the WCCM directory at WCCM.org as following our guidelines. The Group Leader will soon receive a sign-in link which allows access to the system under your supervision": "Ele será listado no diretório da WCCM no site WCCM.org como um grupo que segue nossas diretrizes. O Líder do Grupo receberá um link de inscrição que permitirá acesso ao sistema sob sua supervisão"
+          "The group is listed in the WCCM directory at WCCM.org as following our guidelines. The Group Leader will soon receive a sign-in link which allows access to the system under your supervision": "Ele será listado no diretório da WCCM no site WCCM.org como um grupo que segue nossas diretrizes. O Líder do Grupo receberá um link de inscrição que permitirá acesso ao sistema sob sua supervisão",
+          "WCCM Online Meditation Groups - Message from your Group Leader": "WCCM Online Meditation Groups - Mensagem do Líder do Grupo"
 
 
 

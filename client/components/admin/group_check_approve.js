@@ -11,6 +11,7 @@ import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 import Select from 'react-select';
 import Group from '../../../imports/classes/Group';
+import { translate, Trans } from 'react-i18next';
 
 const format = 'h:mm a';
 
@@ -117,7 +118,7 @@ class CheckAndApproveGroup extends Component {
       {
         group_language: this.state.groupLanguage,
         group_detail: gp_detail,
-        use_own_meeting_resources: this.refs.useOwnMeetingRes.checked,
+        use_own_meeting_resources: !this.refs.useOwnMeetingRes.checked,
         group_leader: gp_leader,
         meet_time: meet_time,
         approved: true,
@@ -158,7 +159,7 @@ class CheckAndApproveGroup extends Component {
             }
           })
 
-          Meteor.call( // Notify the group leader
+          Meteor.call( // Notify the group leader -- EDITED AND TRANSLATED
             'sendEmail',
             'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
             gp_leader.email,
@@ -170,19 +171,19 @@ class CheckAndApproveGroup extends Component {
             }
           );
 
-          Meteor.call( // Notify the National Resp that submitted the group
+          Meteor.call( // Notify the National Resp that submitted the group -- EDITED
             'sendEmail',
             'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
             groupSubmitter.emails[0].address,
             'WCCM Online Meditation Groups - Group submission accepted!',
-            '<p>Dear '+groupSubmitter.username+'</p><h4>Your Group request submission has been reviewed and accepted!</h4><ul><li>Group Language: '+this.state.groupLanguage+'</li><li>Group Meeting Day and Time: '+this.state.meetDay+ ' at '+this.state.meetTime.format(format)+'</li></ul><p>The new group is now visible on the public group listing page: https://www.onlinemeditationwccm.org</p><p>The person you assigned to lead the group, <b>'+gp_leader.first_name+' '+gp_leader.last_name+'</b>, has received an email that notifies him/her of his group role and another one to complete the account creation that will be needed to manage the communications with the group members</p><p>For any help you might need please write to leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+            '<p>Dear '+groupSubmitter.username+'</p><h4>Your Group request submission has been approved!</h4><ul><li>Group Language: '+this.state.groupLanguage+'</li><li>Group Meeting Day and Time: '+this.state.meetDay+ ' at '+this.state.meetTime.format(format)+'</li></ul><p>This new group is now on our public group listing page: https://www.onlinemeditationwccm.org</p><p>The person you have assigned to lead the group, <b>'+gp_leader.first_name+' '+gp_leader.last_name+'</b>, has been sent a group role notification and will need  to complete the account creation process in order to manage communications with group members.</p><p>For any help you might need please contact leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
 
             (err, result) => {
               console.log("ERR: ", err, 'RESULT: ', result);
             }
           );
 
-          bootbox.alert({
+          bootbox.alert({ // Group creation confirmation message -- EDITED AND TRANSLATED
             title: this.props.i18n.t("Your group is now set up"),
             message: this.props.i18n.t("The group is listed in the WCCM directory at WCCM.org as following our guidelines. The Group Leader will soon receive a sign-in link which allows access to the system under your supervision"),
             callback: function(){ return browserHistory.push('/'); }
@@ -271,7 +272,7 @@ class CheckAndApproveGroup extends Component {
     const groupDetail = this.props.groups.group_detail;
     const dateCreated = this.props.groups.date_created;
     const groupLanguage = this.props.groups.group_language;
-    const ownResources = this.props.groups.use_own_meeting_resources?"checked":"";
+    const ownResources = this.props.groups.use_own_meeting_resources?"":"checked";
     const groupLeader = this.props.groups.group_leader;
 
     return (
@@ -283,7 +284,7 @@ class CheckAndApproveGroup extends Component {
                   <div className="panel-heading">Group Info</div>
                     <div className="panel-body">
                       <div className="form-group col-md-4">
-                        <label htmlFor="select1" >Grooup languge</label>
+                        <label htmlFor="select1" >Group language</label>
                         <select value={this.state.groupLanguage} onChange={this.updateLanguage} className="form-control">
                           <option value="English">English</option>
                           <option value="French">French</option>
@@ -378,7 +379,7 @@ class CheckAndApproveGroup extends Component {
                           <div className="checkbox">
                             <label>
                               <input type="checkbox" ref="useOwnMeetingRes" value="" defaultChecked={ownResources} />
-                              We are going to use our own live meeting service (Hangouts, Zoom, Webex...)
+                              This group needs to receive a link to a meeting room
                             </label>
                           </div>
                         </div>
@@ -389,7 +390,7 @@ class CheckAndApproveGroup extends Component {
                   className="btn btn-primary"
                   onClick={this.updateGroup.bind(this)}
                 >
-                  Approve Group
+                  Confirm registration
                 </button>
               <Alert stack={{limit: 3}} />
           </div>
@@ -403,4 +404,4 @@ export default createContainer((props) => {
   Meteor.subscribe('allUsers');
 
   return { groups: Groups.findOne(groupId), allUsers: Meteor.users.find({}).fetch() };
-}, CheckAndApproveGroup);
+}, translate('translations')(CheckAndApproveGroup));

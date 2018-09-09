@@ -134,8 +134,8 @@ class GroupCreate extends Component {
       time_zone: this.state.timeZone
     }
 
-    const noNeedToApprove = Roles.userIsInRole(Meteor.user(), ['admin']) || this.refs.useOwnMeetingRes.checked;
-    console.log("TO BE APPROVED: ", noNeedToApprove);
+    const noNeedToApprove = Roles.userIsInRole(Meteor.user(), ['admin']) || !this.refs.useOwnMeetingRes.checked;
+    console.log("noNeedToApprove: ", noNeedToApprove);
 
     var newGroup = new Group();
     newGroup.insert(
@@ -182,7 +182,7 @@ class GroupCreate extends Component {
               }
             })
 
-            Meteor.call( // Notify the group leader
+            Meteor.call( // Notify the group leader -- EDITED AND TRANSLATED
               'sendEmail',
               'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
               gp_leader.email,
@@ -194,19 +194,19 @@ class GroupCreate extends Component {
               }
             );
 
-            Meteor.call( // Notify the National Resp that submitted the group
+            Meteor.call( // Notify the National Resp that submitted the group -- EDITED
               'sendEmail',
               'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
               Meteor.user().emails[0].address,
               'WCCM Online Meditation Groups - New Group Created!',
-              '<p>Dear '+Meteor.user().username+'</p><h4>You succesfully created a new online group that is now listed in the public directory</h4><ul><li>Group Language: '+this.state.grpupLanguage+'</li><li>Group Meeting Day and Time: '+this.state.meetDay+ ' at '+this.state.meetTime+'</li></ul><p>The new group is now visible on the public group listing page: https://www.onlinemeditationwccm.org</p><p>The person you assigned to lead the group, <b>'+gp_leader.first_name+' '+gp_leader.last_name+'</b>, has received an email that notifies him/her of his group role and another one to complete the account creation that will be needed to manage the communications with the group members</p><p>For any help you might need please write to leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+              '<p>Dear '+Meteor.user().username+'</p><h4>You have successfully created a new online group which  is now listed in the public WCCM Online Directory.</h4><ul><li>Group Language: '+this.state.grpupLanguage+'</li><li>Group Meeting Day and Time: '+this.state.meetDay+ ' at '+this.state.meetTime+'</li></ul><p>This group is now visible on: https://www.onlinemeditationwccm.org</p><p>The new group leader, <b>'+gp_leader.first_name+' '+gp_leader.last_name+'</b>, will receive a notification to complete the account creation process. Once the details are submitted, the new group leader will be able to manage communications with group members.</p><p>If you have any questions,please contact leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
 
               (err, result) => {
                 console.log("ERR: ", err, 'RESULT: ', result);
               }
             );
 
-            bootbox.alert({
+            bootbox.alert({ // Group creation confirmation message -- EDITED AND TRANSLATED
               title: this.props.i18n.t("Your group is now set up"),
               message: this.props.i18n.t("The group is listed in the WCCM directory at WCCM.org as following our guidelines. The Group Leader will soon receive a sign-in link which allows access to the system under your supervision"),
               callback: function(){ return browserHistory.push('/'); }
@@ -214,26 +214,26 @@ class GroupCreate extends Component {
 
           }else {
 
-            Meteor.call( // Notify the Logged in User that created the group
+            Meteor.call( // Notify the Logged in User that created the group -- EDITED
               'sendEmail',
               'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
               Meteor.user().emails[0].address,
               'WCCM Online Meditation Groups - New Group Submission',
-              '<h4>Your Group request submission has been received</h4><p>As soon as one of the sfaff administrator will review and approve your submission you will receive a notification by email</p><p>For any help you might need please write to leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+              '<h4>Your Group Creation Request is being processed</h4><p>You will receive a notification by email regarding the status of your submission.</p><p>For any help you might need please contact leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
 
               (err, result) => {
                 console.log("ERR: ", err, 'RESULT: ', result);
               }
             );
 
-            allAdmins.forEach(admin => { // Notify all the SuperAdmins
+            allAdmins.forEach(admin => { // Notify all the SuperAdmins -- EDITED
               console.log("ALLUS", admin.emails[0].address);
               Meteor.call(
                 'sendEmail',
                 'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
                 admin.emails[0].address,
                 'WCCM Online Meditation Groups - New Group Pending Approval',
-                '<h4>A new group creation request has been submitted</h4><p>Please login wth your administrative credentials and review this submission in order to approve or reject it</p><p><em>The WCCM Online Mediation Groups Automatic Notification Bot</em></p>'
+                '<h4>A Group Creation Request is waiting for your approval</h4><p>Enter your login credentials to access your https://www.onlinemeditationwccm.org dashboard and manage this request.</p><p><em>The WCCM Online Mediation Groups Automatic Notification</em></p>'
               );
             });
 
@@ -268,7 +268,7 @@ class GroupCreate extends Component {
                 <div className="panel-heading">{t('Group Info')}</div>
                   <div className="panel-body">
                     <div className="form-group col-md-4">
-                      <label htmlFor="select1" >{t('Group languge')}</label>
+                      <label htmlFor="select1" >{t('Group language')}</label>
                       <select value={this.state.grpupLanguage} onChange={this.updateLanguage} className="form-control">
                         <option value="English">{t('English')}</option>
                         <option value="French">{t('French')}</option>

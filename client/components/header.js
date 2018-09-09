@@ -122,7 +122,7 @@ class Header extends Component {
     var loggedInUser = Meteor.user();
     var numberOfGroupsToApprove = Counts.get("groups-to-approve");
     if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
-    return (<a href="#" onClick={this.onBindApprovalPendingGroups.bind(this)}>{t('Groups Pending Approval')} <span className="badge">{numberOfGroupsToApprove}</span></a>);
+    return (<a href="#" onClick={this.onBindApprovalPendingGroups.bind(this)}>{t('Groups pending registration')} <span className="badge">{numberOfGroupsToApprove}</span></a>);
     }
     return;
   }
@@ -170,7 +170,7 @@ class Header extends Component {
 
   reservedAreaMenu(t){
     var loggedInUser = Meteor.user();
-    if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
+    if ( Meteor.user()) { // il gruppo va messo dinamico o globale
      return (
        <li className="dropdown">
          <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{this.props.currentUser.username}<span className="caret"></span></a>

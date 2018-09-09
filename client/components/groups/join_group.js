@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link, browserHistory } from 'react-router';
 import { Groups } from '../../../imports/collections/groups';
-import { Accounts } from 'meteor/accounts-base';
 import { CountryDropdown } from 'react-country-region-selector';
 import Alert from 'react-s-alert';
+import moment from 'moment-timezone';
 import ReCAPTCHA from "react-google-recaptcha";
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 import Group from '../../../imports/classes/Group';
+
+let userTimeZone = moment.tz.guess();
 
 const TEST_SITE_KEY = "6LeKW2wUAAAAAKLEwOVTvUVdkEaYZTVcAAoJNjsb";
 const DELAY = 1500;
@@ -78,29 +80,29 @@ class JoinGroup extends Component {
 
         console.log("PROPS _____ ", this.props.groups);
 
-        Meteor.call( // Notify the group leader
+        Meteor.call( // Notify the group leader -- EDITED
           'sendEmail',
           'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
           this.props.groups.group_leader.email,
           'WCCM Online Meditation Groups - New group subscription',
-          '<p>Dear '+this.props.groups.group_leader.first_name+'</p><p>A new meditator, <b>'+name+'</b>, joined the group you lead in <b>'+this.props.groups.group_language+'</b> language, meeting every <b>'+this.props.groups.meet_time.day_of_week+ ' at '+this.props.groups.meet_time.meet_time+'</b></p><p>For any help you might need please write to leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+          '<p>Dear '+this.props.groups.group_leader.first_name+'</p><p>A new meditator, <b>'+name+'</b>, email: '+email+' joined the group you lead every <b>'+this.props.groups.meet_time.day_of_week+ ' at '+this.props.groups.meet_time.meet_time+'</b></p><p>For any help you might need please contact leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
 
           (err, result) => {
             console.log("ERR: ", err, 'RESULT: ', result);
           }
         );
-        Meteor.call( // Notify the user
+        Meteor.call( // Notify the user -- EDITED
           'sendEmail',
           'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
           email,
           'WCCM Online Meditation Groups - You joined an online meditation group!',
-          '<p>Dear '+name+'</p><h4>You have succesfully joined the following online meditation group</h4><ul><li>Group Language: '+this.props.groups.group_language+'</li><li>Group Meeting Day and Time: '+this.props.groups.meet_time.day_of_week+ ' at '+this.props.groups.meet_time.meet_time+'</li></ul><p>For any information you might need please refer to your group leader <b>'+this.props.groups.group_leader.first_name+' '+this.props.groups.group_leader.last_name+'</b> at '+this.props.groups.group_leader.email+'</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+          '<p>Dear '+name+'</p><h4>You are now a participant of the following online meditation group:</h4><ul><li>Group Language: '+this.props.groups.group_language+'</li><li>Group Meeting Day and Time: '+this.props.groups.meet_time.day_of_week+ ' at '+this.props.groups.meet_time.meet_time+' - Timezone: '+this.props.groups.meet_time.time_zone+' (GMT '+moment().tz(this.props.groups.meet_time.time_zone).format('Z')+')</li></ul><p>For any information you might need please refer to your group leader <b>'+this.props.groups.group_leader.first_name+' '+this.props.groups.group_leader.last_name+'</b> at '+this.props.groups.group_leader.email+'</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
 
           (err, result) => {
             console.log("ERR: ", err, 'RESULT: ', result);
           }
         );
-        Alert.success('Group joined succesfully!', {
+        Alert.success('Your request to join was sent to the group leader', {
           position: 'top-left',
           effect: 'jelly',
           onShow: function () {
@@ -151,7 +153,7 @@ class JoinGroup extends Component {
       <div className="container-fluid top-buffer">
         { error.length > 0 ?<div className="alert alert-danger fade in">{error}</div>:''}
         <div className="panel panel-primary">
-          <div className="panel-heading">Join online group</div>
+          <div className="panel-heading">Join Group</div>
           <div className="panel-body">
             <div className="form-group">
               <input type="text" id="full_name"
