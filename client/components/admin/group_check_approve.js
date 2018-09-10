@@ -37,6 +37,7 @@ class CheckAndApproveGroup extends Component {
       meetDay: '',
       meetTime: moment(),
       selectedOption: null,
+      requiresMeetingLink: true,
       timeZone: null
     };
 
@@ -44,6 +45,7 @@ class CheckAndApproveGroup extends Component {
     this.updateCountry = this.updateCountry.bind(this);
     this.updateMeetDay = this.updateMeetDay.bind(this);
     this.updateMeetTime = this.updateMeetTime.bind(this);
+    this.manageMeetingUrlDisplay = this.manageMeetingUrlDisplay.bind(this);
   }
 
   updateLanguage(e) {
@@ -65,6 +67,19 @@ class CheckAndApproveGroup extends Component {
   updateCountry(val) {
     //console.log('NEW VALUE ', newValue);
     this.setState({ country: val });
+  }
+
+  manageMeetingUrlDisplay(){
+    
+    this.setState({ requiresMeetingLink: this.refs.useOwnMeetingRes.checked });
+
+    if (this.refs.useOwnMeetingRes.checked) {
+      $("#meetingUrl").show();
+    } else {
+      $("#meetingUrl").hide();
+    }
+    
+    this.setState({ requiresMeetingLink: this.refs.useOwnMeetingRes.checked });
   }
 
   updateGroup() {
@@ -159,12 +174,14 @@ class CheckAndApproveGroup extends Component {
             }
           })
 
+          const infoAboutMeetingLink = (this.state.requiresMeetingLink)?'<p>This is the URL link you will use to start the online meetings: <b>'+this.refs.group_meeting_url.value+'</b> please note it down in a safe place.':'';
+
           Meteor.call( // Notify the group leader -- EDITED AND TRANSLATED
             'sendEmail',
             'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
             gp_leader.email,
             this.props.i18n.t('WCCM Online Meditation Groups - Group Leader Role Assignment'),
-            '<p>'+ this.props.i18n.t('Dear') + ' '+this.props.i18n.t(gp_leader.first_name)+'</p><h4>'+this.props.i18n.t('You are now the Group Leader of an Online Meditation Group')+' </h4><ul><li>'+this.props.i18n.t('Group language')+': '+this.props.i18n.t(this.state.grpupLanguage)+'</li><li>'+this.props.i18n.t('Group Meeting Day and Time')+': '+this.props.i18n.t(this.state.meetDay)+ ' at '+this.state.meetTime+'</li></ul><p>'+this.props.i18n.t('A separate notification will be sent to you. Please follow the link in that notification to set up your password that will allow you access to  the Online Meditation Group platform.  Once in the platform you will be able to manage your group communications')+'</p><p>'+this.props.i18n.t('If you need further assistance please get in touch with Leo at')+' leonardo@wccm.org</p><p><em>'+this.props.i18n.t('The WCCM Online Mediation Groups Staff')+'</em></p>',
+            '<p>'+ this.props.i18n.t('Dear') + ' '+this.props.i18n.t(gp_leader.first_name)+'</p><h4>'+this.props.i18n.t('You are now the Group Leader of an Online Meditation Group')+' </h4><ul><li>'+this.props.i18n.t('Group language')+': '+this.props.i18n.t(this.state.grpupLanguage)+'</li><li>'+this.props.i18n.t('Group Meeting Day and Time')+': '+this.props.i18n.t(this.state.meetDay)+ ' at '+this.state.meetTime+'</li></ul><p>'+this.props.i18n.t('A separate notification will be sent to you. Please follow the link in that notification to set up your password that will allow you access to  the Online Meditation Group platform.  Once in the platform you will be able to manage your group communications')+'</p>'+infoAboutMeetingLink+'<p>'+this.props.i18n.t('If you need further assistance please get in touch with Leo at')+' leonardo@wccm.org</p><p><em>'+this.props.i18n.t('The WCCM Online Mediation Groups Staff')+'</em></p>',
 
             (err, result) => {
               console.log("ERR: ", err, 'RESULT: ', result);
@@ -260,6 +277,16 @@ class CheckAndApproveGroup extends Component {
 
   };
 
+  renderLink() {
+    if(!this.props.groups.use_own_meeting_resources){
+      return(
+        <div id="meetingUrl" className="form-group col-xs-3">
+          <input type="text" className="form-control" placeholder="Enter here the meeting room link for this group" ref="group_meeting_url" />
+        </div>
+      );
+    }
+  }
+
   render() {
 
     if(_.isUndefined(this.props.groups)){
@@ -267,7 +294,7 @@ class CheckAndApproveGroup extends Component {
       return <div>Updating...</div>;
     };
 
-    console.log("GROUP : ",this.props);
+    console.log("GROUP : ",this.state.requiresMeetingLink);
 
     const groupDetail = this.props.groups.group_detail;
     const dateCreated = this.props.groups.date_created;
@@ -378,7 +405,7 @@ class CheckAndApproveGroup extends Component {
                         <div className="form-group">
                           <div className="checkbox">
                             <label>
-                              <input type="checkbox" ref="useOwnMeetingRes" value="" defaultChecked={ownResources} />
+                              <input type="checkbox" onChange={this.manageMeetingUrlDisplay} ref="useOwnMeetingRes" value="" defaultChecked={ownResources} />
                               This group needs to receive a link to a meeting room
                             </label>
                           </div>
@@ -386,6 +413,7 @@ class CheckAndApproveGroup extends Component {
                     </div>
                 </div>
                 <div className="text-danger">{this.state.error}</div>
+                {this.renderLink()}
                 <button
                   className="btn btn-primary"
                   onClick={this.updateGroup.bind(this)}
