@@ -37,7 +37,7 @@ class CheckAndApproveGroup extends Component {
       meetDay: '',
       meetTime: moment(),
       selectedOption: null,
-      requiresMeetingLink: true,
+      requiresMeetingLink: false,
       timeZone: null
     };
 
@@ -278,7 +278,7 @@ class CheckAndApproveGroup extends Component {
   };
 
   renderLink() {
-    if(!this.props.groups.use_own_meeting_resources){
+    if(!this.props.groups.use_own_meeting_resources || this.state.requiresMeetingLink ){
       return(
         <div id="meetingUrl" className="form-group col-xs-3">
           <input type="text" className="form-control" placeholder="Enter here the meeting room link for this group" ref="group_meeting_url" />
