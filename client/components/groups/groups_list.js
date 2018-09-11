@@ -25,7 +25,6 @@ class GroupsList extends Component {
   renderRows() {
 
     return this.props.groups.map(group => {
-      const groupEditUrl = `/editgroup/${group._id}`;
       const { _id, group_language, group_leader, group_detail, meet_time, meditators  } = group;
       const translatedLanguage = this.props.i18n.t(group_language);
       const detail_text = group_detail && group_detail.detail_text;
@@ -49,7 +48,6 @@ class GroupsList extends Component {
       let setTimeZone = moment.tz(date, meet_time.time_zone);
       let rawformattedConvertedTime = moment(setTimeZone).tz(userTimeZone);
       let formattedConvertedTime = moment(setTimeZone).tz(userTimeZone).format(format);
-      const originalWeekDay = date.format('dddd');
 
       let computedMeetingDay = meet_time.day_of_week;
 

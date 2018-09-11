@@ -21,6 +21,7 @@ import GroupsManage from './components/admin/groups_manage';
 import CreateUser from './components/admin/create_user';
 import CreateAdmin from './components/admin/create_admin';
 import AuthUsersList from './components/admin/auth_users_list';
+import UserDetail from './components/admin/user_edit';
 import GroupsToApprove from './components/admin/groups_to_approve';
 import CheckAndApproveGroup from './components/admin/group_check_approve';
 import JoinGroup from './components/groups/join_group';
@@ -58,6 +59,7 @@ const routes = (
         <Route path="editgroup/:groupId" component={GroupEdit}/>
         <Route path="createuser" component={CreateUser}/>
         <Route path="createadmin" component={CreateAdmin}/>
+        <Route path="userdetail/:userId" component={UserDetail}/>
         <Route path="authuserslist" component={AuthUsersList}/>
         <Route path="natrefgroups" component={NatRefGroups}/>
         <Route path="leadergroups" component={LeaderGroups}/>

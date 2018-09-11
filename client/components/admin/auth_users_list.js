@@ -23,7 +23,7 @@ class AuthUsersList extends Component {
     console.log('*** USERS ***: ', users);
     if(users){
       return users.map(user => {
-
+          const userEditUrl = `/userdetail/${user._id}`;
           let rolesCovered = '';
 
           if(user.roles.__global_roles__){
@@ -50,9 +50,9 @@ class AuthUsersList extends Component {
           let email = user.emails[0].address;
           return (
             <tr key={user._id}>
-              <td>{user.username}</td>
+              <td><Link to={userEditUrl}>{user.username}</Link></td>
               <td>{email}</td>
-              <td>{Parser(rolesCovered)}</td>
+              <td>{Parser(rolesCovered)}</td>            
             </tr>
           )
 
