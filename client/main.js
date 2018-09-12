@@ -18,7 +18,7 @@ import LeaderGroups from './components/groups/leader_groups';
 import GroupCreate from './components/groups/group_create';
 import GroupEdit from './components/groups/group_edit';
 import GroupsManage from './components/admin/groups_manage';
-import CreateUser from './components/admin/create_user';
+import CreateUser from './components/admin/create_natref';
 import CreateAdmin from './components/admin/create_admin';
 import AuthUsersList from './components/admin/auth_users_list';
 import UserDetail from './components/admin/user_edit';

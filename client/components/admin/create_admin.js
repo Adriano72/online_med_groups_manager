@@ -46,7 +46,7 @@ export default class CreateAdmin extends Component {
       if (res) {
         if(res === "exist"){
           console.log("$$$ EXIST $$$");
-          Meteor.call('mAddAdminRoleToExistingUserToUser', newAdminUserData, (error, res) => {
+          Meteor.call('mAddAdminRoleToExistingUserToUser', newAdminUserData, (err, res) => {
             if (res) {
               console.log("FURTHER ROLE RESULT: ", res);
               Alert.success('Administrator rights addes to existing user succesfully!', {

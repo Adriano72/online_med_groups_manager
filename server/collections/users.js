@@ -3,8 +3,7 @@ Meteor.methods({
         console.log("NEW USER DATA: ", user);
         if(_.isObject(user)) {
 
-            if (user.username) {
-
+            if (user.username) {            
                 var id = Accounts.createUser({
                     username: user.username,
                     email: user.email,
@@ -17,8 +16,13 @@ Meteor.methods({
                     // after `Accounts.createUser` or `Accounts.onCreate`
                     //[].concat(user);
                     //Roles.addUsersToRoles(id, user.roles, user.country);
-                    Roles.addUsersToRoles(id, user.roles, Roles.GLOBAL_GROUP);
-                    Roles.setUserRoles(id, 'active', user.country);
+                    if(user.roles[0] ==='admin') {
+                        console.log('1TCL: user.roles[0]', user.roles[0]);
+                        Roles.addUsersToRoles(id, user.roles, Roles.GLOBAL_GROUP);
+                    }else if (user.roles[0] ==='nationalresp'){
+                        console.log('2TCL: user.roles[0]', user.roles[0]);
+                        Roles.addUsersToRoles(id, user.roles, user.country);
+                    }
                 }
 
                 if (user.groupId) {
@@ -93,6 +97,26 @@ Meteor.methods({
                     //[].concat(user);
                     //Roles.addUsersToRoles(id, user.roles, user.country);
                     Roles.addUsersToRoles(existingUser, user.roles, Roles.GLOBAL_GROUP);
+                }
+
+                return existingUser;
+            }
+        }
+    },
+    mAddNatrefRoleToExistingUserToUser: function (user) {
+        console.log("USER TO ADD ADMIN TO: ", user);
+        if(_.isObject(user)) {
+
+            if (user.username) {
+
+                const existingUser = Meteor.users.findOne({ 'emails.address': user.email })
+
+                if (user.roles.length > 0) {
+                    // Need _id of existing user record so this call must come
+                    // after `Accounts.createUser` or `Accounts.onCreate`
+                    //[].concat(user);
+                    //Roles.addUsersToRoles(id, user.roles, user.country);
+                    Roles.addUsersToRoles(existingUser, user.roles, user.country);
                 }
 
                 return existingUser;

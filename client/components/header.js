@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
-import Accounts from './accounts';
 import { Link, browserHistory } from 'react-router';
 import moment from 'moment-timezone';
 import { translate, Trans } from 'react-i18next';

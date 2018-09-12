@@ -243,6 +243,7 @@ class GroupEdit extends Component {
                           <option value="German">German</option>
                           <option value="Dutch">Dutch</option>
                           <option value="Portuguese">Portuguese</option>
+                          <option value="Danish">Danish</option>
                           <option value="Russian">Russian</option>
                           <option value="Chinese">Chinese</option>
                           <option value="Indonesian">Indonesian</option>

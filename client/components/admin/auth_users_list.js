@@ -21,26 +21,57 @@ class AuthUsersList extends Component {
     var users = this.props.allUsers;
 
     console.log('*** USERS ***: ', users);
-    if(users){
+    if (users) {
       return users.map(user => {
           const userEditUrl = `/userdetail/${user._id}`;
           let rolesCovered = '';
-
-          if(user.roles.__global_roles__){
+          /*
+          if (user.roles.__global_roles__) {
             //console.log("Ruoli numero: ", user.roles.__global_roles__.length);
-            _.forEach(user.roles.__global_roles__, function(value){
-              if(value === 'admin'){
+            _.forEach(user.roles.__global_roles__, function(value) {
+              if (value === 'admin'){
                 rolesCovered += '<span className="label label-danger">ADMINISTRATOR</span>';
-              }else if (value === 'nationalresp'){
-                let country = (Roles.getGroupsForUser(user, 'active').length)?' FOR '+Roles.getGroupsForUser(user, 'active'):'';
-                rolesCovered += '<span className="label label-info">NATIONAL REFERENT'+country+'</span>';
               }
             });
           }
+          */
           let groupsForUser = Roles.getGroupsForUser(user);
+
+          if (groupsForUser.length) {
+            groupsForUser.forEach(function(group) {
+              console.log(user.username+' TCL: AuthUsersList -> renderRows -> GROUP', group);    
+              let userRole = Roles.getRolesForUser(user, group);
+              console.log(user.username+' TCL: AuthUsersList -> renderRows -> USER ROLE', userRole);
+              if (userRole.toString() === 'nationalresp') {
+                //rolesCovered += '<span className="label label-info">NATIONAL REFERENT '+group+'</span>';
+              }                 
+            });
+          }
+
+          if (Roles.userIsInRole(user, 'admin')) {
+            rolesCovered += '<span className="label label-danger">ADMIN</span>';
+          }
+          
+
+          if (Roles.userIsInRole(user, ['groupleader'], groupsForUser.toString())) {
+            rolesCovered += '<span className="label label-warning">GROUP LEADER</span>';
+          }
+
+          if (Roles.userIsInRole(user, ['nationalresp'], groupsForUser.toString())) {
+            rolesCovered += '<span className="label label-info">NATIONAL REFERENT '+groupsForUser.toString()+'</span>';
+          }
+
+          
+          /*
+          let country = (Roles.getGroupsForUser(user, 'active').length)?' FOR '+Roles.getGroupsForUser(user, 'active'):'';
+          rolesCovered += '<span className="label label-info">NATIONAL REFERENT'+country+'</span>';
+          
+
+          console.log('TCL: AuthUsersList -> renderRows -> groupsForUser', groupsForUser);
           if(Roles.userIsInRole(user, ['groupleader'], groupsForUser.toString())){
             rolesCovered += '<span className="label label-warning">GROUP LEADER</span>';
           }
+          */
           //const userViewUrl = `/student_detail/${user._id}`;
           const keys = user.roles.__global_roles__&&Object.keys(user.roles.__global_roles__);
           //const roles = Object.keys(user.roles.keys);

@@ -277,6 +277,7 @@ class GroupCreate extends Component {
                         <option value="German">{t('German')}</option>
                         <option value="Dutch">{t('Dutch')}</option>
                         <option value="Portuguese">{t('Portuguese')}</option>
+                        <option value="Danish">{t('Danish')}</option>
                         <option value="Russian">{t('Russian')}</option>
                         <option value="Chinese">{t('Chinese')}</option>
                         <option value="Indonesian">{t('Indonesian')}</option>
