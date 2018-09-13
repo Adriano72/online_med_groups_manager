@@ -17,6 +17,41 @@ class UserDetail extends Component {
     }
   }
 
+  renderRows() {
+
+    const user = this.props.user;
+
+    let tableCode = ""
+    
+    if (Roles.userIsInRole(user, 'admin')) {
+      tableCode += '<tr><td>Admin</td></tr>';     
+    }
+
+    if (Roles.userIsInRole(user, 'admin')) {
+      tableCode += '<tr><td>Group Leader</td></tr>';     
+    }
+
+    let groupsForUser = Roles.getGroupsForUser(user);
+          
+    if (groupsForUser.length) {
+      groupsForUser.forEach(function(group) {    
+        let userRole = Roles.getRolesForUser(user, group);
+        userRole.forEach(function(role) {
+          if (role.toString() === 'nationalresp') {
+            tableCode += '<tr><td>National Referent for '+group+'</td></tr>';
+          }
+        });               
+      });
+    }
+    
+    return (
+      <tr>
+        {Parser(tableCode)}
+
+      </tr>
+    );
+  };
+  
   
 
   render() {
@@ -31,15 +66,16 @@ class UserDetail extends Component {
         <h4>Username: {this.props.user.username}</h4>
         <h4>Email: {this.props.user.emails[0].address}</h4>
         <br />
-        <h3><span className="label label-default">Roles</span></h3><hr />
 
           <table className="table">
             <thead>
               <tr>
-                <th>Role</th>
-                <th>Action</th>
+                <th>Roles</th>
               </tr>
             </thead>
+            <tbody>
+              {this.renderRows()}
+            </tbody>
             
           </table>
         </pre>

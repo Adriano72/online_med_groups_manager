@@ -21,6 +21,7 @@ Meteor.methods({
                         Roles.addUsersToRoles(id, user.roles, Roles.GLOBAL_GROUP);
                     }else if (user.roles[0] ==='nationalresp'){
                         console.log('2TCL: user.roles[0]', user.roles[0]);
+                        Roles.addUsersToRoles(id, user.roles, Roles.GLOBAL_GROUP);
                         Roles.addUsersToRoles(id, user.roles, user.country);
                     }
                 }

@@ -36,30 +36,33 @@ class AuthUsersList extends Component {
           }
           */
           let groupsForUser = Roles.getGroupsForUser(user);
-
+          
           if (groupsForUser.length) {
-            groupsForUser.forEach(function(group) {
-              console.log(user.username+' TCL: AuthUsersList -> renderRows -> GROUP', group);    
+            groupsForUser.forEach(function(group) {   
               let userRole = Roles.getRolesForUser(user, group);
-              console.log(user.username+' TCL: AuthUsersList -> renderRows -> USER ROLE', userRole);
-              if (userRole.toString() === 'nationalresp') {
-                //rolesCovered += '<span className="label label-info">NATIONAL REFERENT '+group+'</span>';
-              }                 
+              userRole.forEach(function(role) {
+                if (role.toString() === 'nationalresp') {
+                  rolesCovered += '<span className="label label-info">NATIONAL REFERENT '+group+'</span>';
+                }
+              });
+                               
             });
           }
+          
 
           if (Roles.userIsInRole(user, 'admin')) {
             rolesCovered += '<span className="label label-danger">ADMIN</span>';
           }
           
 
-          if (Roles.userIsInRole(user, ['groupleader'], groupsForUser.toString())) {
+          if (Roles.userIsInRole(user, ['itsaleader'], Roles.GLOBAL_GROUP)) {
             rolesCovered += '<span className="label label-warning">GROUP LEADER</span>';
           }
-
+          /*
           if (Roles.userIsInRole(user, ['nationalresp'], groupsForUser.toString())) {
             rolesCovered += '<span className="label label-info">NATIONAL REFERENT '+groupsForUser.toString()+'</span>';
           }
+          */
 
           
           /*

@@ -65,6 +65,17 @@ class GroupEdit extends Component {
   }
 
   updateGroup() {
+  
+    let requireNewApproval = false;
+
+    if(this.props.groups.meet_time.time_zone !== this.state.timeZone || this.props.groups.meet_time.day_of_week !== this.state.meetDay || this.props.groups.meet_time.meet_time !== this.state.meetTime.format(format) ) {
+      
+      if(!Roles.userIsInRole(Meteor.user(), ['admin'])) {
+        requireNewApproval = true;
+      };
+    }
+
+
     var newGroup = new Group(this.props.groups);
 
     const gp_detail = {
@@ -86,6 +97,8 @@ class GroupEdit extends Component {
       time_zone: this.state.timeZone
     }
 
+    
+
     newGroup.update(this.props.groups,
       {
         group_language: this.state.groupLanguage,
@@ -93,11 +106,11 @@ class GroupEdit extends Component {
         use_own_meeting_resources: !this.refs.useOwnMeetingRes.checked,
         group_leader: gp_leader,
         meet_time: meet_time,
-        approved: Roles.userIsInRole(Meteor.user(), ['admin'])
+        approved: !requireNewApproval
       },
       (err, result) => {
         if (result) {
-          if(Roles.userIsInRole(Meteor.user(), ['admin'])) {
+          if(Roles.userIsInRole(Meteor.user(), ['admin']) || !requireNewApproval) {
             bootbox.alert({
               title: "Groups changes saved",
               message: "Group changes saved successfully",
@@ -224,6 +237,7 @@ class GroupEdit extends Component {
     const groupLanguage = this.props.groups.group_language;
     const ownResources = this.props.groups.use_own_meeting_resources?"":"checked";
     const groupLeader = this.props.groups.group_leader;
+    const checkDisabled = !Roles.userIsInRole(Meteor.user(), ['admin']);
 
     return (
 
@@ -329,7 +343,7 @@ class GroupEdit extends Component {
                         <div className="form-group">
                           <div className="checkbox">
                             <label>
-                              <input type="checkbox" ref="useOwnMeetingRes" value="" defaultChecked={ownResources} />
+                              <input type="checkbox" disabled={checkDisabled} ref="useOwnMeetingRes" value="" defaultChecked={ownResources} />
                               This group needs to receive a link to a meeting room
                             </label>
                           </div>

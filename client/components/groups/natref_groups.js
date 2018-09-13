@@ -42,13 +42,7 @@ class NatRefGroups extends Component {
               }>
               {med_numbers}
             </button></td>
-            <td>
-              <button
-                className="btn btn-success"
-                onClick={() => browserHistory.push(`/joingroup/${group._id}`)}>
-                Join this group
-              </button>
-            </td>
+            
           </tr>
         )
       }else if(Roles.userIsInRole(Meteor.user(), ['groupleader'], group._id)) {
