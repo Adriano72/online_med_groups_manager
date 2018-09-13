@@ -127,6 +127,9 @@ Meteor.methods({
     mcheckUserExistence: function(p_email) {
       return (Meteor.users.findOne({ 'emails.address': p_email })) ? 'exist' : 'not found';
     },
+    mUserRemove: function(userId) {
+        return (Meteor.users.remove(userId));
+    },
     mResetForgottenPassword: function(p_email) {
       console.log("SERVER USER: ", p_email);
       let user = Meteor.users.findOne({ 'emails.address': p_email });

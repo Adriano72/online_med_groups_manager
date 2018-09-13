@@ -15,6 +15,11 @@ class UserDetail extends Component {
       console.log("USER ******************", Meteor.user());
       return browserHistory.push('/');
     }
+
+    if(_.isUndefined(this.props.user)){
+      console.log("COMP WILL MOUNT ", _.isUndefined(this.props.groups));
+      return browserHistory.push('/');
+    };
   }
 
   renderRows() {
@@ -51,6 +56,19 @@ class UserDetail extends Component {
       </tr>
     );
   };
+
+  deleteUser(){
+    
+    browserHistory.push('/authuserslist')
+    Meteor.call('mUserRemove', this.props.user._id, (error, res) => {
+      if (res) {
+        console.log("FURTHER ROLE RESULT: ", res);
+        alert("User Deleted")
+      }else if(err) {
+        console.log("DELETE USER ERROR: ", err);
+      }
+    });
+  }
   
   
 
@@ -78,6 +96,12 @@ class UserDetail extends Component {
             </tbody>
             
           </table>
+          <button
+            className="btn btn-primary"
+            onClick={this.deleteUser.bind(this)}
+            >
+            Delete User
+          </button>
         </pre>
         <Alert stack={{limit: 3}} />
         
