@@ -265,11 +265,11 @@ class GroupEdit extends Component {
                       </div>
                       <div className="form-group col-md-4">
                         <label>Group Detail</label>
-                        <input type="text" className="form-control" placeholder="Group Detail" ref="group_detail_text" defaultValue={groupDetail&&groupDetail.detail_text} />
+                        <input type="text" className="form-control" disabled={checkDisabled} placeholder="Group Detail" ref="group_detail_text" defaultValue={groupDetail&&groupDetail.detail_text} />
                       </div>
                       <div className="form-group col-md-4">
                         <label>URL to Detail Page</label>
-                        <input type="text" className="form-control" placeholder="Detail URL" ref="group_detail_url" defaultValue={groupDetail&&groupDetail.detail_url} />
+                        <input type="text" className="form-control" disabled={checkDisabled} placeholder="Detail URL" ref="group_detail_url" defaultValue={groupDetail&&groupDetail.detail_url} />
                       </div>
                     </div>
                 </div>
