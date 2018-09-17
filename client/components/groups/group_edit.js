@@ -100,7 +100,7 @@ class GroupEdit extends Component {
 
     if (this.props.groups.group_leader.email !== this.refs.group_leader_email.value) {
       bootbox.confirm({
-        message: "You have updated the group leader data, this will cause the removal of the old group leader and the new user account creation for the inserted group ledaer. Is this what you want?",
+        message: "Confirm the creation of a new Group Leader for this group and the removal of the old one?",
         buttons: {
           confirm: {
               label: 'Yes',
