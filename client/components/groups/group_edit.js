@@ -11,6 +11,7 @@ import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 import Select from 'react-select';
 import Group from '../../../imports/classes/Group';
+import { translate, Trans } from 'react-i18next';
 
 const format = 'h:mm a';
 
@@ -97,43 +98,147 @@ class GroupEdit extends Component {
       time_zone: this.state.timeZone
     }
 
+    if (this.props.groups.group_leader.email !== this.refs.group_leader_email.value) {
+      bootbox.confirm({
+        message: "You have updated the group leader data, this will cause the removal of the old group leader and the new user account creation for the inserted group ledaer. Is this what you want?",
+        buttons: {
+          confirm: {
+              label: 'Yes',
+              className: 'btn-success'
+          },
+          cancel: {
+              label: 'No',
+              className: 'btn-danger'
+          }
+        },
+        callback: (result) => {
+          if(result){
+            
+            newGroup.update(this.props.groups,
+              {
+                group_language: this.state.groupLanguage,
+                group_detail: gp_detail,
+                use_own_meeting_resources: !this.refs.useOwnMeetingRes.checked,
+                group_leader: gp_leader,
+                meet_time: meet_time,
+                approved: !requireNewApproval
+              },
+              (err, result) => {
+                if (result) {
+                  if(Roles.userIsInRole(Meteor.user(), ['admin']) || !requireNewApproval) {
+                    bootbox.alert({
+                      title: "Groups changes saved",
+                      message: "Group changes saved successfully",
+                      callback: function(){ browserHistory.push('/'); }
+                    })
+                  }else{
+                    bootbox.alert({
+                      title: "Groups changes saved",
+                      message: "Your group will be reviewed by our staff for approvation and public listing. You will be notified by email about the approval progress",
+                      callback: function(){ browserHistory.push('/'); }
+                    })
+                  }
+                  
+                  const newLeaderUserData = {
+                    username: gp_leader.first_name,
+                    email: gp_leader.email,
+                    roles: ['groupleader'],
+                    groupId: this.props.groups._id,
+                    country: this.state.country
+                    };
+        
+                  Meteor.call('mcheckUserExistence', newLeaderUserData.email, (error, res) => {
+                    if (res) {
+                      if(res === "exist"){
+                        Meteor.call('mAddAnotherLeadershipToUser', newLeaderUserData, (error, res) => {
+                          if (res) {
+                            console.log("FURTHER LEADERSHIP RESULT: ", res);
+                          }else if(err) {
+                            console.log("FURTHER LEADERSHIP ERROR: ", err);
+                          }
+                        });
+                      }else{
+                        Meteor.call('mCreateGroupLeader', newLeaderUserData, (error, res) => {
+                          if (res) {
+                            console.log("GROUP LEADER CREATION RESULT: ", res);
+                          }else if(err) {
+                            console.log("GROUP LEADER CREATION ERROR: ", err);
+                          }
+                        });
+                      }
+                    }else if(err) {
+                      console.log("GROUP LEADER EXISTENCE CHECK ERROR: ", err);
+                    }
+                  })
+        
+                  Meteor.call( // Notify the group leader -- EDITED AND TRANSLATED
+                    'sendEmail',
+                    'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
+                    newLeaderUserData.email,
+                    this.props.i18n.t('WCCM Online Meditation Groups - Group Leader Role Assignment'),
+                    '<p>'+ this.props.i18n.t('Dear') + ' '+this.props.i18n.t(newLeaderUserData.username)+'</p><h4>'+this.props.i18n.t('You are now the Group Leader of an Online Meditation Group')+' </h4><ul><li>'+this.props.i18n.t('Group language')+': '+this.props.i18n.t(this.state.grpupLanguage)+'</li><li>'+this.props.i18n.t('Group Meeting Day and Time')+': '+this.props.i18n.t(this.state.meetDay)+ ' at '+this.state.meetTime+'</li></ul><p>'+this.props.i18n.t('A separate notification will be sent to you. Please follow the link in that notification to set up your password that will allow you access to  the Online Meditation Group platform.  Once in the platform you will be able to manage your group communications')+'</p><p>'+this.props.i18n.t('If you need further assistance please get in touch with Leo at')+' leonardo@wccm.org</p><p><em>'+this.props.i18n.t('The WCCM Online Mediation Groups Staff')+'</em></p>',
+        
+                    (err, result) => {
+                      console.log("ERR: ", err, 'RESULT: ', result);
+                    }
+                  );
+                  
+        
+                }else {
+                  Alert.error(err.message, {
+                    position: 'top-left',
+                    effect: 'slide',
+                    timeout: 3000,
+                    offset: 20
+                  });
+                }
+              }
+            );
+
+            
+          }
+        }
+      });
+    } else {
+      newGroup.update(this.props.groups,
+        {
+          group_language: this.state.groupLanguage,
+          group_detail: gp_detail,
+          use_own_meeting_resources: !this.refs.useOwnMeetingRes.checked,
+          group_leader: gp_leader,
+          meet_time: meet_time,
+          approved: !requireNewApproval
+        },
+        (err, result) => {
+          if (result) {
+            if(Roles.userIsInRole(Meteor.user(), ['admin']) || !requireNewApproval) {
+              bootbox.alert({
+                title: "Groups changes saved",
+                message: "Group changes saved successfully",
+                callback: function(){ browserHistory.push('/'); }
+              })
+            }else{
+              bootbox.alert({
+                title: "Groups changes saved",
+                message: "Your group will be reviewed by our staff for approvation and public listing. You will be notified by email about the approval progress",
+                callback: function(){ browserHistory.push('/'); }
+              })
+            }  
+          }else {
+            Alert.error(err.message, {
+              position: 'top-left',
+              effect: 'slide',
+              timeout: 3000,
+              offset: 20
+            });
+          }
+        }
+      );
+    }
+
     
 
-    newGroup.update(this.props.groups,
-      {
-        group_language: this.state.groupLanguage,
-        group_detail: gp_detail,
-        use_own_meeting_resources: !this.refs.useOwnMeetingRes.checked,
-        group_leader: gp_leader,
-        meet_time: meet_time,
-        approved: !requireNewApproval
-      },
-      (err, result) => {
-        if (result) {
-          if(Roles.userIsInRole(Meteor.user(), ['admin']) || !requireNewApproval) {
-            bootbox.alert({
-              title: "Groups changes saved",
-              message: "Group changes saved successfully",
-              callback: function(){ browserHistory.push('/'); }
-            })
-          }else{
-            bootbox.alert({
-              title: "Groups changes saved",
-              message: "Your group will be reviewed by our staff for approvation and public listing. You will be notified by email about the approval progress",
-              callback: function(){ browserHistory.push('/'); }
-            })
-          }
-
-        }else {
-          Alert.error(err.message, {
-            position: 'top-left',
-            effect: 'slide',
-            timeout: 3000,
-            offset: 20
-          });
-        }
-      }
-    );
+    
   }
 
   confirmDelete(){
@@ -160,7 +265,7 @@ class GroupEdit extends Component {
         }
     });
   }
-
+ 
   renderDeleteButton() {
     if(Roles.userIsInRole(Meteor.user(), ['admin']) || Meteor.user()._id == this.props.groups.ownerId) {
       return(
@@ -276,6 +381,7 @@ class GroupEdit extends Component {
                 <div className="panel panel-primary">
                   <div className="panel-heading">Group Leader</div>
                     <div className="panel-body">
+                      <div className="row">
                         <div className="form-group col-xs-3">
                           <label>First name</label>
                           <input type="text" className="form-control" placeholder="First name" ref="group_leader_first_name" defaultValue={groupLeader.first_name} />
@@ -292,6 +398,8 @@ class GroupEdit extends Component {
                           <label>Phone</label>
                           <input type="text" className="form-control" placeholder="Phone" ref="group_leader_phone" defaultValue={groupLeader.phone} />
                         </div>
+                      </div>
+                      <div className="row">
                         <div className="form-group col-xs-3">
                           <label>Country</label>
                           <CountryDropdown
@@ -301,6 +409,8 @@ class GroupEdit extends Component {
                             onChange={(val) => this.updateCountry(val)}
                           />
                         </div>
+                      </div>
+                      
                     </div>
                 </div>
                 <div className="panel panel-primary">
@@ -369,4 +479,4 @@ export default createContainer((props) => {
   const { groupId } = props.params;
   Meteor.subscribe('groups');
   return { groups: Groups.findOne(groupId) };
-}, GroupEdit);
+}, translate('translations')(GroupEdit));
