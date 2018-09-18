@@ -113,6 +113,8 @@ class GroupEdit extends Component {
         },
         callback: (result) => {
           if(result){
+
+            const oldLeaderEmail = this.props.groups.group_leader.email;
             
             newGroup.update(this.props.groups,
               {
@@ -145,7 +147,7 @@ class GroupEdit extends Component {
                     roles: ['groupleader'],
                     groupId: this.props.groups._id,
                     country: this.state.country
-                    };
+                  };
         
                   Meteor.call('mcheckUserExistence', newLeaderUserData.email, (error, res) => {
                     if (res) {
@@ -168,7 +170,22 @@ class GroupEdit extends Component {
                       }
                     }else if(err) {
                       console.log("GROUP LEADER EXISTENCE CHECK ERROR: ", err);
-                    }
+                    };
+
+                    const oldLeaderUserData = {
+                      email: oldLeaderEmail,
+                      roles: ['groupleader'],
+                      groupId: this.props.groups._id
+                    };
+
+                    Meteor.call('mmRemoveUserFromRole', oldLeaderUserData, (error, res) => {
+                      if (res) {
+                        console.log("GROUP LEADER REMOVAL RESULT: ", res);
+                      }else if(err) {
+                        console.log("GROUP LEADER REMOVAL ERROR: ", err);
+                      }
+                    });
+
                   })
         
                   Meteor.call( // Notify the group leader -- EDITED AND TRANSLATED
@@ -235,10 +252,6 @@ class GroupEdit extends Component {
         }
       );
     }
-
-    
-
-    
   }
 
   confirmDelete(){
