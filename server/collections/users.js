@@ -133,12 +133,25 @@ Meteor.methods({
             if (user.roles.length > 0) {
                 console.log("ROLES FOR USER: ", Roles.getRolesForUser(existingUser));
                 console.log("GROUPS FOR USER: ", Roles.getGroupsForUser(existingUser, 'groupleader'));
+                
+                var user = existingUser, groupName, roles = [];
+
+                for (groupName in user.roles) {
+                    // note: doesn't strip duplicates
+                    roles.concat(user.roles[groupName])
+                }
+                console.log("ALl ROLES!!!!! : ",roles);
+                  
                 return;
+                
                 // Need _id of existing user record so this call must come
                 // after `Accounts.createUser` or `Accounts.onCreate`
                 //[].concat(user);
                 //Roles.addUsersToRoles(id, user.roles, user.country);
                 Roles.removeUsersFromRoles(existingUser, user.roles, user.groupId);
+                console.log("DOPO ROLES FOR USER: ", Roles.getRolesForUser(existingUser));
+                console.log("DOPO GROUPS FOR USER: ", Roles.getGroupsForUser(existingUser, 'groupleader'));
+                
             }
 
             return existingUser;          
