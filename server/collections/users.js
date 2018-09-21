@@ -136,13 +136,10 @@ Meteor.methods({
                 
                 var user = existingUser, groupName, roles = [];
 
-                for (groupName in user.roles) {
-                    // note: doesn't strip duplicates
-                    roles.concat(user.roles[groupName])
-                }
-                console.log("ALl ROLES!!!!! : ",roles);
+                
+                //console.log("ALl ROLES!!!!! : ", roles);
                   
-                return;
+                
                 
                 // Need _id of existing user record so this call must come
                 // after `Accounts.createUser` or `Accounts.onCreate`

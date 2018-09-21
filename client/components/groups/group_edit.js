@@ -98,7 +98,8 @@ class GroupEdit extends Component {
       time_zone: this.state.timeZone
     }
 
-    if (this.props.groups.group_leader.email !== this.refs.group_leader_email.value) {
+    if (this.props.groups.group_leader.email !== gp_leader.email) { // If the group leader email has been changed
+
       bootbox.confirm({
         message: "Confirm the creation of a new Group Leader for this group and the removal of the old one?",
         buttons: {
@@ -112,7 +113,7 @@ class GroupEdit extends Component {
           }
         },
         callback: (result) => {
-          if(result){
+          if (result && this.props.groups.group_leader.first_name !== gp_leader.first_name) {
 
             const oldLeaderEmail = this.props.groups.group_leader.email;
             
@@ -211,8 +212,13 @@ class GroupEdit extends Component {
                 }
               }
             );
-
             
+          }else {
+            bootbox.alert({
+              title: "Missing data",
+              message: "If you change the group leader email you have to change his/her name too",
+              callback: function(){ return; }
+            })
           }
         }
       });
