@@ -181,7 +181,7 @@ class CheckAndApproveGroup extends Component {
             'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
             gp_leader.email,
             this.props.i18n.t('WCCM Online Meditation Groups - Group Leader Role Assignment'),
-            '<p>'+ this.props.i18n.t('Dear') + ' '+this.props.i18n.t(gp_leader.first_name)+'</p><h4>'+this.props.i18n.t('You are now the Group Leader of an Online Meditation Group')+' </h4><ul><li>'+this.props.i18n.t('Group language')+': '+this.props.i18n.t(this.state.grpupLanguage)+'</li><li>'+this.props.i18n.t('Group Meeting Day and Time')+': '+this.props.i18n.t(this.state.meetDay)+ ' at '+this.state.meetTime+'</li></ul><p>'+this.props.i18n.t('A separate notification will be sent to you. Please follow the link in that notification to set up your password that will allow you access to  the Online Meditation Group platform.  Once in the platform you will be able to manage your group communications')+'</p>'+infoAboutMeetingLink+'<p>'+this.props.i18n.t('If you need further assistance please get in touch with Leo at')+' leonardo@wccm.org</p><p><em>'+this.props.i18n.t('The WCCM Online Mediation Groups Staff')+'</em></p>',
+            '<p>'+ this.props.i18n.t('Dear') + ' '+this.props.i18n.t(gp_leader.first_name)+'</p><h4>'+this.props.i18n.t('You are now the Group Leader of an Online Meditation Group')+' </h4><ul><li>'+this.props.i18n.t('Group language')+': '+this.props.i18n.t(this.state.grpupLanguage)+'</li><li>'+this.props.i18n.t('Group Meeting Day and Time')+': '+this.props.i18n.t(this.state.meetDay)+ ' at '+this.state.meetTime.format(format)+'</li></ul><p>'+this.props.i18n.t('A separate notification will be sent to you. Please follow the link in that notification to set up your password that will allow you access to  the Online Meditation Group platform.  Once in the platform you will be able to manage your group communications')+'</p>'+infoAboutMeetingLink+'<p>'+this.props.i18n.t('If you need further assistance please get in touch with Leo at')+' leonardo@wccm.org</p><p><em>'+this.props.i18n.t('The WCCM Online Mediation Groups Staff')+'</em></p>',
 
             (err, result) => {
               console.log("ERR: ", err, 'RESULT: ', result);
@@ -341,23 +341,24 @@ class CheckAndApproveGroup extends Component {
                     <div className="panel-body">
                         <div className="form-group col-xs-3">
                           <label>First name</label>
-                          <input type="text" className="form-control" placeholder="First name" ref="group_leader_first_name" defaultValue={groupLeader.first_name} />
+                          <input type="text" className="form-control" disabled placeholder="First name" ref="group_leader_first_name" defaultValue={groupLeader.first_name} />
                         </div>
                         <div className="form-group col-xs-3">
                           <label>Last name</label>
-                          <input type="text" className="form-control" placeholder="Last name" ref="group_leader_second_name" defaultValue={groupLeader.last_name} />
+                          <input type="text" className="form-control" disabled placeholder="Last name" ref="group_leader_second_name" defaultValue={groupLeader.last_name} />
                         </div>
                         <div className="form-group col-xs-4">
                           <label>Email</label>
-                          <input type="text" className="form-control" placeholder="Email" ref="group_leader_email" defaultValue={groupLeader.email} />
+                          <input type="text" className="form-control" disabled placeholder="Email" ref="group_leader_email" defaultValue={groupLeader.email} />
                         </div>
                         <div className="form-group col-xs-2">
                           <label>Phone</label>
-                          <input type="text" className="form-control" placeholder="Phone" ref="group_leader_phone" defaultValue={groupLeader.phone} />
+                          <input type="text" className="form-control" disabled placeholder="Phone" ref="group_leader_phone" defaultValue={groupLeader.phone} />
                         </div>
                         <div className="form-group col-xs-3">
                           <label>Country</label>
                           <CountryDropdown
+                            disabled
                             value={this.state.country}
                             classes='countryDropDown'
                             defaultOptionLabel = 'select country'

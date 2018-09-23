@@ -87,7 +87,7 @@ class Header extends Component {
 
   renderCreateGroupLink(t){
     var loggedInUser = Meteor.user();
-    if ( Roles.userIsInRole(loggedInUser, ['admin', 'itsaref'])) { // il gruppo va messo dinamico o globale
+    if ( Roles.userIsInRole(loggedInUser, ['admin', 'nationalresp'])) { // il gruppo va messo dinamico o globale
      return (<a href="#" onClick={this.onBindCreateNewGroup.bind(this)}>{t('Create New Group')}</a>);
     }
     return;
@@ -95,7 +95,7 @@ class Header extends Component {
 
   renderNatRefGroups(t){
     var loggedInUser = Meteor.user();
-    if ( Roles.userIsInRole(loggedInUser, ['itsaref'])) { // il gruppo va messo dinamico o globale
+    if ( Roles.userIsInRole(loggedInUser, ['nationalresp'])) { // il gruppo va messo dinamico o globale
      return (<a href="#" onClick={this.onBindNatRefGroups.bind(this)}>{t('Groups You Created')}</a>);
     }
     return;

@@ -52,7 +52,7 @@ class GroupCreate extends Component {
     //  console.log("TIME ZONES: ", moment.tz.names() );
     console.log("TIME ZONE GUESS: ", moment.tz.guess());
 
-    if(!(Roles.userIsInRole(Meteor.user(), ['admin', 'itsaref']))) {
+    if(!(Roles.userIsInRole(Meteor.user(), ['admin', 'nationalresp']))) {
       console.log("USER ", Meteor.user());
       return browserHistory.push('/');
     };

@@ -125,32 +125,18 @@ Meteor.methods({
         }
     },
     mmRemoveUserFromRole: function (user) {
-        console.log("USER TO REMOVE ROLE FROM: ", user);
         if(_.isObject(user)) {            
 
             const existingUser = Meteor.users.findOne({ 'emails.address': user.email });
 
-            if (user.roles.length > 0) {
-                console.log("ROLES FOR USER: ", Roles.getRolesForUser(existingUser));
-                console.log("GROUPS FOR USER: ", Roles.getGroupsForUser(existingUser, 'groupleader'));
-                
-                var user = existingUser, groupName, roles = [];
-
-                
-                //console.log("ALl ROLES!!!!! : ", roles);
-                  
-                
-                
-                // Need _id of existing user record so this call must come
-                // after `Accounts.createUser` or `Accounts.onCreate`
-                //[].concat(user);
-                //Roles.addUsersToRoles(id, user.roles, user.country);
-                Roles.removeUsersFromRoles(existingUser, user.roles, user.groupId);
-                console.log("DOPO ROLES FOR USER: ", Roles.getRolesForUser(existingUser));
-                console.log("DOPO GROUPS FOR USER: ", Roles.getGroupsForUser(existingUser, 'groupleader'));
-                
+            if (user.roles.length > 0) {               
+                if(_.size(existingUser.roles) < 3) {
+                    Meteor.users.remove(existingUser);
+                }else {                    
+                    _.unset(existingUser.roles, user.groupId);
+                    Meteor.users.update({_id: existingUser._id}, {$set: {"roles": existingUser.roles}});
+                }
             }
-
             return existingUser;          
         }
     },

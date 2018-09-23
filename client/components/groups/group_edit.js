@@ -58,6 +58,7 @@ class GroupEdit extends Component {
     //console.log('NEW VALUE ', newValue);
     //console.log(val && val.format('HH:mm:ss'));
     this.setState({ meetTime: val });
+    //this.setState({ meetTime: val && val.format(format) });
   }
 
   updateCountry(val) {
@@ -194,7 +195,7 @@ class GroupEdit extends Component {
                     'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
                     newLeaderUserData.email,
                     this.props.i18n.t('WCCM Online Meditation Groups - Group Leader Role Assignment'),
-                    '<p>'+ this.props.i18n.t('Dear') + ' '+this.props.i18n.t(newLeaderUserData.username)+'</p><h4>'+this.props.i18n.t('You are now the Group Leader of an Online Meditation Group')+' </h4><ul><li>'+this.props.i18n.t('Group language')+': '+this.props.i18n.t(this.state.grpupLanguage)+'</li><li>'+this.props.i18n.t('Group Meeting Day and Time')+': '+this.props.i18n.t(this.state.meetDay)+ ' at '+this.state.meetTime+'</li></ul><p>'+this.props.i18n.t('A separate notification will be sent to you. Please follow the link in that notification to set up your password that will allow you access to  the Online Meditation Group platform.  Once in the platform you will be able to manage your group communications')+'</p><p>'+this.props.i18n.t('If you need further assistance please get in touch with Leo at')+' leonardo@wccm.org</p><p><em>'+this.props.i18n.t('The WCCM Online Mediation Groups Staff')+'</em></p>',
+                    '<p>'+ this.props.i18n.t('Dear') + ' '+this.props.i18n.t(newLeaderUserData.username)+'</p><h4>'+this.props.i18n.t('You are now the Group Leader of an Online Meditation Group')+' </h4><ul><li>'+this.props.i18n.t('Group language')+': '+this.props.i18n.t(this.state.grpupLanguage)+'</li><li>'+this.props.i18n.t('Group Meeting Day and Time')+': '+this.props.i18n.t(this.state.meetDay)+ ' at '+this.state.meetTime.format(format)+'</li></ul><p>'+this.props.i18n.t('A separate notification will be sent to you. Please follow the link in that notification to set up your password that will allow you access to  the Online Meditation Group platform.  Once in the platform you will be able to manage your group communications')+'</p><p>'+this.props.i18n.t('If you need further assistance please get in touch with Leo at')+' leonardo@wccm.org</p><p><em>'+this.props.i18n.t('The WCCM Online Mediation Groups Staff')+'</em></p>',
         
                     (err, result) => {
                       console.log("ERR: ", err, 'RESULT: ', result);
@@ -214,11 +215,13 @@ class GroupEdit extends Component {
             );
             
           }else {
-            bootbox.alert({
-              title: "Missing data",
-              message: "If you change the group leader email you have to change his/her name too",
-              callback: function(){ return; }
-            })
+            if(result) {
+              bootbox.alert({
+                title: "Missing data",
+                message: "If you change the group leader email you have to change his/her name too",
+                callback: function(){ return; }
+              })
+            }
           }
         }
       });
@@ -398,7 +401,7 @@ class GroupEdit extends Component {
                     </div>
                 </div>
                 <div className="panel panel-primary">
-                  <div className="panel-heading">Group Leader</div>
+                  <div className="panel-heading">Group Leader -- <em> To change the group leader, simply update the name and the email in the relevant fields</em></div>
                     <div className="panel-body">
                       <div className="row">
                         <div className="form-group col-xs-3">
@@ -428,8 +431,7 @@ class GroupEdit extends Component {
                             onChange={(val) => this.updateCountry(val)}
                           />
                         </div>
-                      </div>
-                      
+                      </div>                      
                     </div>
                 </div>
                 <div className="panel panel-primary">
