@@ -20,7 +20,8 @@ class GroupsManage extends Component {
     this.state = {
       filterByDay: { value: 'All', label: 'All' },
       filterByLang: { value: 'All', label: 'All' },
-      filterByGroupType: { value: 'All', label: 'All' }
+      filterByGroupType: { value: 'All', label: 'All' },
+      filterByWCCMLink: 'All'
     };
   }
 
@@ -28,7 +29,7 @@ class GroupsManage extends Component {
 
     return this.props.groups.map(group => {
       const groupEditUrl = `/editgroup/${group._id}`;
-      const { _id, group_language, group_leader, group_detail, meet_time, meditators  } = group;
+      const { _id, group_language, group_leader, group_detail, meet_time, use_own_meeting_resources, meditators  } = group;
       const detail_text = group_detail && group_detail.detail_text;
       const detail_url = group_detail && group_detail.detail_url;
       const leader = group_leader.first_name + " " + group_leader.last_name;
@@ -36,6 +37,7 @@ class GroupsManage extends Component {
       const meetTime = meet_time.meet_time;
       const groupDetailInfo = (detail_text)?detail_text:' ';
       const groupDetailURL = (detail_url)?' <span className="label label-info"><a style="color: inherit; text-decoration: none;"  href=' + detail_url + ' target="_blank">Info</a></span>':' ';
+      const groupUsesWCCMLink = use_own_meeting_resources?'<span className="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>':'<span className="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>';
 
       moment.tz.setDefault(meet_time.time_zone);
 
@@ -70,6 +72,8 @@ class GroupsManage extends Component {
       if(this.state.filterByDay.value !== 'All' &&  computedMeetingDay !== this.state.filterByDay.value) return;
       if(this.state.filterByLang.value !== 'All' &&  group_language !== this.state.filterByLang.value) return;
       if(this.state.filterByGroupType.value !== 'All' &&  (detail_text == '' || _.isUndefined(group_detail))) return;
+      if(this.state.filterByWCCMLink == 'Yes' && use_own_meeting_resources) return;
+      if(this.state.filterByWCCMLink == 'No' && !use_own_meeting_resources) return;
 
       moment.tz.setDefault();
 
@@ -79,6 +83,7 @@ class GroupsManage extends Component {
           <td>{groupDetailInfo}{Parser(groupDetailURL)}</td>
           <td>{leader}</td>
           <td>{meetingtime}</td>
+          <td>{Parser(groupUsesWCCMLink)}</td>
           <td><button
             className="btn btn-info"
             onClick={() => {
@@ -106,10 +111,15 @@ class GroupsManage extends Component {
     this.setState({ filterByGroupType: type });
   }
 
+  filterByMeetingLink = (filter) => {
+    this.setState({ filterByWCCMLink: filter });
+  }
+
   resetFilters = () => {
     this.setState({ filterByDay: {value: 'All', label: 'All' } });
     this.setState({ filterByLang: {value: 'All', label: 'All' } });
     this.setState({ filterByGroupType: {value: 'All', label: 'All' } });
+    this.setState({ filterByWCCMLink: 'All'});
   }
 
   render() {
@@ -139,6 +149,21 @@ class GroupsManage extends Component {
             Reset filters
           </button>
         </div>
+        <div className="form-group col-md-6 text-right">
+        WCCM Meeting Link Display Filter:&nbsp;&nbsp;
+        <div className="btn-group" role="group" aria-label="...">
+          <button type="button" className="btn btn-default" aria-label="Left Align" onClick={() => this.filterByMeetingLink('All')}>
+            <span className="glyphicon glyphicon-ban-circle text-default" aria-hidden="true"></span>
+          </button>
+          <button type="button" className="btn btn-default" aria-label="Left Align" onClick={() => this.filterByMeetingLink('Yes')}>
+            <span className="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+          </button>
+          <button type="button" className="btn btn-default" aria-label="Left Align" onClick={() => this.filterByMeetingLink('No')}>
+            <span className="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
+          </button>
+        </div>
+
+        </div>
           <table className="table table-striped">
             <thead>
               <tr>
@@ -146,6 +171,7 @@ class GroupsManage extends Component {
                 <th>Group Info</th>
                 <th>Group Leader</th>
                 <th>Meeting Schedule [in your local time]</th>
+                <th>Uses WCCM Meeting Link</th>
                 <th>Members</th>
               </tr>
             </thead>

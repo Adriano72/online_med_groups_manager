@@ -101,7 +101,7 @@ i18n
           "Group changes saved successfully": "Mudanças no grupo salvas com sucesso",
           "Update Group": "Atualizar Grupo",
           "Delete Group": "Apagar grupo",
-          "User Management": "Gerenciar Usuário",
+          "Users Management": "Gerenciar Usuário",
           "Language": "Idioma",
           "Group Info": "Informação do Grupo",
           "Group Leader": "Líder do Grupo",

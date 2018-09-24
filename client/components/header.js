@@ -146,7 +146,7 @@ class Header extends Component {
   renderCreateUserLink(t){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
-     return (<a href="#" onClick={this.onBindCreateNewAuthUser.bind(this)}>{t('Create Nat Ref User')}</a>);
+     return (<a href="#" onClick={this.onBindCreateNewAuthUser.bind(this)}>{t('Create National Referent User')}</a>);
     }
     return;
   }
@@ -154,7 +154,7 @@ class Header extends Component {
   renderCreateAdminLink(t){
     var loggedInUser = Meteor.user();
     if ( Roles.userIsInRole(loggedInUser, 'admin')) { // il gruppo va messo dinamico o globale
-     return (<a href="#" onClick={this.onBindCreateNewAdminUser.bind(this)}>{t('Create Admin User')}</a>);
+     return (<a href="#" onClick={this.onBindCreateNewAdminUser.bind(this)}>{t('Create Administrator User')}</a>);
     }
     return;
   }
