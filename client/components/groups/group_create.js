@@ -260,6 +260,8 @@ class GroupCreate extends Component {
 
   render() {
     const t = this.props.t;
+    const checkDisabled = !Roles.userIsInRole(Meteor.user(), ['admin']);
+
     return (
         <div className="container-fluid top-buffer">
             <h2>{t('New Group')}</h2><br />
@@ -285,11 +287,11 @@ class GroupCreate extends Component {
                     </div>
                     <div className="form-group col-md-4">
                       <label>{t('Group Detail')}</label>
-                      <input type="text" className="form-control" placeholder={t('Group Detail')} ref="group_detail_text" />
+                      <input type="text" className="form-control" disabled={checkDisabled} placeholder={t('Group Detail')} ref="group_detail_text" />
                     </div>
                     <div className="form-group col-md-4">
                       <label>{t('URL to Detail Page')}</label>
-                      <input type="text" className="form-control" placeholder={t('URL to Detail Page')} ref="group_detail_url" />
+                      <input type="text" className="form-control" disabled={checkDisabled} placeholder={t('URL to Detail Page')} ref="group_detail_url" />
                     </div>
                   </div>
               </div>
