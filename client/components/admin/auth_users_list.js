@@ -35,28 +35,27 @@ class AuthUsersList extends Component {
             });
           }
           */
-          let groupsForUser = Roles.getGroupsForUser(user);
           
-          if (groupsForUser.length) {
-            groupsForUser.forEach(function(group) {   
-              let userRole = Roles.getRolesForUser(user, group);
-              userRole.forEach(function(role) {
-                if (role.toString() === 'nationalresp') {
-                  rolesCovered += '<span className="label label-info">NATIONAL REFERENT '+group+'</span>';
-                }
-              });
-                               
-            });
-          }
           
+          Object.entries(user.roles).forEach(
+            ([key, value]) => {
+              if(value == 'nationalresp' && key != '__global_roles__') {
+                console.log("PAESE: ", key);
+                (rolesCovered.length > 0)? rolesCovered += ' <span className="label label-info">NATIONAL REFERENT '+key+'</span>':rolesCovered += '<span className="label label-info">NATIONAL REFERENT '+key+'</span>';
+
+              }
+            }
+          );
+
+
 
           if (Roles.userIsInRole(user, 'admin')) {
-            rolesCovered += '<span className="label label-danger">ADMIN</span>';
+            (rolesCovered.length > 0)? rolesCovered += ' <span className="label label-danger">ADMIN</span>':rolesCovered += '<span className="label label-danger">ADMIN</span>';
           }
           
 
           if (Roles.userIsInRole(user, ['itsaleader'], Roles.GLOBAL_GROUP)) {
-            rolesCovered += '<span className="label label-warning">GROUP LEADER</span>';
+            (rolesCovered.length > 0)? rolesCovered += ' <span className="label label-warning">GROUP LEADER</span>':rolesCovered += '<span className="label label-warning">GROUP LEADER</span>';
           }
           /*
           if (Roles.userIsInRole(user, ['nationalresp'], groupsForUser.toString())) {
