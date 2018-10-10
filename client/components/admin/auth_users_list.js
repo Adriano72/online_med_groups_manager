@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link, browserHistory } from 'react-router';
 import Parser from 'html-react-parser';
+import { Groups } from '../../../imports/collections/groups';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
@@ -9,45 +10,41 @@ import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 
 class AuthUsersList extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.countGroupsOwned = this.countGroupsOwned.bind(this);
+  }
   componentWillMount() {
 
     if(!(Roles.userIsInRole(Meteor.user(), ['admin']))) {
-      console.log("USER ******************", Meteor.user());
       return browserHistory.push('/');
     }
   }
 
-  renderRows() {
-    var users = this.props.allUsers;
+  countGroupsOwned(uid) {
+    //console.log("ROPS GROU: ", this.props.groups);
+    var countGroups = _.filter(this.props.groups, {ownerId: uid});    
+    return countGroups.length;
+  }
 
-    console.log('*** USERS ***: ', users);
-    if (users) {
-      return users.map(user => {
+  renderRows() {
+    if (this.props.allUsers) {
+      return this.props.allUsers.map(user => {
           const userEditUrl = `/userdetail/${user._id}`;
           let rolesCovered = '';
-          /*
-          if (user.roles.__global_roles__) {
-            //console.log("Ruoli numero: ", user.roles.__global_roles__.length);
-            _.forEach(user.roles.__global_roles__, function(value) {
-              if (value === 'admin'){
-                rolesCovered += '<span className="label label-danger">ADMINISTRATOR</span>';
-              }
-            });
-          }
-          */
-          
+         
+
+         var numberOfGroups = this.countGroupsOwned(user._id);
           
           Object.entries(user.roles).forEach(
             ([key, value]) => {
               if(value == 'nationalresp' && key != '__global_roles__') {
-                console.log("PAESE: ", key);
                 (rolesCovered.length > 0)? rolesCovered += ' <span className="label label-info">NATIONAL REFERENT '+key+'</span>':rolesCovered += '<span className="label label-info">NATIONAL REFERENT '+key+'</span>';
 
               }
             }
           );
-
-
 
           if (Roles.userIsInRole(user, 'admin')) {
             (rolesCovered.length > 0)? rolesCovered += ' <span className="label label-danger">ADMIN</span>':rolesCovered += '<span className="label label-danger">ADMIN</span>';
@@ -85,11 +82,14 @@ class AuthUsersList extends Component {
             <tr key={user._id}>
               <td><Link to={userEditUrl}>{user.username}</Link></td>
               <td>{email}</td>
+              <td>{numberOfGroups}</td>
               <td>{Parser(rolesCovered)}</td>            
             </tr>
           )
 
       });
+    }else {
+      alert("CIAONEEE");
     }
   };
 
@@ -106,6 +106,7 @@ class AuthUsersList extends Component {
               <tr>
                 <th>Meditator</th>
                 <th>Email</th>
+                <th>Groups Owned</th>
                 <th>Roles</th>
               </tr>
             </thead>
@@ -124,7 +125,8 @@ class AuthUsersList extends Component {
 
 export default createContainer(() => {
   Meteor.subscribe('allUsers');
+  Meteor.subscribe('groups');
   return {
-    allUsers: Meteor.users.find({}, { sort: { username: 1 } }).fetch(),
+    allUsers: Meteor.users.find({}, { sort: { username: 1 } }).fetch(), groups: Groups.find({}).fetch()
   };
 }, AuthUsersList);

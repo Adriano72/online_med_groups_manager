@@ -219,6 +219,6 @@ class Header extends Component {
 export default createContainer(() => {
   Meteor.subscribe('groupsToApproveCount');
   return {
-    currentUser: Meteor.user() || {}, groupsToApprove: Counts.get('groups-to-approve') // default to plain object
+    currentUser: Meteor.user() || {}
   };
 }, translate('translations')(Header));
