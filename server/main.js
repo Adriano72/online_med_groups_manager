@@ -50,7 +50,7 @@ Accounts.emailTemplates.enrollAccount.text = (user, url) => { // EDITED
     + '\n\n'
     + 'For any help you might need please contact leonardo@wccm.org'
     + '\n\n'
-    + 'The WCCM Online Mediation Groups Staff';
+    + 'The WCCM Online Meditation Groups Staff';
 };
 
 Meteor.startup(() => {

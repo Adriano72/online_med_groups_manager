@@ -74,7 +74,7 @@ export default class CreateAdmin extends Component {
                 'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
                 email,
                 'WCCM Online Meditation Groups - Administrator Role Assignment',
-                '<p>Dear '+name+'</p><h4>You have to been made an administrator on the WCCM Meditation Groups Directory to manage mediation groups</b></h4><p>We have sent you an email. Please check your inbox and click on the link in the email to complete your profile</p><p>For any help you might need please contact leonardo@wccm.org<p><em>The WCCM Online Mediation Groups Staff</em></p>',
+                '<p>Dear '+name+'</p><h4>You have to been made an administrator on the WCCM Meditation Groups Directory to manage Meditation groups</b></h4><p>We have sent you an email. Please check your inbox and click on the link in the email to complete your profile</p><p>For any help you might need please contact leonardo@wccm.org<p><em>The WCCM Online Meditation Groups Staff</em></p>',
                 (err, result) => {
                   console.log("ERR: ", err, 'RESULT: ', result);
                 }

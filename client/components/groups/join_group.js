@@ -85,7 +85,7 @@ class JoinGroup extends Component {
           'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
           this.props.groups.group_leader.email,
           'WCCM Online Meditation Groups - New group subscription',
-          '<p>Dear '+this.props.groups.group_leader.first_name+'</p><p>A new meditator, <b>'+name+'</b>, email: '+email+' joined the group you lead every <b>'+this.props.groups.meet_time.day_of_week+ ' at '+this.props.groups.meet_time.meet_time+'</b></p><p>For any help you might need please contact leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+          '<p>Dear '+this.props.groups.group_leader.first_name+'</p><p>A new meditator, <b>'+name+'</b>, email: '+email+' joined the group you lead every <b>'+this.props.groups.meet_time.day_of_week+ ' at '+this.props.groups.meet_time.meet_time+'</b></p><p>For any help you might need please contact leonardo@wccm.org</p><p><em>The WCCM Online Meditation Groups Staff</em></p>',
 
           (err, result) => {
             console.log("ERR: ", err, 'RESULT: ', result);
@@ -96,7 +96,7 @@ class JoinGroup extends Component {
           'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
           email,
           'WCCM Online Meditation Groups - You joined an online meditation group!',
-          '<p>Dear '+name+'</p><h4>You are now a participant of the following online meditation group:</h4><ul><li>Group Language: '+this.props.groups.group_language+'</li><li>Group Meeting Day and Time: '+this.props.groups.meet_time.day_of_week+ ' at '+this.props.groups.meet_time.meet_time+' - Timezone: '+this.props.groups.meet_time.time_zone+' (GMT '+moment().tz(this.props.groups.meet_time.time_zone).format('Z')+')</li></ul><p>For any information you might need please refer to your group leader <b>'+this.props.groups.group_leader.first_name+' '+this.props.groups.group_leader.last_name+'</b> at '+this.props.groups.group_leader.email+'</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+          '<p>Dear '+name+'</p><h4>You are now a participant of the following online meditation group:</h4><ul><li>Group Language: '+this.props.groups.group_language+'</li><li>Group Meeting Day and Time: '+this.props.params.meeting_time+'</li></ul><p>For any information you might need please refer to your group leader <b>'+this.props.groups.group_leader.first_name+' '+this.props.groups.group_leader.last_name+'</b> at '+this.props.groups.group_leader.email+'</p><p><em>The WCCM Online Meditation Groups Staff</em></p>',
 
           (err, result) => {
             console.log("ERR: ", err, 'RESULT: ', result);

@@ -151,7 +151,7 @@ i18n
           "Dear": "Querida(o)",
           "WCCM Online Meditation Groups - Group Leader Role Assignment": "WCCM Online Meditação Grupos - Designação do Cargo de Líder de Grupo",
           "You are now the Group Leader of an Online Meditation Group": "Você agora é um Líder de um Grupo de Meditação Online",
-          "The WCCM Online Mediation Groups Staff": "Equipe de Grupos de Meditação online da WCCM",
+          "The WCCM Online Meditation Groups Staff": "Equipe de Grupos de Meditação online da WCCM",
           "A separate notification will be sent to you. Please follow the link in that notification to set up your password that will allow you access to  the Online Meditation Group platform.  Once in the platform you will be able to manage your group communications": 'Uma notificação individual será enviada a você. Por favor clique no link da notificação para configurar sua senha, que lhe dará acesso à plataforma de Grupos de Meditação Online. Uma vez connectado você poderá gerenciar suas comunicações',
           "If you need further assistance please get in touch with Leo at": "Se você precisa de ajuda por favor contate Leo em",
           "Your group is now set up": "Seu grupo está criado",

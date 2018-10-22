@@ -187,7 +187,7 @@ class GroupCreate extends Component {
               'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
               gp_leader.email,
               this.props.i18n.t('WCCM Online Meditation Groups - Group Leader Role Assignment'),
-              '<p>'+ this.props.i18n.t('Dear') + ' '+this.props.i18n.t(gp_leader.first_name)+'</p><h4>'+this.props.i18n.t('You are now the Group Leader of an Online Meditation Group')+' </h4><ul><li>'+this.props.i18n.t('Group language')+': '+this.props.i18n.t(this.state.grpupLanguage)+'</li><li>'+this.props.i18n.t('Group Meeting Day and Time')+': '+this.props.i18n.t(this.state.meetDay)+ ' at '+this.state.meetTime+'</li></ul><p>'+this.props.i18n.t('A separate notification will be sent to you. Please follow the link in that notification to set up your password that will allow you access to  the Online Meditation Group platform.  Once in the platform you will be able to manage your group communications')+'</p><p>'+this.props.i18n.t('If you need further assistance please get in touch with Leo at')+' leonardo@wccm.org</p><p><em>'+this.props.i18n.t('The WCCM Online Mediation Groups Staff')+'</em></p>',
+              '<p>'+ this.props.i18n.t('Dear') + ' '+this.props.i18n.t(gp_leader.first_name)+'</p><h4>'+this.props.i18n.t('You are now the Group Leader of an Online Meditation Group')+' </h4><ul><li>'+this.props.i18n.t('Group language')+': '+this.props.i18n.t(this.state.grpupLanguage)+'</li><li>'+this.props.i18n.t('Group Meeting Day and Time')+': '+this.props.i18n.t(this.state.meetDay)+ ' at '+this.state.meetTime+'</li></ul><p>'+this.props.i18n.t('A separate notification will be sent to you. Please follow the link in that notification to set up your password that will allow you access to  the Online Meditation Group platform.  Once in the platform you will be able to manage your group communications')+'</p><p>'+this.props.i18n.t('If you need further assistance please get in touch with Leo at')+' leonardo@wccm.org</p><p><em>'+this.props.i18n.t('The WCCM Online Meditation Groups Staff')+'</em></p>',
 
               (err, result) => {
                 console.log("ERR: ", err, 'RESULT: ', result);
@@ -199,7 +199,7 @@ class GroupCreate extends Component {
               'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
               Meteor.user().emails[0].address,
               'WCCM Online Meditation Groups - New Group Created!',
-              '<p>Dear '+Meteor.user().username+'</p><h4>You have successfully created a new online group which  is now listed in the public WCCM Online Directory.</h4><ul><li>Group Language: '+this.state.grpupLanguage+'</li><li>Group Meeting Day and Time: '+this.state.meetDay+ ' at '+this.state.meetTime+'</li></ul><p>This group is now visible on: https://www.onlinemeditationwccm.org</p><p>The new group leader, <b>'+gp_leader.first_name+' '+gp_leader.last_name+'</b>, will receive a notification to complete the account creation process. Once the details are submitted, the new group leader will be able to manage communications with group members.</p><p>If you have any questions,please contact leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+              '<p>Dear '+Meteor.user().username+'</p><h4>You have successfully created a new online group which  is now listed in the public WCCM Online Directory.</h4><ul><li>Group Language: '+this.state.grpupLanguage+'</li><li>Group Meeting Day and Time: '+this.state.meetDay+ ' at '+this.state.meetTime+'</li></ul><p>This group is now visible on: https://www.onlinemeditationwccm.org</p><p>The new group leader, <b>'+gp_leader.first_name+' '+gp_leader.last_name+'</b>, will receive a notification to complete the account creation process. Once the details are submitted, the new group leader will be able to manage communications with group members.</p><p>If you have any questions,please contact leonardo@wccm.org</p><p><em>The WCCM Online Meditation Groups Staff</em></p>',
 
               (err, result) => {
                 console.log("ERR: ", err, 'RESULT: ', result);
@@ -219,7 +219,7 @@ class GroupCreate extends Component {
               'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
               Meteor.user().emails[0].address,
               'WCCM Online Meditation Groups - New Group Submission',
-              '<h4>Your Group Creation Request is being processed</h4><p>You will receive a notification by email regarding the status of your submission.</p><p>For any help you might need please contact leonardo@wccm.org</p><p><em>The WCCM Online Mediation Groups Staff</em></p>',
+              '<h4>Your Group Creation Request is being processed</h4><p>You will receive a notification by email regarding the status of your submission.</p><p>For any help you might need please contact leonardo@wccm.org</p><p><em>The WCCM Online Meditation Groups Staff</em></p>',
 
               (err, result) => {
                 console.log("ERR: ", err, 'RESULT: ', result);
@@ -233,7 +233,7 @@ class GroupCreate extends Component {
                 'WCCM-NOREPLY Online Meditation Groups <admin@wccm.org>',
                 admin.emails[0].address,
                 'WCCM Online Meditation Groups - New Group Pending Approval',
-                '<h4>A Group Creation Request is waiting for your approval</h4><p>Enter your login credentials to access your https://www.onlinemeditationwccm.org dashboard and manage this request.</p><p><em>The WCCM Online Mediation Groups Automatic Notification</em></p>'
+                '<h4>A Group Creation Request is waiting for your approval</h4><p>Enter your login credentials to access your https://www.onlinemeditationwccm.org dashboard and manage this request.</p><p><em>The WCCM Online Meditation Groups Automatic Notification</em></p>'
               );
             });
 

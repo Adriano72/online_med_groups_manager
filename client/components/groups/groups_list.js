@@ -81,7 +81,7 @@ class GroupsList extends Component {
           <td>
             <button
               className="btn btn-success"
-              onClick={() => browserHistory.push(`/joingroup/${group._id}`)}>
+              onClick={() => browserHistory.push(`/joingroup/${group._id}/${meetingtime}`)}>
               {this.props.i18n.t('Join this group')}
             </button>
           </td>

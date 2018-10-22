@@ -66,7 +66,7 @@ const routes = (
         <Route path="pendinggroups" component={GroupsToApprove}/>
         <Route path="groupsmanage" component={GroupsManage}/>
         <Route path="checkgroup/:groupId" component={CheckAndApproveGroup}/>
-        <Route path="joingroup/:groupId" component={JoinGroup}/>
+        <Route path="joingroup/:groupId/:meeting_time" component={JoinGroup}/>
         <Route path="groupmeditators/:groupId" component={GroupMeditators}/>
       </Route>
     </Router>
