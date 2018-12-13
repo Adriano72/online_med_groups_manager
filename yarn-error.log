@@ -1,0 +1,58 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.9.4/libexec/bin/yarn.js
+
+PATH: 
+  /Users/adrianomassi/anaconda3/bin:/Users/adrianomassi/workspace/flutter/bin:/Library/Frameworks/Python.framework/Versions/3.6/bin:/Library/Frameworks/Python.framework/Versions/3.7/bin:/usr/local/opt/openssl/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/opt/ImageMagick/bin:/Users/adrianomassi/Library/android-sdk-macosx/tools:/Users/adrianomassi/Library/android-sdk-macosx/platform-tools
+
+Yarn version: 
+  1.9.4
+
+Node version: 
+  9.8.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: EACCES: permission denied, mkdir '/Users/adrianomassi/git/online_med_groups_manager/node_modules/babel-code-frame/node_modules'
+
+npm manifest: 
+  {
+    "name": "online_med_groups_manager",
+    "private": true,
+    "scripts": {
+      "start": "meteor run"
+    },
+    "dependencies": {
+      "@babel/runtime": "7.0.0-beta.55",
+      "babel-runtime": "^6.20.0",
+      "bcrypt": "^3.0.0",
+      "html-react-parser": "^0.4.7",
+      "i18next": "^11.10.2",
+      "i18next-browser-languagedetector": "^2.2.4",
+      "indexof": "0.0.1",
+      "meteor-node-stubs": "~0.2.4",
+      "moment-timezone": "^0.5.23",
+      "rc-time-picker": "^3.4.0",
+      "react": "^16.6.3",
+      "react-addons-pure-render-mixin": "^15.6.2",
+      "react-country-region-selector": "^1.4.3",
+      "react-dom": "^16.6.3",
+      "react-google-recaptcha": "^1.0.5",
+      "react-i18next": "^7.13.0",
+      "react-router": "^3.2.1",
+      "react-router-dom": "^4.3.1",
+      "react-s-alert": "^1.4.1",
+      "react-select": "^2.1.2",
+      "valid-url": "^1.0.9"
+    },
+    "devDependencies": {
+      "eslint-config-rallycoding": "^3.2.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
