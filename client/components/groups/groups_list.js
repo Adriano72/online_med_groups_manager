@@ -7,9 +7,14 @@ import moment from 'moment-timezone';
 import { Groups } from '../../../imports/collections/groups';
 import { translate, Trans } from 'react-i18next';
 
-let userTimeZone = moment.tz.guess();
 const format = 'h:mm a';
 const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+const allTimeZones = [];
+
+$.each(moment.tz.names(), function() {
+    allTimeZones.push({value: this, label: this });
+});
 
 class GroupsList extends Component {
   constructor(props) {
@@ -18,8 +23,29 @@ class GroupsList extends Component {
     this.state = {
       filterByDay: { value: 'All', label: this.props.i18n.t('All') },
       filterByLang: { value: 'All', label: this.props.i18n.t('All') },
-      filterByGroupType: { value: 'All', label: this.props.i18n.t('All') }
+      filterByGroupType: { value: 'All', label: this.props.i18n.t('All') },
+      timeZone: ''
     };
+  }
+
+  componentWillMount() {
+    this.setState({ timeZone: moment.tz.guess() });
+  }
+
+  updateTimeZone = (selectedOption) => {
+
+    let timeZoneString = '';
+
+    if(!(_.isUndefined(selectedOption))) {
+
+      for (let x = 0; x < selectedOption.value.length; x++){
+           timeZoneString += selectedOption.value[x];
+           //console.log("RESULT: ", testVal);
+      }
+    }
+
+    this.setState({ selectedOption });
+    this.setState({ timeZone: timeZoneString });
   }
 
   renderRows() {
@@ -46,8 +72,8 @@ class GroupsList extends Component {
           minute: time.get('minute')
       });
       let setTimeZone = moment.tz(date, meet_time.time_zone);
-      let rawformattedConvertedTime = moment(setTimeZone).tz(userTimeZone);
-      let formattedConvertedTime = moment(setTimeZone).tz(userTimeZone).format(format);
+      let rawformattedConvertedTime = moment(setTimeZone).tz(this.state.timeZone);
+      let formattedConvertedTime = moment(setTimeZone).tz(this.state.timeZone).format(format);
 
       let computedMeetingDay = meet_time.day_of_week;
 
@@ -153,9 +179,13 @@ class GroupsList extends Component {
           <label>{t('Filter by Week Day')}</label>
           <Select name="filter-by-day" value={this.state.filterByDay} placeholder="Filter by Meeting Day" searchable options={daysOfWeek} onChange={this.filterByDayOfWeek} />
         </div>
-        <div className="form-group col-md-4">
+        <div className="form-group col-md-2">
           <label>{t('Group Type')}</label>
           <Select name="filter-by-day" value={this.state.filterByGroupType} placeholder="Filter by Group Type" searchable options={groupTypes} onChange={this.filterByGroupTypes} />
+        </div>
+        <div className="form-group col-md-2">
+          <label htmlFor="timeZonesSelect" >{t('Time Zone')}</label>
+          <Select defaultValue={{ value: this.state.timeZone, label: this.state.timeZone }} onChange={this.updateTimeZone} options={allTimeZones} />
         </div>
         <div className="form-group col-md-6">
           <button

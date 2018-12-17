@@ -9,9 +9,14 @@ import { Groups } from '../../../imports/collections/groups';
 let userTimeZone = moment.tz.guess();
 const format = 'h:mm a';
 const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const daysOfWeek = [{value: 'All', label: 'All'}, {value: 'Monday', label: 'Monday'}, {value: 'Tuesday', label: 'Tuesday'}, {value: 'Wednesday', label: 'Wednesday'}, {value: 'Thursday', label: 'Thursday'}, {value: 'Friday', label: 'Friday'}, {value: 'Saturday', label: 'Saturday'}, {value: 'Sunday', label: 'Sunday'}];
 const languages = [{value: 'All', label: 'All'}, {value: 'English', label: 'English'}, {value: 'French', label: 'French'}, {value: 'Italian', label: 'Italian'}, {value: 'Spanish', label: 'Spanish'}, {value: 'German', label: 'German'}, {value: 'Dutch', label: 'Dutch'}, {value: 'Portuguese', label: 'Portuguese'}, {value: 'Russian', label: 'Russian'}, {value: 'Chinese', label: 'Chinese'}, {value: 'Indonesian', label: 'Indonesian'}];
 const groupTypes = [{ value: 'All', label: 'All'}, {value: 'Special Groups', label: 'Special Groups' }];
+
+const allTimeZones = [];
+
+$.each(moment.tz.names(), function() {
+    allTimeZones.push({value: this, label: this });
+});
 
 class GroupsManage extends Component {
   constructor(props) {
@@ -21,8 +26,29 @@ class GroupsManage extends Component {
       filterByDay: { value: 'All', label: 'All' },
       filterByLang: { value: 'All', label: 'All' },
       filterByGroupType: { value: 'All', label: 'All' },
-      filterByWCCMLink: 'All'
+      filterByWCCMLink: 'All',
+      timeZone: ''
     };
+  }
+
+  componentWillMount() {
+    this.setState({ timeZone: moment.tz.guess() });
+  }
+
+  updateTimeZone = (selectedOption) => {
+
+    let timeZoneString = '';
+
+    if(!(_.isUndefined(selectedOption))) {
+
+      for (let x = 0; x < selectedOption.value.length; x++){
+           timeZoneString += selectedOption.value[x];
+           //console.log("RESULT: ", testVal);
+      }
+    }
+
+    this.setState({ selectedOption });
+    this.setState({ timeZone: timeZoneString });
   }
 
   renderRows() {
@@ -50,8 +76,8 @@ class GroupsManage extends Component {
           minute: time.get('minute')
       });
       let setTimeZone = moment.tz(date, meet_time.time_zone);
-      let rawformattedConvertedTime = moment(setTimeZone).tz(userTimeZone);
-      let formattedConvertedTime = moment(setTimeZone).tz(userTimeZone).format(format);
+      let rawformattedConvertedTime = moment(setTimeZone).tz(this.state.timeZone);
+      let formattedConvertedTime = moment(setTimeZone).tz(this.state.timeZone).format(format);
       const originalWeekDay = date.format('dddd');
 
       let computedMeetingDay = meet_time.day_of_week;
@@ -137,9 +163,13 @@ class GroupsManage extends Component {
           <label>Filter by Week Day</label>
           <Select name="filter-by-day" value={this.state.filterByDay} placeholder="Filter by Meeting Day" searchable options={daysOfWeek} onChange={this.filterByDayOfWeek} />
         </div>
-        <div className="form-group col-md-4">
+        <div className="form-group col-md-2">
           <label>Group Type</label>
           <Select name="filter-by-day" value={this.state.filterByGroupType} placeholder="Filter by Group Type" searchable options={groupTypes} onChange={this.filterByGroupTypes} />
+        </div>
+        <div className="form-group col-md-2">
+          <label htmlFor="timeZonesSelect" >{'Time Zone'}</label>
+          <Select defaultValue={{ value: this.state.timeZone, label: this.state.timeZone }} onChange={this.updateTimeZone} options={allTimeZones} />
         </div>
         <div className="form-group col-md-6">
           <button

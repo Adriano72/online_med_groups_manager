@@ -207,7 +207,7 @@ class Header extends Component {
             {this.renderMenuAuthUsersCreation(t)}
           </ul>
           <ul className="nav navbar-nav navbar-right">
-            <li><p className="navbar-text">{t('Timezone')}: {moment.tz.guess()}</p></li>
+            {/*<li><p className="navbar-text">{t('Timezone')}: {moment.tz.guess()}</p></li>*/}
             {this.reservedAreaMenu(t)}
           </ul>
         </div>
