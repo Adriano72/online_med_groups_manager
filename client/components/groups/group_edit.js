@@ -451,7 +451,9 @@ class GroupEdit extends Component {
                         </div>
                         <div className="form-group col-xs-2">
                           <label>Time</label>
+
                           <TimePicker
+                            allowEmpty={false}
                             showSecond={false}
                             defaultValue={this.state.meetTime}
                             className="timePicker"
@@ -461,6 +463,7 @@ class GroupEdit extends Component {
                             use12Hours
                             inputReadOnly
                           />
+
                         </div>
                         <div className="form-group col-xs-2">
                           <label htmlFor="timeZonesSelect" >Time Zone</label>
