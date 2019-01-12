@@ -165,7 +165,7 @@ class GroupsList extends Component {
   render() {
     const t = this.props.t;
     const i18n = this.props.i18n;
-    const languages = [{ value: 'All', label: t('All')}, {value: 'English', label: t('English') }, {value: 'French', label: t('French') }, {value: 'Italian', label: t('Italian') }, {value: 'Spanish', label: t('Spanish') }, {value: 'German', label: t('German') }, {value: 'Dutch', label: t('Dutch') }, {value: 'Portuguese', label: t('Portuguese') }, {value: 'Russian', label: t('Russian') }, {value: 'Chinese', label: t('Chinese') }, {value: 'Indonesian', label: t('Indonesian') }];
+    const languages = [{ value: 'All', label: t('All')}, {value: 'English', label: t('English') }, {value: 'French', label: t('French') }, {value: 'Italian', label: t('Italian') }, {value: 'Spanish', label: t('Spanish') }, {value: 'German', label: t('German') }, {value: 'Dutch', label: t('Dutch') }, {value: 'Portuguese', label: t('Portuguese') }, {value: 'Russian', label: t('Russian') }, {value: 'Chinese', label: t('Chinese') }, {value: 'Indonesian', label: t('Indonesian') }, {value: 'Czech', label: t('Czech') }];
     const daysOfWeek = [{ value: 'All', label: t('All') }, { value: 'Monday', label: t('Monday') }, { value: 'Tuesday', label: t('Tuesday') }, {value: 'Wednesday', label: t('Wednesday') }, {value: 'Thursday', label: t('Thursday') }, {value: 'Friday', label: t('Friday') }, {value: 'Saturday', label: t('Saturday') }, {value: 'Sunday', label: t('Sunday') }];
     const groupTypes = [{ value: 'All', label: t('All') }, { value: 'Special Groups', label: t('Special Groups') }];
 

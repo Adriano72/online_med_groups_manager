@@ -9,7 +9,7 @@ import { Groups } from '../../../imports/collections/groups';
 let userTimeZone = moment.tz.guess();
 const format = 'h:mm a';
 const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const languages = [{value: 'All', label: 'All'}, {value: 'English', label: 'English'}, {value: 'French', label: 'French'}, {value: 'Italian', label: 'Italian'}, {value: 'Spanish', label: 'Spanish'}, {value: 'German', label: 'German'}, {value: 'Dutch', label: 'Dutch'}, {value: 'Portuguese', label: 'Portuguese'}, {value: 'Russian', label: 'Russian'}, {value: 'Chinese', label: 'Chinese'}, {value: 'Indonesian', label: 'Indonesian'}];
+const languages = [{value: 'All', label: 'All'}, {value: 'English', label: 'English'}, {value: 'French', label: 'French'}, {value: 'Italian', label: 'Italian'}, {value: 'Spanish', label: 'Spanish'}, {value: 'German', label: 'German'}, {value: 'Dutch', label: 'Dutch'}, {value: 'Portuguese', label: 'Portuguese'}, {value: 'Russian', label: 'Russian'}, {value: 'Chinese', label: 'Chinese'}, {value: 'Indonesian', label: 'Indonesian'}, {value: 'Czech', label: 'Czech'}];
 const groupTypes = [{ value: 'All', label: 'All'}, {value: 'Special Groups', label: 'Special Groups' }];
 
 const allTimeZones = [];

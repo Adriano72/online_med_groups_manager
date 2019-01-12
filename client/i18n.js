@@ -67,6 +67,7 @@ i18n
           "Italian": "Italiano",
           "Spanish": "Espanhol",
           "German": "Alemão",
+          "Czech": "Tcheco",
           "Dutch": "Holandês",
           "Russian": "Russo",
           "Portuguese": "Português",
