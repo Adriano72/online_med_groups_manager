@@ -1,3 +1,3 @@
 Meteor.startup(function () {
-  process.env.MAIL_URL = 'smtp://wccmnews@gmail.com:iswi3rjypDQZ0O5MZOSlkw@smtp.mandrillapp.com:587';
+  process.env.MAIL_URL = 'smtp://wccmnews@gmail.com:JX9Fp0VohKt6O-tF8WvwzA@smtp.mandrillapp.com:587';
 });

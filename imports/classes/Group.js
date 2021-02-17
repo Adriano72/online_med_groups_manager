@@ -180,6 +180,12 @@ const Group = Class.create({
       }
     },
     addMeditator(meditator) {
+
+      let meditatorAlreadyPresent = _.findIndex(this.meditators, (o) => { return _.isMatch(o, meditator) }) > -1;
+      //console.log("VARIABLE IS: "+meditatorAlreadyPresent);
+
+      if (meditatorAlreadyPresent == true) throw Error("This meditator is already present in the selected group");
+
       if(this.meditators) {
         this.meditators.push(meditator);
       } else {

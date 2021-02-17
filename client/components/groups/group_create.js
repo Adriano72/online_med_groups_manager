@@ -281,9 +281,13 @@ class GroupCreate extends Component {
                         <option value="Portuguese">{t('Portuguese')}</option>
                         <option value="Danish">{t('Danish')}</option>
                         <option value="Russian">{t('Russian')}</option>
+                        <option value="Ukrainian">{t('Ukrainian')}</option>
                         <option value="Chinese">{t('Chinese')}</option>
                         <option value="Indonesian">{t('Indonesian')}</option>
                         <option value="Czech">{t('Czech')}</option>
+                        <option value="Castalán">{t('Castalán')}</option>
+                        <option value="Polish">{t('Polish')}</option>
+
                       </select>
                     </div>
                     <div className="form-group col-md-4">

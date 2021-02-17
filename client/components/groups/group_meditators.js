@@ -89,7 +89,7 @@ class GroupMeditators extends Component {
         callback:  (result)  => {
             if(result){
               let finalSet = _.reject(this.state.meditatorsList, function(value){
-                return value.email === memberToremove;
+                return value === memberToremove;
               });
               this.setState({ meditatorsList: finalSet });
               this.updateGroup(finalSet);
@@ -205,7 +205,7 @@ class GroupMeditators extends Component {
           <td>
             <button
               className="btn btn-warning"
-              onClick={() => this.remove(meditator.email)}
+              onClick={() => this.remove(meditator)}
             >
               Remove
             </button>
